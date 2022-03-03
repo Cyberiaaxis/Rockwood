@@ -1,0 +1,46 @@
+.StatsBox {
+  display: flex; /* or inline-flex */
+  justify-content: space-evenly ;
+}
+
+.statsDetails ul {
+  display: none;
+  position: absolute;
+  margin-left: 3em;
+  margin-top: -2em;
+  background: green;
+  padding: 1em;
+  box-shadow: 3px 3px red, -1em 0 .4em olive;
+  -webkit-border-radius: 200px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
+.statsDetails li:hover > ul {
+  display: block;
+}
+
+.statsDetails li:hover > ul > li {
+ list-style-type:none;
+ border-bottom:1px solid #80bee3;
+}
+
+.statsDetails > li > p {
+  border: thick double #32a1ce;
+  color: red;
+}
+.statsDetails > li {
+  list-style-type: none;  
+}
+
+
+/* .statsDetails li:hover > ul > li:nth-child(odd) {
+    background-color:blue;
+}
+.statsDetails li:hover > ul > li:nth-child(even) {
+    background-color:red;
+} */
+
+.statsDetails li > ul > li:hover {
+  color: white;
+ }
+//  source code here:  https://codepen.io/cyberia/pen/YzVpXNq?editors=1111

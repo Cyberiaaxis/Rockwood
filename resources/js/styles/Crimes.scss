@@ -1,0 +1,115 @@
+.container {
+  max-width: 100vw;
+  display: grid;
+  grid-template-columns: repeat(19, minmax(1fr, 70px));
+  grid-template-rows: repeat(10, 30px);
+  grid-gap: 2px;
+  z-index: 1;
+}
+.box {
+  font-weight: bolder;
+  color: firebrick;
+  padding-top: 2px;
+  text-align: center;
+  grid-row-end: 1 span;
+  grid-column-end: 1 span;
+}
+a {
+  text-decoration: none;
+}
+.listItems {
+  width: 100%;
+}
+
+ul {
+  list-style: none;
+}
+
+.sublist {
+  display: none;
+}
+
+.list:focus > .sublist {
+  // flex-direction: column-reverse;
+  display: block;
+}
+
+.box a {
+  text-decoration: none;
+}
+
+.box a:hover {
+  color: greenyellow;
+}
+
+.subList > .subList {
+  display: none; /* Display hide the dropdown */
+}
+
+/* Unopened lightbox */
+.lightbox {
+  display: none;
+}
+
+// /* Opened lightbox */
+.lightbox:target {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(24, 21, 21);
+  list-style: none;
+  // z-index: 2;
+}
+
+// /* Lightbox content */
+.lightbox figcaption {
+  width: 10em;
+  max-width: calc(100vw - 5rem);
+  position: relative;
+  padding: 1.5em;
+  background-color: #996a24;
+  text-align: center;
+  @media (min-width: 25rem) {
+      max-width: 25rem;
+  }
+}
+
+// /* Close button */
+.lightbox .close {
+  position: absolute;
+  display: block;
+}
+
+.lightbox .close:after {
+  right: -1rem;
+  top: -1rem;
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  display: flex;
+  z-index: 1;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  border-radius: 50%;
+  color: white;
+  content: "x";
+  cursor: pointer;
+}
+
+// /* Lightbox overlay */
+.lightbox .close::backdrop::before {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.7);
+  content: "";
+  cursor: default;
+}

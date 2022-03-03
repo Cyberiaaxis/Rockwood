@@ -1,0 +1,24 @@
+#container {
+    height: 100%;
+    width: 100%;
+    border: thick double red;
+    overflow-x: scroll;
+  }
+  
+  .content {
+    display: flex;
+  }
+  
+  .showcase {
+    display: flex;
+  }
+  
+  .content>div {
+    background-color: yellowgreen;
+    border: thick double #32a1ce;
+    padding: 10px;
+  }
+  .productinfo{
+    display: "none";
+  }
+  

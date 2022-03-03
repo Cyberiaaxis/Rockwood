@@ -1,0 +1,125 @@
+.hoverMenu ul {
+  padding: 0;
+  list-style: none;
+  background: transparent;
+}
+.hoverMenu ul li {
+  /* display: inline-block; */
+  position: relative;
+  line-height: 21px;
+  text-align: left;
+}
+.hoverMenu ul li a {
+  display: block;
+  padding: 8px 25px;
+  color: #333;
+  text-decoration: none;
+}
+.hoverMenu ul li a:hover {
+  color: #fff;
+  background: #939393;
+}
+.hoverMenu ul li ul.dropdown {
+  min-width: 100%; /* Set width of the dropdown */
+  display: none;
+  position: absolute;
+  z-index: 999;
+  /* left: 100%; */
+  top: 100%;
+}
+.hoverMenu ul li:hover > ul.dropdown {
+  display: block; /* Display the dropdown */
+}
+.hoverMenu ul li ul.dropdown li {
+  display: block;
+}
+
+.hoverMenu .dropdown .dropdown {
+  top: 0;
+  left: 100%;
+}
+
+.Dashboardfooter .hoverMenu ul li ul.dropdown {
+  top: 0;
+  transform: translateY(-100%);
+}
+
+.Dashboardfooter .hoverMenu .dropdown .dropdown {
+  top: 37px;
+}
+
+.AsideLeft .hoverMenu ul li ul.dropdown {
+  top: 0;
+  transform: translateX(100%);
+}
+
+.AsideLeft .hoverMenu .dropdown .dropdown {
+  left: 0;
+}
+
+.AsideRight .hoverMenu ul li ul.dropdown {
+  top: 2px;
+  transform: translateX(-100%);
+}
+
+.AsideRight .hoverMenu .dropdown .dropdown {
+  left: 0;
+}
+
+.Dashboardfooter .hoverMenu ul li ul.dropdown li a:first-child:nth-last-child(2):after {
+  content: "\2662";
+}
+
+.Dashboardfooter .hoverMenu ul li a:first-child:nth-last-child(2):after {
+  content: "\2662";
+}
+
+.AsideLeft .hoverMenu ul li ul.dropdown li a:first-child:nth-last-child(2):after {
+  content: "\2662";
+}
+
+.AsideLeft .hoverMenu ul li a:first-child:nth-last-child(2):after {
+  content: "\2662";
+}
+
+.AsideRight .hoverMenu ul li ul.dropdown li a:first-child:nth-last-child(2)::before {
+  content: "\2662";
+}
+
+.AsideRight .hoverMenu ul li a:first-child:nth-last-child(2)::before {
+  content: "\2662";
+}
+
+.Header .hoverMenu ul li ul.dropdown li a:first-child:nth-last-child(2)::after {
+  content: "\2662";
+}
+
+.Header .hoverMenu ul li a:first-child:nth-last-child(2)::after {
+  content: "\2662";
+}
+
+.Header .hoverMenu ul li {
+  display: inline-block;
+}
+
+.Dashboardfooter .hoverMenu ul li {
+  display: inline-block;
+}
+
+.AsideRight .hoverMenu ul > li a {
+  text-align: right;
+  line-height: 137px;
+}
+
+.AsideLeft .hoverMenu ul > li a {
+  text-align: left;
+  line-height: 137px;
+}
+
+.AsideRight .hoverMenu ul li ul.dropdown li > a {
+  line-height: 21px;
+}
+
+.AsideLeft .hoverMenu ul li ul.dropdown li > a {
+  line-height: 21px;
+}

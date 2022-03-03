@@ -1,0 +1,95 @@
+.dashboard{
+     background: url('../images/main1.jpg');
+     background-size: cover;
+     height: 100vh;
+     color:#15c73b;
+}
+header {
+  grid-area: header;
+}
+
+footer {
+  grid-area: footer;
+}
+
+// .topMenu{
+//     margin: 10px;
+//     display: flex;
+//     justify-content: space-between;
+//     flex-wrap: wrap;
+
+// }
+
+// .menuList{
+//     margin: 10px;
+
+// }
+
+// .menuList:hover div.list{
+//     display: block;
+// }
+
+ul,
+ul li{
+  list-style: none;
+  padding:0;
+}
+
+.topMenu{
+    margin: 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.menuList{
+  width: 5%;
+  position: relative;
+  padding: 0.25rem 0.75rem;
+}
+
+.dropdown-menu{
+  top: 1.9rem;
+  display: none;
+  position: absolute;
+  height: 50vh;
+  width:50vw;
+}
+
+.menuList:active + .dropdown-menu,
+.menuList:focus + .dropdown-menu,
+.menuList.active + .dropdown-menu,
+.menuList:hover + .dropdown-menu {
+     top: 1.9rem;
+     display: block;
+}
+
+.sidebar-left {
+  margin: auto;
+  text-align: left;
+  grid-area: sidebar-left;
+}
+
+article {
+  grid-area: article;
+}
+
+.sidebar-right {
+  margin: auto;
+    text-align: right;
+  margin-left: 4rem;
+  grid-area: sidebar-right;
+}
+
+.grid {
+    display: grid;
+    grid-template-areas:
+      "header header header"
+      "sidebar-left content sidebar-right"
+      "footer footer footer";
+    grid-template-columns: 200px 1fr 200px;
+    grid-template-rows: auto 1fr auto;
+    grid-gap: 10px;
+    height: 100vh;
+    font-weight: bolder;
+}

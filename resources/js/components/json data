@@ -1,0 +1,92 @@
+[
+  {
+    "label": "Nerve 1",
+    "children": [
+      {
+        "label": "subNerve1",
+        "children": [
+          {
+            "label": "task1",
+            "href": "taskaction1",
+            "text": "you can do this action"
+          },
+          {
+            "label": "task2",
+            "href": "taskaction1",
+            "text": "you can do this action"
+          },
+          {
+            "label": "task3",
+            "children": [
+              {
+                "label": "task1",
+                "href": "taskaction1",
+                "text": "you can do this action"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "Nerve 2",
+    "children": [
+      {
+        "label": "subNerve2",
+        "children": [
+          {
+            "label": "task1",
+            "href": "taskaction1",
+            "text": "you can do this action"
+          },
+          {
+            "label": "task2",
+            "href": "taskaction1",
+            "text": "you can do this action"
+          },
+          {
+            "label": "task3",
+            "children": [
+              {
+                "label": "task1",
+                "href": "taskaction1",
+                "text": "you can do this action"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "Nerve 3",
+    "children": [
+      {
+        "label": "subNerve3",
+        "children": [
+          {
+            "label": "task1",
+            "href": "taskaction1",
+            "text": "you can do this action"
+          },
+          {
+            "label": "task2",
+            "href": "taskaction1",
+            "text": "you can do this action"
+          },
+          {
+            "label": "task3",
+            "children": [
+              {
+                "label": "task1",
+                "href": "taskaction1",
+                "text": "you can do this action"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

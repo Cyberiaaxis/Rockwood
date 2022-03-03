@@ -1,0 +1,35 @@
+<?php
+/**
+ * Source https://blog.ircmaxell.com/2012/03/handling-plugins-in-php.html
+ */
+class Mediator {
+    protected $events = array();
+    public function attach($eventName, $callback) {
+        if (!isset($this->events[$eventName])) {
+            $this->events[$eventName] = array();
+        }
+        $this->events[$eventName][] = $callback;
+    }
+    public function trigger($eventName, $data = null) {
+        foreach ($this->events[$eventName] as $callback) {
+            $callback($eventName, $data);
+        }
+    }
+}
+
+/**
+ * This code goes OUTSIDE your training script. This does NOT belong in the controller
+ */
+$mediator = new Mediator;
+$mediator->attach('training1', function() { echo "REGULAR BORING TRAINING\n"; });
+$mediator->attach('training2', function() { echo "EXTRA FUN TRAINING\n"; });
+$mediator->attach('training2', function() { echo "MORE EXTRA FUN TRAINING\n"; });
+
+
+
+
+/**
+ * Your Gym/Training code goes here. For example, this code can go into your Gym/Training controller.
+ */
+$mediator->trigger('training1'); // prints "Loading"
+$mediator->trigger('training2'); // prints "StoppingStopped"

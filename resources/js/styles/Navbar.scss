@@ -1,0 +1,58 @@
+@font-face {
+  font-family: 'Lumberjack Font Family';
+  src: url('../fonts/Lumberjack\ Rough.otf'); /* IE9 Compat Modes */
+}
+
+.navbar {
+    display: flex;
+    color: deepskyblue;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    z-index: 1030;
+    font-family: 'Lumberjack Font Family', Fallback, sans-serif;
+    font-size: 20px;
+    position: relative;
+    display: -ms-flexbox;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 0;
+}
+
+
+.bg-transparent,
+.bg-none{
+    background-color: transparent;
+}
+
+.fixed-top,
+.fixed-bottom{
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+
+.fixed-top {
+    top: 0;
+}
+
+.logo{
+    padding-top: 30px;
+    padding-left: 120px;
+    // display: inherit;
+    // justify-content: center;
+    width: 80px;
+    height: 80px;
+}
+
+.logo img{
+    display: block;
+}
+
+
+ul li:hover{
+  color:orange;
+}
+

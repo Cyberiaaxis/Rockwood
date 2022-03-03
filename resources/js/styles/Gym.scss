@@ -1,0 +1,100 @@
+.header {
+  background: transparent;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  border: thick double #8b0000;
+  border-radius: 10px;
+  margin: 20px;
+}
+
+.header p {
+  text-align: center;
+  font-weight: bold;
+}
+
+.flexed {
+  display: flex;
+  flex-wrap: wrap;
+  background: transparent;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  border: thick double #8b0000;
+  border-radius: 10px;
+}
+
+.gridded {
+  display: grid;
+  grid-template-areas:
+    "three-and-four-and-five three-and-four-and-five"
+    "collectionInput collectionButton";
+  padding: 1em;
+}
+
+@media screen and (max-width: 500px) {
+  .gridded {
+    grid-template-areas:
+      "three-and-four-and-five three-and-four-and-five"
+      "collectionInput collectionButton";
+  }
+}
+
+/* .gridded > * {
+  background: yellow;
+} */
+
+.collectionInput {
+  grid-area: collectionInput;
+}
+
+.collectionButton {
+  grid-area: collectionButton;
+}
+.description {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.result {
+  display: none;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.wrapper {
+  grid-area: three-and-four-and-five;
+}
+
+.wrapper .boxHead {
+  border-bottom-style: groove;
+}
+
+.collectionButton button {
+  border: 0;
+  line-height: 2.5;
+  padding: 0 20px;
+  font-size: 1rem;
+  text-align: center;
+  color: #fff;
+  text-shadow: 1px 1px 1px #000;
+  border-radius: 10px;
+  background-color: rgba(220, 0, 0, 1);
+  background-image: linear-gradient(
+    to top left,
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0.2) 30%,
+    rgba(0, 0, 0, 0)
+  );
+  box-shadow: inset 2px 2px 3px rgba(255, 255, 255, 0.6),
+    inset -2px -2px 3px rgba(0, 0, 0, 0.6);
+}
+
+.collectionButton button:hover {
+  background-color: rgba(255, 0, 0, 1);
+}
+
+.collectionButton button:active {
+  box-shadow: inset -2px -2px 3px rgba(255, 255, 255, 0.6),
+    inset 2px 2px 3px rgba(0, 0, 0, 0.6);
+}
