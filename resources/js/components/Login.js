@@ -29,14 +29,13 @@ const Login = () => {
     } = useForm();
     const navigate = useNavigate();
 
-    const onSubmit = (data) => {
-        const result = gameServerApi("auth/login", 'POST',  data );
+    const onSubmit = async (data) => {
+        const result = await gameServerApi("auth/login", 'POST',  data );
 
-        if (result.user) {
+        if (result.userId) {
             const userDetails = {
-                userId: result.user.id,
-                accessToken: result.access_token,
-                loggedIn: true,
+                userId: result.userId, 
+                userName: result.userName
             };
             setUser(userDetails);
             navigate("/dashboard");
