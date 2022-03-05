@@ -60,9 +60,16 @@ $router->get('rightList', 'App\Http\Controllers\LandingPageController@rightList'
 $router->get('leftList', 'App\Http\Controllers\LandingPageController@leftList');
 $router->post('auth/login', 'App\Http\Controllers\LoginController@login');
 $router->post('/register', 'App\Http\Controllers\RegistrationController@signup');
-$router->get('/ping', 'App\Http\Controllers\LoginController@ping');
 
 
 $router->group(['middleware' => ['auth:sanctum']], function($router){
     $router->get('/home', 'App\Http\Controllers\HomeController@index');
+    // i think the 'ping' should go here? so it only works when authenticated
+
+    //i am can do anthing if i got login form for login first
+    //lets try
+    $router->get('/ping', 'App\Http\Controllers\LoginController@ping');
+//lets compile and see what happens now
+//ok
+
 });

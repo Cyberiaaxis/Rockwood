@@ -115,6 +115,7 @@ class LoginController extends Controller
      */
     public function ping()
     {
+       
         if(Auth::check()){
             $user = auth()->user();
             return response()->json(["userId" => $user->id, "userName"=> $user->name]);
