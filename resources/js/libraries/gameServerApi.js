@@ -5,21 +5,24 @@ const gameServerApi = async (endpoint = 'ping', requestType = 'GET', body) => {
     // if the cookie isn't set, then let's get a csrf token.
     if (!Cookies.get('XSRF-TOKEN')) 
     {
-        await ky.get('/sanctum/csrf-cookie');
+        await fetch('/sanctum/csrf-cookie', { credentials: 'include' });
     }
     // console.log(Cookies.get());
     const options = {
         headers: {
             // we're required to send a header containing the csrf token
             'X-XSRF-TOKEN': Cookies.get('XSRF-TOKEN'),
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
         },
         // the data we send to the game server
-        json: body,
+        body: JSON.stringify(body),
         method: requestType,
+        credentials: 'include'
     }
-    return await ky('/api/' + endpoint, options).json();
+    const response =  await fetch('/api/' + endpoint, options)
+    return await response.json();
 }
-
 export default gameServerApi;
 
 

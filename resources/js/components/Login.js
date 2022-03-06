@@ -7,7 +7,7 @@ import gameServerApi from "../libraries/gameServerApi";
 import Model from "./Model";
 import RegistrationForm from "./RegistrationForm";
 import ForgetPassword from "./ForgetPassword";
-import { useNavigate, Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { AuthContext } from "../libraries/AuthContext";
 // import { ModalContext } from "../libraries/ModalContext";
 
@@ -27,7 +27,7 @@ const Login = () => {
         handleSubmit,
         clearErrors,
     } = useForm();
-    const navigate = useNavigate();
+    const history = useHistory()
 
     const onSubmit = async (data) => {
         const result = await gameServerApi("auth/login", 'POST',  data );
@@ -38,7 +38,7 @@ const Login = () => {
                 userName: result.userName
             };
             setUser(userDetails);
-            navigate("/dashboard");
+            history.push("/dashboard");
         } else {
             for (const [fieldName, errors] of Object.entries(result.errors)) {
                 setError(fieldName, {

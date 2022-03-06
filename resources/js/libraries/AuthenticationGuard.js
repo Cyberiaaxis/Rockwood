@@ -1,43 +1,30 @@
 import React from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import { AuthContext} from './AuthContext';
 import gameServerApi from './gameServerApi';
 
-// this will make sure there is a logged in user after refresh
+// this will make sure there is a logged in user
 const AuthenticationGuard = ({ children }) => {
-    const [state, setState] = React.useState('initial')
     const { user, loggedIn, setUser } = React.useContext(AuthContext);
-    const navigate = useNavigate();
+    const history = useHistory()
+    console.log('AuthGuard.js rendering')
 
     React.useEffect(() => {
-        async function run() {
-            // only execute if state is initial
-            if (state !== 'initial') return;
-            
-            try {
-                const response = await gameServerApi('ping');
-                console.log('ping response: ', response);
-                // TODO: if ping request says authenticated, call setUser to store username/id in context
-                setUser({ userId: response.userId, userName: response.userName, loggedIn: true })
-            }
-            catch(err) {
-                console.log('error: ', err)
-                // TODO probably unauthenticated, redirect to login form
-                navigate('/login')
-            }
-
-            setState('after-auth')
+        console.log('AuthGuard: ', user, loggedIn)
+        if (!loggedIn) {
+            console.log('AuthGuard: not logged in, redirecting')
+            history.push('/')
+        } else {
+            console.log('AuthGuard: logged in')
         }
-        run();
-    }, [state]);
-
-    if (state === 'initial')
-        return (<div>Checking user...</div>);
+    }, [loggedIn])
 
     if (loggedIn)
         return children
-    else
-        return navigate("/");;
+    
+    // this is not allowed directly in your render method
+    //return navigate("/");;
+    return <div>Not logged in, redirecting</div>
 }
 
 export default AuthenticationGuard

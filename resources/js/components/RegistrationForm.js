@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faKey, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import gameServerApi from "../libraries/gameServerApi";
-import { useNavigate, Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 const RegistrationForm = (onOK) => {
     const [message, setMessage] = useState('');
@@ -15,7 +15,7 @@ const RegistrationForm = (onOK) => {
         handleSubmit,
         clearErrors,
     } = useForm();
-    const navigate = useNavigate();
+    const history = useHistory()
 
     function refreshPage() {
         setTimeout(()=>{

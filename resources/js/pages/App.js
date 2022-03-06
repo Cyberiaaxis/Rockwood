@@ -6,6 +6,8 @@ import Footer from "../components/Footer";
 
 
 const App = () => {
+  console.log('App.js rendering')
+
   return (<>
     <Header />
     {/* <Slider/> */}
