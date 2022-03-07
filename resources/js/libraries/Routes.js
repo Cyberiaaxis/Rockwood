@@ -26,7 +26,6 @@ const UserRoutes = () => {
                         {/* these routes are available for everyone, should NOT be a child of authenticationguard */}
                         <Route exact path="/" component={App} />
                         <Route>
-                            <div>test1</div>
                             <AuthenticationGuard>
                                 <Switch>
                                     {/* these routes are protected by the authentication guard */}

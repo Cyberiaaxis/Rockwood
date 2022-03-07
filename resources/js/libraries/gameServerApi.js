@@ -21,9 +21,16 @@ const gameServerApi = async (endpoint = 'ping', requestType = 'GET', body) => {
         credentials: 'include'
     }
     const response =  await fetch('/api/' + endpoint, options)
+    if (response.status >= 400 && response.status <= 599) throw new HttpStatusError(response.status)
     return await response.json();
 }
 export default gameServerApi;
 
-
+class HttpStatusError extends Error {
+    constructor(statusCode) {
+        super('HTTP ' + statusCode);
+        this.name = 'HttpStatusError'
+        this.statusCode = statusCode
+    }
+}
 //https://gist.github.com/Cyberiaaxis/79381ef863b6b3b21635cc2913c2e81a#file-gameserverapi-js-L6

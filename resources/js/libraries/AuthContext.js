@@ -10,7 +10,7 @@ export const AuthContextProvider = ({ children }) => {
 		setUser: user => setModel(m => Object.assign({}, m, { loggedIn: true, user })),
 		unsetUser: user => setModel(m => Object.assign({}, m, { loggedIn: false, user: undefined }))
 	})
-	// console.log('model', model);
+	console.log('AuthContext: model: ', model);
 	return (
 		<AuthContext.Provider value={model}>
 			{children}
