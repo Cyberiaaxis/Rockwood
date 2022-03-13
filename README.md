@@ -30,6 +30,9 @@ Wait for the process to finish then run this command
 
 build assets 
  ```npm install && npm run dev```
+ 
+ #Frontend
+ https://github.com/Cyberiaaxis/Rockwood/tree/master/resources/js
 
 
 or 
