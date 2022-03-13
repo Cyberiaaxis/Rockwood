@@ -1,4 +1,4 @@
-**#CA Game Engine **
+#CA Game Engine
 
 **PPBG Gaming Application**
 
