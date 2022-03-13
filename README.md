@@ -1,25 +1,39 @@
 **#CA Game Engine **
 
-
 **PPBG Gaming Application**
 
-Technical Requirments
+## Installing
 
-1. The LEMP software stack is a group of software that can be used to serve dynamic web pages and web applications written in PHP. This is an acronym that describes a Linux operating system, with an Nginx (pronounced like “Engine-X”) web server. The backend data is stored in the MySQL database and the dynamic processing is handled by PHP.
-
-Steps for installation:
-https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-20-04
+LEMP is a variation of the ubiquitous LAMP stack used for developing and deploying web applications. Traditionally, LAMP consists of Linux, Apache, MySQL, and PHP. Due to its modular nature, the components can easily be swapped out. With LEMP, Apache is replaced with the lightweight yet powerful Nginx.
 
 
-2. Laravel with mix
-https://laravel.com/docs/9.x/installation#the-laravel-installer
-https://dev.to/sureshramani/how-to-install-react-in-laravel-8-54a6
-
-3. MUI css framework
-https://mui.com/getting-started/installation/
-
-Or 
-Clone the project and composer update will helps
+Script use Laravel framework which utilizes Composer to manage its dependencies. So, before using
+Laravel, make sure you have ``Composer`` installed on your machine.
 
 
+First you need to upload files to Server then give write permission to Webserver which is run by
+    ``www-data`` user group to following directory ``bootstrap`` and ``storage``
+    folder.
+
+Copy the ``.env.example`` file and rename it into the ``env`` file. it can be done with command too, by this command.
+
+
+```cp .env.example .env```
+
+run following command from terminal in where you uploaded files
+
+```composer install --no-dev```
+
+Wait for the process to finish then run this command 
+
+```php artisan key:genreate```
+
+build assets 
+ ```npm install && npm run dev```
+
+
+or 
+    clone the project 
+```composer install``` --no-dev only
+```npm install && npm run dev```
 
