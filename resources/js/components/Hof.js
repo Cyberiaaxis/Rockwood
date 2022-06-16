@@ -5,7 +5,7 @@ import RestoreIcon from "@material-ui/icons/Restore";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import { DataGrid } from "@material-ui/data-grid";
-import { useDemoData } from "@material-ui/x-grid-data-generator";
+// import { useDemoData } from "@material-ui/x-grid-data-generator";
 import Http from '../libraries/gameServerApi';
 
 // const useStyles = makeStyles({});
@@ -19,11 +19,11 @@ function loadServerRows(page, data) {
 }
 
 const Hof = () => {
-  const { data } = useDemoData({
-    dataSet: "",
-    rowLength: 100,
-    maxColumns: 6
-  });
+//   const { data } = useDemoData({
+//     dataSet: "",
+//     rowLength: 100,
+//     maxColumns: 6
+//   });
 
   // const classes = useStyles();
   const [value, setValue] = React.useState({});
@@ -61,8 +61,8 @@ const Hof = () => {
       <BottomNavigation
         value={value}
         onChange={async (event, newValue) => {
-          
-          const  result =  Http(newValue,{method: 'post',data}); //data will be come from here 
+
+          const  result =  Http(newValue,{method: 'post',data}); //data will be come from here
           // console.log(result);
           // console.log(result);
           // console.log(newValue);

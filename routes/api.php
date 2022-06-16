@@ -58,12 +58,13 @@
 // dd($router);
 $router->get('rightList', 'App\Http\Controllers\LandingPageController@rightList');
 $router->get('leftList', 'App\Http\Controllers\LandingPageController@leftList');
-$router->post('auth/login', 'App\Http\Controllers\LoginController@login');
+$router->post('/auth/login', 'App\Http\Controllers\LoginController@login');
 $router->post('/register', 'App\Http\Controllers\RegistrationController@signup');
 
 
 
 $router->group(['middleware' => ['auth:sanctum']], function($router){
+    $router->get('/auth/logout', 'App\Http\Controllers\LoginController@logout');
     $router->get('/home', 'App\Http\Controllers\HomeController@index');
     // i think the 'ping' should go here? so it only works when authenticated
     $router->get('/ping', 'App\Http\Controllers\LoginController@ping');

@@ -3,12 +3,13 @@ import ky from 'ky';
 
 const gameServerApi = async (endpoint = 'ping', requestType = 'GET', body) => {
     // if the cookie isn't set, then let's get a csrf token.
-    if (!Cookies.get('XSRF-TOKEN')) 
+    if (!Cookies.get('XSRF-TOKEN'))
     {
         await fetch('/sanctum/csrf-cookie', { credentials: 'include' });
     }
-    // console.log(Cookies.get());
+
     const options = {
+
         headers: {
             // we're required to send a header containing the csrf token
             'X-XSRF-TOKEN': Cookies.get('XSRF-TOKEN'),
@@ -20,7 +21,9 @@ const gameServerApi = async (endpoint = 'ping', requestType = 'GET', body) => {
         method: requestType,
         credentials: 'include'
     }
+
     const response =  await fetch('/api/' + endpoint, options)
+    console.log("response", response);
     if (response.status >= 400 && response.status <= 599) throw new HttpStatusError(response.status)
     return await response.json();
 }

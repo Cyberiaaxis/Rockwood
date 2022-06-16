@@ -14,18 +14,19 @@ const CurrentUserGuard = ({ children }) => {
         async function run() {
             // only execute if state is initial
             if (state !== 'initial') return;
-            
+
             try {
                 const response = await gameServerApi('ping');
                 console.log('CurrentUserGuard: authorized:', response);
                 // TODO: if ping request says authenticated, call setUser to store username/id in context
                 setUser({ userId: response.userId, userName: response.userName})
+                history.push('/Dashboard')
             }
             catch(err) {
                 console.log('CurrentUserGuard: unauthorized')
                 unsetUser()
                 // TODO probably unauthenticated, redirect to login form
-                //history.push('/')
+                history.push('/')
             }
 
             setState('after-auth')

@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { AuthContextProvider } from "../libraries/AuthContext";
 import CurrentUserGuard from '../libraries/CurrentUserGuard';
 import AuthenticationGuard from "../libraries/AuthenticationGuard";
 import Login from "../components/Login";
 
-import { BrowserRouter as Router,  Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import Attack from "../pages/Attack";
 import App from "../pages/App";
@@ -22,18 +24,21 @@ const UserRoutes = () => {
         <Router>
             <AuthContextProvider>
                 <CurrentUserGuard>
-                    <Switch>
-                        {/* these routes are available for everyone, should NOT be a child of authenticationguard */}
-                        <Route exact path="/" component={App} />
-                        <Route>
-                            <AuthenticationGuard>
-                                <Switch>
-                                    {/* these routes are protected by the authentication guard */}
-                                    <Route path={"/dashboard"} component={Dashboard} />
-                               </Switch>
-                            </AuthenticationGuard>
-                        </Route>
-                    </Switch>
+
+                        <Switch>
+                            {/* these routes are available for everyone, should NOT be a child of authenticationguard */}
+                            <Route exact path="/" component={App} />
+                            <Route>
+                                <AuthenticationGuard>
+                                    <Switch>
+                                        {/* these routes are protected by the authentication guard */}
+                                        <Route path={"/dashboard"} component={Dashboard} />
+                                    </Switch>
+                                </AuthenticationGuard>
+                            </Route>
+                        </Switch>
+
+
                 </CurrentUserGuard>
             </AuthContextProvider>
         </Router>

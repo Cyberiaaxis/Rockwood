@@ -21,7 +21,7 @@ const AuthenticationGuard = ({ children }) => {
 
     if (loggedIn)
         return children
-    
+
     // this is not allowed directly in your render method
     //return navigate("/");;
     return <div>Not logged in, redirecting</div>

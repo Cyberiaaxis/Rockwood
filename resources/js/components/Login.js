@@ -13,11 +13,11 @@ import { AuthContext } from "../libraries/AuthContext";
 
 const Login = () => {
     const { user, setUser } = useContext(AuthContext);
-    // const [modalState, setModalState] = useState({modal: '', opened: false});    
+    // const [modalState, setModalState] = useState({modal: '', opened: false});
     const [registrationModal, setRegistrationModal] = useState(false);
     const [forgetModal, setForgetModal] = useState(false);
     const handleOK = (event) => {
-        console.log(event);
+        // console.log(event);
     };
 
     const {
@@ -30,16 +30,18 @@ const Login = () => {
     const history = useHistory()
 
     const onSubmit = async (data) => {
+        // console.log("data", data);
         const result = await gameServerApi("auth/login", 'POST',  data );
-
+        // console.log("result",result);
         if (result.userId) {
             const userDetails = {
-                userId: result.userId, 
+                userId: result.userId,
                 userName: result.userName
             };
             setUser(userDetails);
             history.push("/dashboard");
         } else {
+            // console.log(result);
             for (const [fieldName, errors] of Object.entries(result.errors)) {
                 setError(fieldName, {
                     type: "manual",

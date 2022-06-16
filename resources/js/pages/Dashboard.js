@@ -3,8 +3,12 @@ import { makeStyles, Paper, Box, Button, Grid, Avatar } from "@material-ui/core"
 import clsx from "clsx";
 import ProgressBar from "../components/ProgressBar";
 import "../styles/menuStyle.scss";
+import gameServerApi from "../libraries/gameServerApi";
+import { AuthContext } from "../libraries/AuthContext";
+import { useHistory, Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 import Stats from "../components/Stats";
-import Hof from "../components/Hof";
+// import Hof from "../components/Hof";
 import Gym from "../components/Gym";
 import Crimes from "../components/Crimes";
 import Inventory from "../components/Inventory";
@@ -90,13 +94,15 @@ const topMenuBar = [
     },
     {
         label: "Contact",
-        href: "contact",
+        href: "#",
     },
 ];
 
 
 
 const Dashboard = () => {
+    const { user, setUser, unsetUser  } = useContext(AuthContext);
+    const history = useHistory()
     const [page, setPage] = useState("dashboard");
     const classes = useStyles();
 
@@ -117,7 +123,7 @@ const Dashboard = () => {
             </li>
         );
     };
-    
+
     const Menu = ({ items }) => {
         return (
             <nav className="hoverMenu">
@@ -131,18 +137,56 @@ const Dashboard = () => {
     };
 
     const handleClick = (event) => {
-        if(event !== undefined){
-            setPage(event);   
+        if (event !== undefined) {
+            setPage(event);
         }
     };
 
+    const logout = () => {
+        try {
+            toast.promise(
+
+                gameServerApi("auth/logout"),
+                {
+                    pending: 'Logging out...',
+                    success: {
+
+                        render({ data }) {
+
+                            unsetUser(false);
+                            history.push("/");
+
+                            return data.messageOut;
+                        },
+                    },
+                    error: {
+                        render({ data }) {
+                            return data.message;
+                        }
+                    }
+                }
+                , {
+                    position: toast.POSITION.TOP_CENTER,
+                    theme: 'colored'
+                });
+
+            return false
+
+        } catch (error) {
+            return toast.error(error, {
+                position: toast.POSITION.TOP_CENTER,
+                theme: 'colored'
+            })
+        }
+    }
+
+
     const pages = {
-        hof: <Hof />,        
+        // hof: <Hof />,
         inventory: <Inventory />,
         home: <Stats />,
         profile: <Profile />,
         account: "account",
-        logout: "Logout",
         stats: <Stats />,
         explore: null,
         city: null,
@@ -150,7 +194,7 @@ const Dashboard = () => {
         crimes: <Crimes />,
         gym: <Gym />,
     };
-console.log(pages[page]);
+    // console.log(pages[page]);
     return (
         <div className={classes.root}>
             <Grid container>
@@ -176,7 +220,9 @@ console.log(pages[page]);
                                 items={topMenuBar}
                             />
                         </Box>
+                        <button onClick={(e) => logout()}> Logout</button>
                     </Box>
+
                 </Grid>
                 {/* AsideLeft */}
                 <Grid item xs={2} sm={1} className={clsx(classes.sideBarLeft, "AsideLeft")}>

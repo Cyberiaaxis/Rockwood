@@ -34,12 +34,13 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        // dd("aaaaaaaaaaaa");
         $this->validateInputs($request);
 
 
         if ($this->attemptLogin($request)) {
             $user = auth()->user();
-            return response()->json(["userId" => $user->id, "userName"=> $user->name]);
+            return response()->json(["userId" => $user->id, "userName" => $user->name]);
         }
 
 
@@ -114,10 +115,20 @@ class LoginController extends Controller
      *
      */
     public function ping()
-    {  
+    {
         $user = auth()->user();
-        return response()->json(["userId" => $user->id, "userName"=> $user->name]);
+        return response()->json(["userId" => $user->id, "userName" => $user->name]);
     }
 
-
+    /**
+     * Get the failed login response instance.
+     *
+     * @return Logout user session.
+     *
+     */
+    public function logout()
+    {
+        auth()->guard('web')->logout();
+        return response()->json(["messageOut" => "You are logout successfully"]);
+    }
 }
