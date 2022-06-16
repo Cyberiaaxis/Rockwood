@@ -38,7 +38,7 @@ const UserRoutes = () => {
                             </Route>
                         </Switch>
 
-
+                        <ToastContainer />
                 </CurrentUserGuard>
             </AuthContextProvider>
         </Router>
