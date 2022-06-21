@@ -1,0 +1,26 @@
+=> [34;4mIlluminate\Database\Eloquent\Collection[39;24m {#3562
+     [34mall[39m: [
+       [34;4mSpatie\Permission\Models\Permission[39;24m {#4503
+         [34mid[39m: [35m1[39m,
+         [34mname[39m: "[32medit user[39m",
+         [34mguard_name[39m: "[32mweb[39m",
+         [34mcreated_at[39m: "[32m2022-06-21 19:14:20[39m",
+         [34mupdated_at[39m: "[32m2022-06-21 19:14:20[39m",
+       },
+       [34;4mSpatie\Permission\Models\Permission[39;24m {#4504
+         [34mid[39m: [35m2[39m,
+         [34mname[39m: "[32mdelete user[39m",
+         [34mguard_name[39m: "[32mweb[39m",
+         [34mcreated_at[39m: "[32m2022-06-21 19:14:20[39m",
+         [34mupdated_at[39m: "[32m2022-06-21 19:14:20[39m",
+       },
+       [34;4mSpatie\Permission\Models\Permission[39;24m {#4505
+         [34mid[39m: [35m3[39m,
+         [34mname[39m: "[32mcreate user[39m",
+         [34mguard_name[39m: "[32mweb[39m",
+         [34mcreated_at[39m: "[32m2022-06-21 19:14:20[39m",
+         [34mupdated_at[39m: "[32m2022-06-21 19:14:20[39m",
+       },
+     ],
+   }
+
