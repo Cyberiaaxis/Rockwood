@@ -1,5 +1,4 @@
 import Cookies from 'js-cookie'
-import ky from 'ky';
 
 const gameServerApi = async (endpoint = 'ping', requestType = 'GET', body) => {
     // if the cookie isn't set, then let's get a csrf token.

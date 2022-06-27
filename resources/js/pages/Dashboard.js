@@ -16,6 +16,7 @@ import Profile from "../components/Profile";
 
 
 
+
 // https://codesandbox.io/s/material-demo-forked-9ot1z?file=/menuStyle.css
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -197,9 +198,11 @@ const Dashboard = () => {
     // console.log(pages[page]);
     return (
         <div className={classes.root}>
+            <Link to='/staff/'>Admin Access</Link>
             <Grid container>
                 {/* Header */}
                 <Grid item xs={12}>
+
                     <Box display="flex">
                         <Box paddingTop={1} flexGrow={1}>
                             <Button className={classes.startButton} variant="contained" color="primary" size="large">

@@ -8,6 +8,7 @@ import Login from "../components/Login";
 
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
+import StaffApp from "../staffPages/StaffApp";
 import Attack from "../pages/Attack";
 import App from "../pages/App";
 // import Chat from "../components/Chat";
@@ -28,6 +29,7 @@ const UserRoutes = () => {
                         <Switch>
                             {/* these routes are available for everyone, should NOT be a child of authenticationguard */}
                             <Route exact path="/" component={App} />
+                            <Route exact path="/staff/" component={StaffApp} />
                             <Route>
                                 <AuthenticationGuard>
                                     <Switch>
