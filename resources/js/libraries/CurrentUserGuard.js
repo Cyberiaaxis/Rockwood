@@ -18,8 +18,8 @@ const CurrentUserGuard = ({ children }) => {
             try {
                 const response = await gameServerApi('ping');
                 console.log('CurrentUserGuard: authorized:', response);
-                // TODO: if ping request says authenticated, call setUser to store username/id in context
-                setUser({ userId: response.userId, userName: response.userName})
+                // TODO: if ping request says authenticated, call setUser to store username/id/type in context
+                setUser({ userId: response.userId, userName: response.userName, userType: response.userType})
                 history.push('/Dashboard')
             }
             catch(err) {

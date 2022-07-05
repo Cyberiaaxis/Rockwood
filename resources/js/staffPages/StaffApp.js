@@ -1,14 +1,14 @@
-import React from 'react';
-// import Header from "../components/Header";
-// // import Slider from "../components/Slider";
-// import Lists from "../components/Lists";
-// import Footer from "../components/Footer";
+import React from 'react'
+import Body from '../components/Staff/Body';
+import Footer from '../components/Staff/Footer';
+import Header from "../components/Staff/Header";
 
-
-const StaffApp = () => {
-
-  return (
-    <div>hi welcome on admin area</div>
-  )
+export default function StaffApp() {
+    return (
+        <React.Fragment>
+            <Header />
+            <Body />
+            <Footer />
+        </React.Fragment>
+    )
 }
-export default StaffApp;
