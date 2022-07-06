@@ -36,7 +36,8 @@ const Login = () => {
         if (result.userId) {
             const userDetails = {
                 userId: result.userId,
-                userName: result.userName
+                userName: result.userName,
+                userRole: result.userRoles
             };
             setUser(userDetails);
             history.push("/dashboard");

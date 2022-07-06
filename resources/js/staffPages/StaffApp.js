@@ -7,8 +7,6 @@ export default function StaffApp() {
     return (
         <React.Fragment>
             <Header />
-            <Body />
-            <Footer />
         </React.Fragment>
     )
 }

@@ -6,7 +6,6 @@ export default function Header() {
     return (
         <React.Fragment>
             <Navbar />
-            <Sidebar />
         </React.Fragment>
 
     )

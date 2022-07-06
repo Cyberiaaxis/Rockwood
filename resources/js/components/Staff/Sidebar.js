@@ -60,7 +60,7 @@ function Sidebar(props) {
   );
 
   const container = window !== undefined ? () => window().document.body : undefined;
-
+console.log(container);
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
