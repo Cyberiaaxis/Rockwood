@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { makeStyles, Paper, Box, Button, Grid, Avatar } from "@material-ui/core";
+
 import clsx from "clsx";
 import ProgressBar from "../components/ProgressBar";
 import "../styles/menuStyle.scss";
@@ -102,7 +103,7 @@ const topMenuBar = [
 
 
 const Dashboard = () => {
-    const { user, setUser, unsetUser  } = useContext(AuthContext);
+    const { unsetUser, staffPanelAccess, setStaffPanelAccess } = useContext(AuthContext);
     const history = useHistory()
     const [page, setPage] = useState("dashboard");
     const classes = useStyles();
@@ -143,6 +144,17 @@ const Dashboard = () => {
         }
     };
 
+    const handleSaccess = async () => {
+        const result = gameServerApi("saccess");
+
+        if (result) {
+            console.log('result')
+            setStaffPanelAccess(true)
+            return true;
+        }
+        return false;
+    }
+
     const logout = () => {
         try {
             toast.promise(
@@ -182,6 +194,7 @@ const Dashboard = () => {
     }
 
 
+
     const pages = {
         // hof: <Hof />,
         inventory: <Inventory />,
@@ -198,7 +211,7 @@ const Dashboard = () => {
     // console.log(pages[page]);
     return (
         <div className={classes.root}>
-            <Link to='/staff/'>Admin Access</Link>
+            <Link to='/staff/' onClick={handleSaccess} >Admin Access</Link>
             <Grid container>
                 {/* Header */}
                 <Grid item xs={12}>

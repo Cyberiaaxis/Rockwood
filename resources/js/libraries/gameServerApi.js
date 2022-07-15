@@ -22,7 +22,7 @@ const gameServerApi = async (endpoint = 'ping', requestType = 'GET', body) => {
     }
 
     const response =  await fetch('/api/' + endpoint, options)
-    console.log("response", response);
+    // console.log("response", response);
     if (response.status >= 400 && response.status <= 599) throw new HttpStatusError(response.status)
     return await response.json();
 }

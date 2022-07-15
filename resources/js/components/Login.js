@@ -31,7 +31,7 @@ const Login = () => {
 
     const onSubmit = async (data) => {
         // console.log("data", data);
-        const result = await gameServerApi("auth/login", 'POST',  data );
+        const result = await gameServerApi("auth/login", 'POST', data);
         // console.log("result",result);
         if (result.userId) {
             const userDetails = {
@@ -63,7 +63,7 @@ const Login = () => {
                     setForgetModal(true);
                     setRegistrationModal(false);
                     // setModal(forgetModal);
-                 }}>
+                }}>
                     Recover Account
                 </span>
 
@@ -96,7 +96,7 @@ const Login = () => {
                     setRegistrationModal(true)
                     setForgetModal(false);
                     // setModal(registrationModal);
-                    }}>
+                }}>
                     Join Us
                 </span>
                 {errors.email && <p>{errors.email.message}</p>}

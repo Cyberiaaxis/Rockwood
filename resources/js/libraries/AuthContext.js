@@ -8,9 +8,10 @@ export const AuthContext = React.createContext({});
 export const AuthContextProvider = ({ children }) => {
 	const [model, setModel] = React.useState({
 		setUser: user => setModel(m => Object.assign({}, m, { loggedIn: true, user })),
-		unsetUser: user => setModel(m => Object.assign({}, m, { loggedIn: false, user: undefined }))
+		unsetUser: user => setModel(m => Object.assign({}, m, { loggedIn: false, user: undefined })),
+        setStaffPanelAccess: staffPanelAccess => setModel(m => Object.assign({}, m, { staffPanelAccess})),
 	})
-	console.log('AuthContext: model: ', model);
+	// console.log('AuthContext: model: ', model);
 	return (
 		<AuthContext.Provider value={model}>
 			{children}

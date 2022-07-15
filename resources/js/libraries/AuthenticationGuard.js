@@ -7,15 +7,14 @@ import gameServerApi from './gameServerApi';
 const AuthenticationGuard = ({ children }) => {
     const { user, loggedIn, setUser } = React.useContext(AuthContext);
     const history = useHistory()
-    console.log('AuthGuard.js rendering')
+    // console.log('AuthGuard.js rendering')
 
     React.useEffect(() => {
-        console.log('AuthGuard: ', user, loggedIn)
         if (!loggedIn) {
-            console.log('AuthGuard: not logged in, redirecting')
+            // console.log('AuthGuard: not logged in, redirecting')
             history.push('/')
         } else {
-            console.log('AuthGuard: logged in')
+            // console.log('AuthGuard: logged in')
         }
     }, [loggedIn])
 
