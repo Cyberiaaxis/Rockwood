@@ -19,14 +19,13 @@ export default function StaffApp() {
     const theme = useTheme();
     const handleSaccess = async () => {
 
-    const result = gameServerApi("saccess");
+        const result = gameServerApi("saccess");
         setStaffPanelAccess(false);
     }
 
     console.log(staffPanelAccess)
     return (
         <React.Fragment>
-            <div onClick={handleSaccess}> Back to player </div>
             <div className={classes.root}>
                 <CssBaseline />
                 <Header />

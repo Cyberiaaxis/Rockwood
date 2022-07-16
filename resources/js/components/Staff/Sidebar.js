@@ -1,6 +1,9 @@
 import React from 'react';
+import { AuthContext } from '../../libraries/AuthContext';
+import gameServerApi from '../../libraries/gameServerApi';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useHistory, Link } from "react-router-dom";
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -51,6 +54,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Sidebar(props) {
+    const { unsetUser, staffPanelAccess, setStaffPanelAccess } = React.useContext(AuthContext);
+    const history = useHistory();
     const classes = useStyles();
     const theme = useTheme();
 
@@ -63,6 +68,14 @@ export default function Sidebar(props) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+    const handleRSaccess = async () => {
+        const result = gameServerApi("rsaccess");
+
+        if (result) {
+            setStaffPanelAccess(false)
+            history.push("/Dashboard");
+        }
+    }
 
     return (
         <Drawer
@@ -83,7 +96,9 @@ export default function Sidebar(props) {
                     {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                 </IconButton>
             </div>
+
             <Divider />
+            <div onClick={handleRSaccess}>BAP</div>
             <List>
                 {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                     <ListItem button key={text}>

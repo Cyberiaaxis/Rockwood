@@ -21,11 +21,15 @@ const CurrentUserGuard = ({ children }) => {
                 // console.log('CurrentUserGuard: authorized:', response);
                 // TODO: if ping request says authenticated, call setUser to store username/id/type in context
                 setUser({ userId: response.userId, userName: response.userName, userRole: response.userRoles })
-                // setStaffPanelAccess(response.status);
+                setStaffPanelAccess(response.status);
+                console.log("staffPanelAccess", staffPanelAccess);
 
-                if (staffPanelAccess) {
+                if (staffPanelAccess === true) {
+                    console.log('staff member');
                     history.push('/staff/');
                 } else {
+                    console.log('not staff member');
+
                     history.push('/Dashboard/');
                 }
 
