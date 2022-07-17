@@ -145,14 +145,11 @@ const Dashboard = () => {
     };
 
     const handleSaccess = async () => {
-        const result = gameServerApi("saccess");
+        const result = await gameServerApi("saccess");
 
         if (result) {
-            console.log('result')
-            setStaffPanelAccess(true)
-            return true;
+            setStaffPanelAccess(Boolean(Number(result)));
         }
-        return false;
     }
 
     const logout = () => {

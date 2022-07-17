@@ -69,12 +69,9 @@ export default function Sidebar(props) {
         setOpen(false);
     };
     const handleRSaccess = async () => {
-        const result = gameServerApi("rsaccess");
-
-        if (result) {
-            setStaffPanelAccess(false)
-            history.push("/Dashboard");
-        }
+        const result = await gameServerApi("rsaccess");
+        setStaffPanelAccess(Boolean(Number(result)));
+        history.push("/dashboard");
     }
 
     return (

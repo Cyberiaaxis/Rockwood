@@ -7,8 +7,6 @@ import gameServerApi from './gameServerApi';
 const CurrentUserGuard = ({ children }) => {
     const [state, setState] = React.useState('initial')
     const { user, loggedIn, setUser, unsetUser, staffPanelAccess, setStaffPanelAccess } = React.useContext(AuthContext);
-
-    console.log('staffPanelAccess CG', staffPanelAccess);
     const history = useHistory()
 
     React.useEffect(() => {
@@ -18,18 +16,13 @@ const CurrentUserGuard = ({ children }) => {
 
             try {
                 const response = await gameServerApi('ping');
-                // console.log('CurrentUserGuard: authorized:', response);
                 // TODO: if ping request says authenticated, call setUser to store username/id/type in context
                 setUser({ userId: response.userId, userName: response.userName, userRole: response.userRoles })
-                setStaffPanelAccess(response.status);
-                console.log("staffPanelAccess", staffPanelAccess);
 
-                if (staffPanelAccess === true) {
-                    console.log('staff member');
+                if (response.status) {
+                    setStaffPanelAccess(response.status);
                     history.push('/staff/');
                 } else {
-                    console.log('not staff member');
-
                     history.push('/Dashboard/');
                 }
 
@@ -47,11 +40,10 @@ const CurrentUserGuard = ({ children }) => {
     }, [state]);
 
     // console.log('CurrentUserGuard.js rendering - state:', state)
-
     if (state === 'initial')
         return (<div>Checking user...</div>);
 
     return children
 }
 
-export default CurrentUserGuard
+export default CurrentUserGuard;
