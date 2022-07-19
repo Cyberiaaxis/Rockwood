@@ -1,5 +1,4 @@
 import React from 'react';
-import { AuthContext } from '../../libraries/AuthContext';
 import gameServerApi from '../../libraries/gameServerApi';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -54,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Sidebar(props) {
-    const { unsetUser, staffPanelAccess, setStaffPanelAccess } = React.useContext(AuthContext);
     const history = useHistory();
     const classes = useStyles();
     const theme = useTheme();
@@ -70,7 +68,6 @@ export default function Sidebar(props) {
     };
     const handleRSaccess = async () => {
         const result = await gameServerApi("rsaccess");
-        setStaffPanelAccess(Boolean(Number(result)));
         history.push("/dashboard");
     }
 

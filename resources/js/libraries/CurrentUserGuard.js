@@ -6,7 +6,7 @@ import gameServerApi from './gameServerApi';
 // this checks for a current user when the app is loading
 const CurrentUserGuard = ({ children }) => {
     const [state, setState] = React.useState('initial')
-    const { user, loggedIn, setUser, unsetUser, staffPanelAccess, setStaffPanelAccess } = React.useContext(AuthContext);
+    const { user, loggedIn, setUser, unsetUser } = React.useContext(AuthContext);
     const history = useHistory()
 
     React.useEffect(() => {
@@ -20,7 +20,6 @@ const CurrentUserGuard = ({ children }) => {
                 setUser({ userId: response.userId, userName: response.userName, userRole: response.userRoles })
 
                 if (response.status) {
-                    setStaffPanelAccess(response.status);
                     history.push('/staff/');
                 } else {
                     history.push('/Dashboard/');

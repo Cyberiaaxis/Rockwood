@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { makeStyles, Paper, Box, Button, Grid, Avatar } from "@material-ui/core";
-
 import clsx from "clsx";
 import ProgressBar from "../components/ProgressBar";
 import "../styles/menuStyle.scss";
@@ -14,6 +13,7 @@ import Gym from "../components/Gym";
 import Crimes from "../components/Crimes";
 import Inventory from "../components/Inventory";
 import Profile from "../components/Profile";
+import PlayerHome from "../components/PlayerHome";
 
 
 
@@ -105,7 +105,7 @@ const topMenuBar = [
 const Dashboard = () => {
     const { unsetUser, staffPanelAccess, setStaffPanelAccess } = useContext(AuthContext);
     const history = useHistory()
-    const [page, setPage] = useState("dashboard");
+    const [page, setPage] = useState("home");
     const classes = useStyles();
 
 
@@ -146,10 +146,7 @@ const Dashboard = () => {
 
     const handleSaccess = async () => {
         const result = await gameServerApi("saccess");
-
-        if (result) {
-            setStaffPanelAccess(Boolean(Number(result)));
-        }
+        history.push("/staff/");
     }
 
     const logout = () => {
@@ -195,7 +192,7 @@ const Dashboard = () => {
     const pages = {
         // hof: <Hof />,
         inventory: <Inventory />,
-        home: <Stats />,
+        home: <PlayerHome />,
         profile: <Profile />,
         account: "account",
         stats: <Stats />,
@@ -205,10 +202,10 @@ const Dashboard = () => {
         crimes: <Crimes />,
         gym: <Gym />,
     };
-    // console.log(pages[page]);
+    // console.log("pages[page]", pages[page]);
     return (
         <div className={classes.root}>
-            <Link to='/staff/' onClick={handleSaccess} >Admin Access</Link>
+            <div onClick={handleSaccess} >Admin Access</div>
             <Grid container>
                 {/* Header */}
                 <Grid item xs={12}>
