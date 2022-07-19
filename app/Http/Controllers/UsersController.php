@@ -1,13 +1,16 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\{Role, Permission};
 use Hash;
 use Carbon\Carbon;
 use App\Http\Resources\UserResource;
 use App\Models\{UserTravel, TravelRoute, UserDetail, User, UserStats};
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 // use Auth;
 // use DateTime;
@@ -36,12 +39,11 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $users = User::with('permissions')->orderBy('name')->get();
-        if($request->ajax())
-        {
+        if ($request->ajax()) {
             return UserResource::collection($users);
         }
 
-    return view('staff.users.users');
+        return view('staff.users.users');
     }
 
     /**
@@ -60,23 +62,23 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'=>'required|max:120',
-            'gender'=>'required',
-            'type'=>'required',
-            'password'=>'required',
-            'email'=>'required|email|unique:users,email',
-            'roles'=>"required|array",
+            'name' => 'required|max:120',
+            'gender' => 'required',
+            'type' => 'required',
+            'password' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'roles' => "required|array",
         ]);
         $password = Hash::make($request->password);
         $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => $password,
-                'gender'=> $request->gender,
-                'type'=> $request->type,
-            ]);
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $password,
+            'gender' => $request->gender,
+            'type' => $request->type,
+        ]);
         $user->syncRoles($request->roles);
-    return response()->json(['success' => true,'msg' => 'User has been created.']);
+        return response()->json(['success' => true, 'msg' => 'User has been created.']);
     }
 
     /**
@@ -87,7 +89,7 @@ class UsersController extends Controller
     public function show(Request $request, User $profile)
     {
         $now =  Carbon::now();
-    return view('player.profile', ['user' => $profile, 'currentdatetime' => $now]);
+        return view('player.profile', ['user' => $profile, 'currentdatetime' => $now]);
     }
 
     /**
@@ -97,9 +99,9 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-         $roles = Role::all();
+        $roles = Role::all();
         $user = User::findorFail($id);
-    return view('staff.users.edit', ['user' => $user, 'roles' => $roles]);
+        return view('staff.users.edit', ['user' => $user, 'roles' => $roles]);
     }
 
     /**
@@ -110,17 +112,17 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name'=>'required|max:120',
-            'email'=>'required|email|exists:users,email',
-            'roles'=>"required|array",
-            'type'=>'required',
-            'gender'=>'required',
+            'name' => 'required|max:120',
+            'email' => 'required|email|exists:users,email',
+            'roles' => "required|array",
+            'type' => 'required',
+            'gender' => 'required',
         ]);
         $user = User::findorFail($id);
-        $input = $request->except(['url','method','csrfToken', 'roles']);
+        $input = $request->except(['url', 'method', 'csrfToken', 'roles']);
         $user->fill($input)->save();
         $user->syncRoles($request->roles);
-    return response()->json(['success' => true,'msg' => 'User has been updated']);
+        return response()->json(['success' => true, 'msg' => 'User has been updated']);
     }
 
     /**
@@ -132,7 +134,7 @@ class UsersController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-    return response()->json(['success' => true,'msg' => 'User has been deleted']);
+        return response()->json(['success' => true, 'msg' => 'User has been deleted']);
     }
 
     /**
@@ -142,7 +144,6 @@ class UsersController extends Controller
      */
     public function getUser($id)
     {
-
     }
 
     /**
@@ -167,13 +168,12 @@ class UsersController extends Controller
     {
         $userDetails = new UserDetail();
 
-        if($userDetails->getLocation(auth()->user()->id) === $travelroute->destination)
-        {
+        if ($userDetails->getLocation(auth()->user()->id) === $travelroute->destination) {
             return "You are already on destination";
         }
 
         $newTime = $this->addTravelTime($travelroute->duration);
-    return $userDetails->changeTravelStatus(auth()->user()->id, $travelroute->destination , $newTime);
+        return $userDetails->changeTravelStatus(auth()->user()->id, $travelroute->destination, $newTime);
     }
 
     /**
@@ -187,7 +187,7 @@ class UsersController extends Controller
         $userDetails = new UserDetail();
         $this->verifyReaminTravelTime($userDetails, $carbon);
         $this->addTravel($travelroute);
-    return $userDetails->changeTravelStatus(auth()->user()->id, $travelroute->destination);
+        return $userDetails->changeTravelStatus(auth()->user()->id, $travelroute->destination);
     }
 
     /**
@@ -199,7 +199,7 @@ class UsersController extends Controller
     {
         $carbon = new Carbon();
         return $carbon->now();
-    return $carbon->now()->addMinutes($duration);
+        return $carbon->now()->addMinutes($duration);
     }
 
     /**
@@ -225,8 +225,8 @@ class UsersController extends Controller
         $user = new User();
         $userStats = new UserStats();
         $this->canBust($userStats, $userDetails);
-        $addDuration = $carbon->now()->addMinutes(mt_rand(0,60));
-    return  $this->chanceBust($userDetails, $user, $userStats, $carbon, $experince = 100);
+        $addDuration = $carbon->now()->addMinutes(mt_rand(0, 60));
+        return  $this->chanceBust($userDetails, $user, $userStats, $carbon, $experince = 100);
     }
 
     /**
@@ -238,19 +238,17 @@ class UsersController extends Controller
     {
         $randomChance = mt_rand(0, 100);
 
-        if ($randomChance >= 0 && $randomChance <= 25)
-        {
+        if ($randomChance >= 0 && $randomChance <= 25) {
             $this->successBust($userDetails, $userStats, $experince);
-        return "You bust successfully ". $user->getUserNameById($userDetails->user_id);
+            return "You bust successfully " . $user->getUserNameById($userDetails->user_id);
         }
 
-        if ($randomChance >= 26 && $randomChance <= 50)
-        {
+        if ($randomChance >= 26 && $randomChance <= 50) {
             $this->failBust($userDetails, $userStats, $experince, $addDuration);
-        return "You failed in bust to " . $user->getUserNameById($userDetails->user_id);
+            return "You failed in bust to " . $user->getUserNameById($userDetails->user_id);
         }
 
-    return "You missed in bust to " . $user->getUserNameById($userDetails->user_id);
+        return "You missed in bust to " . $user->getUserNameById($userDetails->user_id);
     }
 
     /**
@@ -286,18 +284,40 @@ class UsersController extends Controller
         $haveNerve = $userStats->haveNerve(auth()->user()->id);
         $requireNerve = (int) round($userStats->maxNerve(auth()->user()->id) / 2);
 
-        if ($userDetails->getJailTime($userDetails->user_id) === NULL)
-        {
+        if ($userDetails->getJailTime($userDetails->user_id) === NULL) {
             throw new Exception("You can't bust a non jailed player");
         }
 
-        if($haveNerve < $requireNerve)
-        {
+        if ($haveNerve < $requireNerve) {
             throw new Exception("You don't have enough nerve to bust any");
         }
 
-    return $userStats->decrementNerve(auth()->user()->id, $requireNerve);
+        return $userStats->decrementNerve(auth()->user()->id, $requireNerve);
     }
+
+    /**
+     * Remove the specified resource from storage.
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function AddSaccessStatus()
+    {
+        session()->put('saccess_status', true);
+        return true;
+    }
+
+        /**
+     * Remove the specified resource from storage.
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function RemoveSaccessStatus()
+    {
+        session()->put('saccess_status', false);
+        return 'false';
+    }
+
+
 
     // public function heal(UserDetail $userDetails)
     // {
@@ -331,4 +351,3 @@ class UsersController extends Controller
     //     // return $userStats->decrementNerve(auth()->user()->id, $requireNerve);
     // }
 }
-

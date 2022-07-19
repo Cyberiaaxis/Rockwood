@@ -50,16 +50,16 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $dates = ['created_at', 'updated_at', 'last_seen'];
 
     /**
-    * get total posts
-    */
+     * get total posts
+     */
     public function getTotalPostsAttribute()
     {
-         return $this->posts()->count();
+        return $this->posts()->count();
     }
 
     public function course()
     {
-         return $this->belongsToMany(Course::class, 'user_courses');
+        return $this->belongsToMany(Course::class, 'user_courses');
     }
 
     /**
@@ -69,7 +69,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function doneCourse(int $course_id)
     {
-         return $this->course()->where('course_id',$course_id)->exists();
+        return $this->course()->where('course_id', $course_id)->exists();
     }
 
     /**
@@ -91,7 +91,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param  int $userId
      * @return string
      */
-    public function getUserNameById(int $userId) :string
+    public function getUserNameById(int $userId): string
     {
         return $this->where('id', $userId)->value('name');
     }
@@ -101,7 +101,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param  int $userId
      * @return string
      */
-    public function getAge(int $userId) : string
+    public function getAge(int $userId): string
     {
         return  $this->where(['id' => $userId])->value('created_at');
     }
@@ -126,5 +126,22 @@ class User extends Authenticatable implements MustVerifyEmail
         return  $this->take(5)->orderBy('name')->pluck('name');
     }
 
-}
+    /**
+     * get user from storage.
+     * @param
+     * @return a collection
+     */
+    public function getUserRoles()
+    {
+        return  $this->getRoleNames();
+    }
 
+    /**
+     * get user from storage.
+     * @param
+     * @return a collection
+     */
+    public function getSaccessAttribute(){
+
+    }
+}

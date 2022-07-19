@@ -10,64 +10,27 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+// ['middleware' => ['auth:sanctum', 'role:admin|editor']],
 
-// Route::post('/signin', [AuthenticationController::class, 'signin']);
 
-// /**
-//  * Tests
-//  */
-//  Route::get('/test0', function (Request $request) {
-//      return [
-//          'status' => 'success',
-//          'data' => [
-//              'hello' => 'This is the a basic test ZERO'
-//          ]
-//      ];
-//  });
-
-//  Route::post('/test1', function (Request $request) {
-//      return [
-//          'status' => 'success',
-//          'data' => [
-//              'hello' => 'This is the FIRST test'
-//          ]
-//      ];
-//  });
-
-// Route::middleware('auth:sanctum')->get('/test2', function (Request $request) {
-//     return [
-//         'status' => 'success',
-//         'data' => [
-//             'hello' => 'This is the SECOND test. We do not need this'
-//         ]
-//     ];
-// });
-
-// Route::middleware('auth:sanctum')->post('/test3', function (Request $request) {
-//     return [
-//         'status' => 'success',
-//         'data' => [
-//             'hello' => 'This is the THIRD test'
-//         ]
-//     ];
-// });
-
-// Route::middleware('auth:sanctum')->post('/user', function (Request $request) {
-//     return $request->user();
-// });
-// dd($router);
 $router->get('rightList', 'App\Http\Controllers\LandingPageController@rightList');
 $router->get('leftList', 'App\Http\Controllers\LandingPageController@leftList');
-$router->post('/auth/login', 'App\Http\Controllers\LoginController@login');
+$router->post('auth/login', 'App\Http\Controllers\LoginController@login');
 $router->post('/register', 'App\Http\Controllers\RegistrationController@signup');
+// dd();
+// $router->prefix('staff')->namespace('Staff')->middleware(['auth:sanctum', 'role:admin|editor'])->group(function ($router) {
+//     // $router->get('/', 'DashboardController');
+//     // $router->post('/login', 'App\Http\Controllers\LoginController@login');
+//     });
 
-
-
-$router->group(['middleware' => ['auth:sanctum']], function($router){
+$router->group(['middleware' => 'auth:sanctum'], function($router){
     $router->get('/auth/logout', 'App\Http\Controllers\LoginController@logout');
     $router->get('/home', 'App\Http\Controllers\HomeController@index');
     // i think the 'ping' should go here? so it only works when authenticated
     $router->get('/ping', 'App\Http\Controllers\LoginController@ping');
+    $router->get('/saccess', 'App\Http\Controllers\UsersController@AddSaccessStatus');
+    $router->get('/rsaccess', 'App\Http\Controllers\UsersController@RemoveSaccessStatus');
+
     //i am can do anthing if i got login form for login first
     //lets try
 //lets compile and see what happens now

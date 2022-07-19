@@ -40,7 +40,8 @@ class LoginController extends Controller
 
         if ($this->attemptLogin($request)) {
             $user = auth()->user();
-            return response()->json(["userId" => $user->id, "userName" => $user->name]);
+            $role = $user->getUserRoles();
+            return response()->json(["userId" => $user->id, "userName" => $user->name, "userRole" => $role]);
         }
 
 
@@ -117,7 +118,9 @@ class LoginController extends Controller
     public function ping()
     {
         $user = auth()->user();
-        return response()->json(["userId" => $user->id, "userName" => $user->name]);
+        $role = $user->getUserRoles();
+        $status = (session("saccess_status")) ? session("saccess_status") : false ;
+        return response()->json(["userId" => $user->id, "userName" => $user->name, "userRoles" => $role, "status" => $status]);
     }
 
     /**

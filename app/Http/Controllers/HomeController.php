@@ -28,25 +28,35 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(
+        Area $area,
+        Attack $attack,
+        Level $level,
+        Rank $rank,
+        User $user,
+        UserDetail $userDetail,
+        UserCrime $userCrime,
+        UserStats $userStats,
+        Carbon $carbon,
+        RealEstate $realEstate,
+        UserReward $userReward
+    ) {
         $this->middleware(function ($request, $next) {
             $this->loginUser = auth()->user();
             return $next($request);
         });
 
-        $this->area = new Area();
-        $this->level = new Level();
-        $this->rank = new Rank();
-        $this->user = new User();
-        $this->userDetails = new UserDetail();
-        $this->userCrime = new UserCrime();
-        $this->userStats = new UserStats();
-        $this->carbon = new Carbon();
-        $this->realEstate = new RealEstate();
-        $this->userReward = new UserReward();
-        $this->attack = new Attack();
-        $this->carbon = new Carbon();
+        $this->area = $area;
+        $this->level = $level;
+        $this->rank = $rank;
+        $this->user = $user;
+        $this->userDetails = $userDetail;
+        $this->userCrime = $userCrime;
+        $this->userStats = $userStats;
+        $this->carbon = $carbon;
+        $this->realEstate = $realEstate;
+        $this->userReward = $userReward;
+        $this->attack = $attack;
     }
 
     /**
@@ -110,7 +120,7 @@ class HomeController extends Controller
             "money" => $money,
             "points" => $points,
         ];
-    return response()->json($details);
+        return response()->json($details);
     }
 
     /**
