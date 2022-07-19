@@ -1,19 +1,55 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
+import gameServerApi from "../libraries/gameServerApi";
 import Paper from '@mui/material/Paper';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import StarIcon from '@mui/icons-material/Star';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
+
+const columns = [
+    { id: 'name', label: 'Name', minWidth: 100 },
+    { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
+    {
+        id: 'population',
+        label: 'Population',
+        minWidth: 100,
+        align: 'left',
+        format: (value) => value.toLocaleString('en-US'),
+    },
+    {
+        id: 'size',
+        label: 'Size\u00a0(km\u00b2)',
+        minWidth: 100,
+        align: 'left',
+        format: (value) => value.toLocaleString('en-US'),
+    },
+
+];
+
+function createData(name, code, population, size) {
+    const density = population / size;
+    return { name, code, population, size, density };
+}
+
+const rows = [
+    createData('India', 'IN', "effergeggerggggggggggggggggggggggtgtrg", 3287263),
+    createData('China', 'CN', 1403500365, 9596961),
+    createData('Italy', 'IT', 60483973, 301340),
+    createData('United States', 'US', 327167434, 9833520),
+    createData('Canada', 'CA', 37602103, 9984670),
+    createData('Australia', 'AU', 25475400, 7692024),
+
+];
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -53,12 +89,20 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 
 export default function PlayerHome() {
-
-    const [expanded, setExpanded] = React.useState('panel1');
+    const [expanded, setExpanded] = React.useState(null);
 
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
+
+    React.useEffect(() => {
+        const userDetails = async () => {
+            const result = await gameServerApi("home");
+            console.log("playerhome", result);
+        }
+        userDetails();
+    }, []);
+
 
     return (
         <React.Fragment>
@@ -70,58 +114,138 @@ export default function PlayerHome() {
                                 <Typography>Collapsible Group Item #1</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Typography>
-                                    <List
-                                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                                        aria-label="contacts"
-                                    >
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                    </List>
-                                </Typography>
+                                <TableContainer sx={{ maxHeight: 440 }}>
+                                    <Table stickyHeader aria-label="sticky table">
+                                        <TableHead>
+                                            <TableRow>
+                                                {columns.map((column) => (
+                                                    <TableCell
+                                                        key={column.id}
+                                                        align={column.align}
+                                                        style={{ minWidth: column.minWidth }}
+                                                    >
+                                                        {column.label}
+                                                    </TableCell>
+                                                ))}
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {rows
+
+                                                .map((row) => {
+                                                    return (
+                                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                                            {columns.map((column) => {
+                                                                const value = row[column.id];
+                                                                return (
+                                                                    <TableCell key={column.id} align={column.align}>
+                                                                        {column.format && typeof value === 'number'
+                                                                            ? column.format(value)
+                                                                            : value}
+                                                                    </TableCell>
+                                                                );
+                                                            })}
+                                                        </TableRow>
+                                                    );
+                                                })}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </AccordionDetails>
+                        </Accordion>
+                    </div>
+                </Grid>
+                <Grid item xs={6}>
+                    <div>
+                        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                            <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+                                <Typography>Collapsible Group Item #1</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <TableContainer sx={{ maxHeight: 440 }}>
+                                    <Table stickyHeader aria-label="sticky table">
+                                        <TableHead>
+                                            <TableRow>
+                                                {columns.map((column) => (
+                                                    <TableCell
+                                                        key={column.id}
+                                                        align={column.align}
+                                                        style={{ minWidth: column.minWidth }}
+                                                    >
+                                                        {column.label}
+                                                    </TableCell>
+                                                ))}
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {rows
+                                                .map((row) => {
+                                                    return (
+                                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                                            {columns.map((column) => {
+                                                                const value = row[column.id];
+                                                                return (
+                                                                    <TableCell key={column.id} align={column.align}>
+                                                                        {column.format && typeof value === 'number'
+                                                                            ? column.format(value)
+                                                                            : value}
+                                                                    </TableCell>
+                                                                );
+                                                            })}
+                                                        </TableRow>
+                                                    );
+                                                })}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </AccordionDetails>
+                        </Accordion>
+
+                    </div>
+                </Grid>
+                <Grid item xs={6}>
+                    <div>
+                        <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+                            <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+                                <Typography>Collapsible Group Item #1</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <TableContainer sx={{ maxHeight: 440 }}>
+                                    <Table stickyHeader aria-label="sticky table">
+                                        <TableHead>
+                                            <TableRow>
+                                                {columns.map((column) => (
+                                                    <TableCell
+                                                        key={column.id}
+                                                        align={column.align}
+                                                        style={{ minWidth: column.minWidth }}
+                                                    >
+                                                        {column.label}
+                                                    </TableCell>
+                                                ))}
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {rows
+                                                .map((row) => {
+                                                    return (
+                                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                                            {columns.map((column) => {
+                                                                const value = row[column.id];
+                                                                return (
+                                                                    <TableCell key={column.id} align={column.align}>
+                                                                        {column.format && typeof value === 'number'
+                                                                            ? column.format(value)
+                                                                            : value}
+                                                                    </TableCell>
+                                                                );
+                                                            })}
+                                                        </TableRow>
+                                                    );
+                                                })}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
                             </AccordionDetails>
                         </Accordion>
                     </div>
@@ -133,184 +257,42 @@ export default function PlayerHome() {
                                 <Typography>Collapsible Group Item #1</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Typography>
-                                    <List
-                                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                                        aria-label="contacts"
-                                    >
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                    </List>
-                                </Typography>
-                            </AccordionDetails>
-                        </Accordion>
-                    </div>
-                </Grid>
-                <Grid item xs={6}>
-                    <div>
-                        <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-                            <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                                <Typography>Collapsible Group Item #1</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <Typography>
-                                    <List
-                                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                                        aria-label="contacts"
-                                    >
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                    </List>
-                                </Typography>
-                            </AccordionDetails>
-                        </Accordion>
-                    </div>
-                </Grid>
-                <Grid item xs={6}>
-                    <div>
-                        <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
-                            <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                                <Typography>Collapsible Group Item #1</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <Typography>
-                                    <List
-                                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                                        aria-label="contacts"
-                                    >
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem disablePadding>
-                                            <ListItemButton>
-                                                <ListItemIcon>
-                                                    <StarIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Chelsea Otakan" />
-                                                <ListItemText primary="Chelsea Otakan" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                    </List>
-                                </Typography>
+                                <TableContainer sx={{ maxHeight: 440 }}>
+                                    <Table stickyHeader aria-label="sticky table">
+                                        <TableHead>
+                                            <TableRow>
+                                                {columns.map((column) => (
+                                                    <TableCell
+                                                        key={column.id}
+                                                        align={column.align}
+                                                        style={{ minWidth: column.minWidth }}
+                                                    >
+                                                        {column.label}
+                                                    </TableCell>
+                                                ))}
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {rows
+                                                .map((row) => {
+                                                    return (
+                                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                                            {columns.map((column) => {
+                                                                const value = row[column.id];
+                                                                return (
+                                                                    <TableCell key={column.id} align={column.align}>
+                                                                        {column.format && typeof value === 'number'
+                                                                            ? column.format(value)
+                                                                            : value}
+                                                                    </TableCell>
+                                                                );
+                                                            })}
+                                                        </TableRow>
+                                                    );
+                                                })}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
                             </AccordionDetails>
                         </Accordion>
                     </div>

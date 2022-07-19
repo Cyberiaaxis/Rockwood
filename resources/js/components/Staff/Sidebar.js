@@ -66,9 +66,10 @@ export default function Sidebar(props) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    const handleRSaccess = async () => {
-        const result = await gameServerApi("rsaccess");
-        history.push("/dashboard");
+    const handleClick = async (e) => {
+        console.log(e.target.innerText);
+        // const result = await gameServerApi("rsaccess");
+        // history.push("/dashboard");
     }
 
     return (
@@ -94,10 +95,10 @@ export default function Sidebar(props) {
             <Divider />
             <div onClick={handleRSaccess}>BAP</div>
             <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                {['Back to profile', 'Rank', ].map((text, index) => (
                     <ListItem button key={text}>
                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
+                        <ListItemText onClick={handleClick} primary={text} />
                     </ListItem>
                 ))}
             </List>

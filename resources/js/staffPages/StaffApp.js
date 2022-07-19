@@ -21,7 +21,7 @@ export default function StaffApp() {
             <div className={classes.root}>
                 <CssBaseline />
                 <Header />
-                <Body />
+                <Body>{myComponent}</Body>
             </div>
         </React.Fragment>
     )
