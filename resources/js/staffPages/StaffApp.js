@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Body from '../components/Staff/Body';
@@ -12,15 +12,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function StaffApp() {
-
     const classes = useStyles();
     const theme = useTheme();
+    const [myComponent, setMyComponent] = useState(<Footer/>);
 
     return (
         <React.Fragment>
             <div className={classes.root}>
                 <CssBaseline />
-                <Header />
+                <Header setMyComponent={setMyComponent} />
                 <Body>{myComponent}</Body>
             </div>
         </React.Fragment>

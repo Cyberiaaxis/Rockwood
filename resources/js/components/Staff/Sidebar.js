@@ -14,6 +14,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import Rank from "./Rank";
 
 const drawerWidth = 250;
 
@@ -57,8 +58,12 @@ export default function Sidebar(props) {
     const classes = useStyles();
     const theme = useTheme();
 
-    const { open, setOpen } = props;
+    const { open, setOpen, setMyComponent } = props;
 
+    const handleRSaccess = async () => {
+        const result = await gameServerApi("rsaccess");
+        history.push("/dashboard/");
+    }
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -71,6 +76,11 @@ export default function Sidebar(props) {
         // const result = await gameServerApi("rsaccess");
         // history.push("/dashboard");
     }
+
+    const pages = {
+        Rank: <Rank />,
+    };
+    console.log("pages[page]", pages['Rank']);
 
     return (
         <Drawer
@@ -91,14 +101,12 @@ export default function Sidebar(props) {
                     {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                 </IconButton>
             </div>
-
             <Divider />
-            <div onClick={handleRSaccess}>BAP</div>
             <List>
-                {['Back to profile', 'Rank', ].map((text, index) => (
-                    <ListItem button key={text}>
+                {['Back to profile', 'Rank',].map((text, index) => (
+                    <ListItem button key={text} onClick={(e) => setMyComponent(pages['Rank'])}>
                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                        <ListItemText onClick={handleClick} primary={text} />
+                        <ListItemText onClick={(e) => setMyComponent(pages[text])} primary={text} />
                     </ListItem>
                 ))}
             </List>
@@ -114,3 +122,4 @@ export default function Sidebar(props) {
         </Drawer>
     )
 }
+// https://paste.gg/p/anonymous/72c10ffc7ec741f28658c8c1d3a20279
