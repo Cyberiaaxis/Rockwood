@@ -7,14 +7,14 @@ import Header from "../components/Staff/Header";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: 'flex',
+        // display: 'flex',
     },
 }));
 
 export default function StaffApp() {
     const classes = useStyles();
     const theme = useTheme();
-    const [myComponent, setMyComponent] = useState(<Footer/>);
+    const [myComponent, setMyComponent] = useState(<Footer />);
 
     return (
         <React.Fragment>

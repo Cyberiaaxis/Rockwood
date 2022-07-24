@@ -204,73 +204,73 @@ export default function Navbar(props) {
 
     return (
         <div className={classes.grow}>
-            <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                    <ClickAwayListener onClickAway={handleDrawerClose}>
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={handleDrawer}
-                            edge="start"
-                            className={classes.menuButton}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                    </ClickAwayListener>
-                    <Typography className={classes.title} variant="h6" noWrap>
-                        Material-UI
-                    </Typography>
-                    <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon />
-                        </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
+
+            <Toolbar>
+                <ClickAwayListener onClickAway={handleDrawerClose}>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawer}
+                        edge="start"
+                        className={classes.menuButton}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                </ClickAwayListener>
+                <Typography className={classes.title} variant="h6" noWrap>
+                    Material-UI
+                </Typography>
+                <div className={classes.search}>
+                    <div className={classes.searchIcon}>
+                        <SearchIcon />
                     </div>
-                    <div className={classes.grow} />
-                    <div className={classes.sectionDesktop}>
-                        <IconButton aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="secondary">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton aria-label="show 17 new notifications" color="inherit">
-                            <Badge badgeContent={17} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                    </div>
-                    <div className={classes.sectionMobile}>
-                        <IconButton
-                            aria-label="show more"
-                            aria-controls={mobileMenuId}
-                            aria-haspopup="true"
-                            onClick={handleMobileMenuOpen}
-                            color="inherit"
-                        >
-                            <MoreIcon />
-                        </IconButton>
-                    </div>
-                </Toolbar>
-            </AppBar>
-            {renderMobileMenu}
-            {renderMenu}
-        </div>
+                    <InputBase
+                        placeholder="Search…"
+                        classes={{
+                            root: classes.inputRoot,
+                            input: classes.inputInput,
+                        }}
+                        inputProps={{ 'aria-label': 'search' }}
+                    />
+                </div>
+                <div className={classes.grow} />
+                <div className={classes.sectionDesktop}>
+                    <IconButton aria-label="show 4 new mails" color="inherit">
+                        <Badge badgeContent={4} color="secondary">
+                            <MailIcon />
+                        </Badge>
+                    </IconButton>
+                    <IconButton aria-label="show 17 new notifications" color="inherit">
+                        <Badge badgeContent={17} color="secondary">
+                            <NotificationsIcon />
+                        </Badge>
+                    </IconButton>
+                    <IconButton
+                        edge="end"
+                        aria-label="account of current user"
+                        aria-controls={menuId}
+                        aria-haspopup="true"
+                        onClick={handleProfileMenuOpen}
+                        color="inherit"
+                    >
+                        <AccountCircle />
+                    </IconButton>
+                </div>
+                <div className={classes.sectionMobile}>
+                    <IconButton
+                        aria-label="show more"
+                        aria-controls={mobileMenuId}
+                        aria-haspopup="true"
+                        onClick={handleMobileMenuOpen}
+                        color="inherit"
+                    >
+                        <MoreIcon />
+                    </IconButton>
+                </div>
+            </Toolbar>
+
+            { renderMobileMenu }
+    { renderMenu }
+        </div >
     );
 }

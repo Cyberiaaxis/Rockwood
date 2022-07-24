@@ -58,8 +58,8 @@ export default function Sidebar(props) {
     const classes = useStyles();
     const theme = useTheme();
 
-    const { open, setOpen, setMyComponent } = props;
-
+    const { open, setOpen, myComponent, setMyComponent } = props;
+console.log(myComponent);
     const handleRSaccess = async () => {
         const result = await gameServerApi("rsaccess");
         history.push("/dashboard/");
@@ -104,7 +104,7 @@ export default function Sidebar(props) {
             <Divider />
             <List>
                 {['Back to profile', 'Rank',].map((text, index) => (
-                    <ListItem button key={text} onClick={(e) => setMyComponent(pages['Rank'])}>
+                    <ListItem button key={text} onClick={(e) => setMyComponent(pages[text])}>
                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                         <ListItemText onClick={(e) => setMyComponent(pages[text])} primary={text} />
                     </ListItem>
