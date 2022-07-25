@@ -12,6 +12,8 @@ import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import gameServerApi from "../../libraries/gameServerApi";
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import Avatar from '@mui/material/Avatar';
+import { width } from "@mui/system";
 
 
 const IOSSwitch = styled((props) => (
@@ -66,43 +68,34 @@ const IOSSwitch = styled((props) => (
 }));
 
 
-const activeButton = (params) => {
-    return (
-        <FormControlLabel
-            control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
-            label="iOS style"
-        />
-    )
-}
 
-const images = (params) => {
-    return (
-        <img src={params.value} />
-    )
-}
+
 
 const columns = [
-    { field: 'id', headerName: 'ID', editable: true },
-    { field: 'rankname', headerName: 'Rank Name', editable: true },
-    { field: 'image', headerName: 'Image', editable: true, renderCell: images },
-    { field: 'active', headerName: 'Active', editable: true, renderCell: activeButton },
+    { field: 'id', headerName: 'ID', width: 300 },
+    { field: 'rankname', headerName: 'Rank Name', editable: true, width: 300 },
+    {
+        field: 'image', headerName: 'Image', type: "file", editable: true, width: 300, renderCell: (params) => { console.log("image", params); return (<Avatar src={params.avatar} />) }, renderEditCell: (params) => {
+            return (
+                <IconButton
+                    color="primary"
+                    aria-label="upload picture"
+                    component="label"
+                >
+                    <input hidden accept="image/*" type="file" />
+                    <PhotoCamera />
+                </IconButton>
+            );
+        }
+    },
+    { field: 'status', headerName: 'Status', width: 300, renderCell: (params) => { console.log("status", params); return (<FormControlLabel control={<IOSSwitch sx={{ m: 1 }} defaultChecked />} label="Status" />) } }
 ];
 
 const rows = [
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
-    { id: 1, rankname: 'Snow', },
+    { id: 1, rankname: 'Snow', image: { avatar: "/static/images/avatar/1.jpg" }, },
+    { id: 2, rankname: 'Snow', image: { avatar: "/static/images/avatar/1.jpg" }, },
+    { id: 3, rankname: 'Snow', image: { avatar: "/static/images/avatar/1.jpg" }, },
+    { id: 4, rankname: 'Snow', image: { avatar: "/static/images/avatar/1.jpg" }, },
 ];
 
 export default function Rank() {
@@ -155,3 +148,4 @@ export default function Rank() {
         </React.Fragment >
     )
 }
+// "/static/images/avatar/1.jpg"
