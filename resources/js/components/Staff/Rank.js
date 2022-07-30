@@ -1,151 +1,328 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faKey, faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
-import { useForm } from "react-hook-form";
-import Button from '@mui/material/Button';
-import { useHistory, Link } from "react-router-dom";
-import Box from '@mui/material/Box';
-import { DataGrid } from '@mui/x-data-grid';
-import IconButton from '@mui/material/IconButton';
-import { FormControlLabel, Skeleton, styled, Switch } from '@mui/material';
-import Divider from '@mui/material/Divider';
-import TextField from '@mui/material/TextField';
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
+import {
+    DataGrid,
+    GridActionsCellItem,
+    GridRowModes,
+    GridToolbarContainer
+} from "@mui/x-data-grid";
+import { Avatar, IconButton } from "@mui/material";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import renderStatus from "./renderStatus";
+import { FormControlLabel, styled, Switch } from "@mui/material";
+import { toast } from "react-toastify";
 import gameServerApi from "../../libraries/gameServerApi";
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import Avatar from '@mui/material/Avatar';
-import { width } from "@mui/system";
+import { green, pink, deepPurple, blue } from "@mui/material/colors";
+
+function renderAvatar(params) {
+    return (
+        <Avatar style={{ backgroundColor: params.value }}>
+            {params.row.name?.toString().toUpperCase().substring(0, 1)}
+        </Avatar>
+    );
+}
 
 
-const IOSSwitch = styled((props) => (
-    <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
-))(({ theme }) => ({
-    width: 42,
-    height: 26,
-    padding: 0,
+const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+    width: 62,
+    height: 34,
+    padding: 7,
     "& .MuiSwitch-switchBase": {
+        margin: 1,
         padding: 0,
-        margin: 2,
-        transitionDuration: "300ms",
+        transform: "translateX(6px)",
         "&.Mui-checked": {
-            transform: "translateX(16px)",
             color: "#fff",
-            "& + .MuiSwitch-track": {
-                backgroundColor: theme.palette.mode === "dark" ? "#2ECA45" : "#65C466",
-                opacity: 1,
-                border: 0
+            transform: "translateX(22px)",
+            "& .MuiSwitch-thumb:before": {
+                backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+                    "#fff"
+                )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`
             },
-            "&.Mui-disabled + .MuiSwitch-track": {
-                opacity: 0.5
+            "& + .MuiSwitch-track": {
+                opacity: 1,
+                backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be"
             }
-        },
-        "&.Mui-focusVisible .MuiSwitch-thumb": {
-            color: "#33cf4d",
-            border: "6px solid #fff"
-        },
-        "&.Mui-disabled .MuiSwitch-thumb": {
-            color:
-                theme.palette.mode === "light"
-                    ? theme.palette.grey[100]
-                    : theme.palette.grey[600]
-        },
-        "&.Mui-disabled + .MuiSwitch-track": {
-            opacity: theme.palette.mode === "light" ? 0.7 : 0.3
         }
     },
     "& .MuiSwitch-thumb": {
-        boxSizing: "border-box",
-        width: 22,
-        height: 22
+        backgroundColor: theme.palette.mode === "dark" ? "#003892" : "#001e3c",
+        width: 32,
+        height: 32,
+        "&:before": {
+            content: "''",
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            left: 0,
+            top: 0,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+                "#fff"
+            )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`
+        }
     },
     "& .MuiSwitch-track": {
-        borderRadius: 26 / 2,
-        backgroundColor: theme.palette.mode === "light" ? "#E9E9EA" : "#39393D",
         opacity: 1,
-        transition: theme.transitions.create(["background-color"], {
-            duration: 500
-        })
+        backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
+        borderRadius: 20 / 2
     }
 }));
 
-
-
-
-
-const columns = [
-    { field: 'id', headerName: 'ID', width: 300 },
-    { field: 'rankname', headerName: 'Rank Name', editable: true, width: 300 },
+const initialRows = [
     {
-        field: 'image', headerName: 'Image', type: "file", editable: true, width: 300, renderCell: (params) => { console.log("image", params); return (<Avatar src={params.avatar} />) }, renderEditCell: (params) => {
-            return (
-                <IconButton
-                    color="primary"
-                    aria-label="upload picture"
-                    component="label"
-                >
-                    <input hidden accept="image/*" type="file" />
-                    <PhotoCamera />
-                </IconButton>
-            );
-        }
+        id: 10,
+        avatar: "",
+        name: "A",
+        active: false,
+        status: "active"
     },
-    { field: 'status', headerName: 'Status', width: 300, renderCell: (params) => { console.log("status", params); return (<FormControlLabel control={<IOSSwitch sx={{ m: 1 }} defaultChecked />} label="Status" />) } }
+    {
+        id: 11,
+        avatar: "",
+        name: "B",
+        active: false,
+        status: "inactive"
+    },
+    {
+        id: 12,
+        avatar: "",
+        name: "C",
+        active: false,
+        status: "banned"
+    },
+    {
+        id: 13,
+        avatar: "",
+        name: "D",
+        active: false
+    },
+    {
+        id: 14,
+        avatar: "",
+        name: "E",
+        active: false
+    }
 ];
 
-const rows = [
-    { id: 1, rankname: 'Snow', image: { avatar: "/static/images/avatar/1.jpg" }, },
-    { id: 2, rankname: 'Snow', image: { avatar: "/static/images/avatar/1.jpg" }, },
-    { id: 3, rankname: 'Snow', image: { avatar: "/static/images/avatar/1.jpg" }, },
-    { id: 4, rankname: 'Snow', image: { avatar: "/static/images/avatar/1.jpg" }, },
-];
+function UploadAvatar(params) {
+    return (
+        <>
+            <IconButton color="primary" aria-label="upload picture" component="label">
+                <input hidden accept="image/*" type="file" />
+                <Avatar sx={{ bgcolor: blue[700] }}>
+                    <PhotoCamera />
+                </Avatar>
+            </IconButton>
+        </>
+    );
+}
 
-export default function Rank() {
+const renderAvatarEdit = (params) => {
+    return <UploadAvatar {...params} />;
+};
 
-    const {
-        register,
-        setError,
-        formState: { errors },
-        handleSubmit,
-        clearErrors,
-    } = useForm();
-    const history = useHistory();
+function EditToolbar(props) {
+    const { setRows, setRowModesModel } = props;
 
-    const onSubmit = async (data) => {
-        const { name } = data;
-        console.log(name);
-        const result = await gameServerApi("createRank", 'POST', data);
-        console.log("result", result);
+    const handleClick = () => {
+        const id = Math.floor(Math.random(1000));
+        setRows((oldRows) => [...oldRows, { id, name: "", age: "", isNew: true }]);
+        setRowModesModel((oldModel) => ({
+            ...oldModel,
+            [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" }
+        }));
     };
 
     return (
-        <React.Fragment>
-            <h1>Create Role</h1>
-            <div>
-                <form className="input-group" method="POST" onSubmit={handleSubmit(onSubmit)}>
-                    <div className="form-group">
-                        <TextField id="standard-basic" label="Standard" variant="standard"  {...register("name", { required: true })} />
-                    </div>
-                    <div className="form-group">
-                        <IconButton color="primary" aria-label="upload picture" component="label">
-                            <input hidden accept="image/*" type="file" />
-                            <PhotoCamera />
-                        </IconButton>
-                    </div>
-                    <div className="form-group">
-                        <Button type="submit" variant="contained">Create Role</Button>
-                    </div>
-                </form>
-                <Divider />
-                <Box sx={{ height: 400, width: '100%' }}>
-                    <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        pageSize={10}
-                        rowsPerPageOptions={[10]}
-                        checkboxSelection
-                    />
-                </Box>
-            </div>
-        </React.Fragment >
-    )
+        <GridToolbarContainer>
+            <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+                Add record
+            </Button>
+        </GridToolbarContainer>
+    );
 }
-// "/static/images/avatar/1.jpg"
+
+EditToolbar.propTypes = {
+    setRowModesModel: PropTypes.func.isRequired,
+    setRows: PropTypes.func.isRequired
+};
+
+export default function Rank() {
+    const [rows, setRows] = React.useState(initialRows);
+    const [rowModesModel, setRowModesModel] = React.useState({});
+
+console.log("rows", rows);
+    React.useEffect(async () => {
+        const result = await gameServerApi("ranks");
+        setRows(result.ranks);
+    }, []);
+
+    const handleRowEditStart = (params, event) => {
+        event.defaultMuiPrevented = true;
+    };
+
+    const handleRowEditStop = (params, event) => {
+        event.defaultMuiPrevented = true;
+    };
+
+    const handleEditClick = (id) => () => {
+        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    };
+
+    const handleSaveClick = (id) => () => {
+        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+
+    };
+
+    const handleDeleteClick = (id) => () => {
+        setRows(rows.filter((row) => row.id !== id));
+    };
+
+    const handleCancelClick = (id) => () => {
+        setRowModesModel({
+            ...rowModesModel,
+            [id]: { mode: GridRowModes.View, ignoreModifications: true }
+        });
+
+        const editedRow = rows.find((row) => row.id === id);
+        if (editedRow.isNew) {
+            setRows(rows.filter((row) => row.id !== id));
+        }
+    };
+
+    const handleProcessRowUpdateError = React.useCallback((error) => {
+        toast.error(error.message)
+    }, []);
+
+    const processRowUpdate = async (newRow) => {
+        const updatedRow = { ...newRow, isNew: false };
+        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+        console.log("processRowUpdate before");
+        const result = await gameServerApi("makeRank", 'POST', updatedRow);
+
+        if (result.status) {
+            toast.success(result.message)
+        }
+
+        return updatedRow;
+    };
+
+    const columns = [
+        {
+            field: "id",
+            headerName: "ID",
+            width: 100
+        },
+        {
+            field: "avatar",
+            headerName: "Avatar",
+            width: 300,
+            editable: true,
+            renderCell: renderAvatar,
+            renderEditCell: renderAvatarEdit
+        },
+        {
+            field: "status",
+            headerName: "Status",
+            width: 300,
+            editable: true,
+            renderCell: renderStatus,
+            renderEditCell: (params) => {
+                // console.log("status", params);
+                return (
+                    <FormControlLabel
+                        control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
+                        label="."
+                    />
+                );
+            }
+        },
+        { field: "name", headerName: "Name", width: 380, editable: true },
+        {
+            field: "actions",
+            type: "actions",
+            headerName: "Actions",
+            width: 100,
+            cellClassName: "actions",
+
+            getActions: ({ id }) => {
+                console.log("id", id);
+                const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+                console.log("isInEditMode", isInEditMode);
+                if (isInEditMode) {
+                    return [
+                        <GridActionsCellItem
+                            icon={<SaveIcon />}
+                            label="Save"
+                            onClick={handleSaveClick(id)}
+                        />,
+                        <GridActionsCellItem
+                            icon={<CancelIcon />}
+                            label="Cancel"
+                            className="textPrimary"
+                            onClick={handleCancelClick(id)}
+                            color="inherit"
+                        />
+                    ];
+                }
+
+                return [
+                    <GridActionsCellItem
+                        icon={<EditIcon />}
+                        label="Edit"
+                        className="textPrimary"
+                        onClick={handleEditClick(id)}
+                        color="inherit"
+                    />
+                    // <GridActionsCellItem
+                    //   icon={<DeleteIcon />}
+                    //   label="Delete"
+                    //   onClick={handleDeleteClick(id)}
+                    //   color="inherit"
+                    // />
+                ];
+            }
+        }
+    ];
+
+    return (
+        <Box
+            sx={{
+                height: 700,
+                width: "100%",
+                "& .actions": {
+                    color: "textSecondary"
+                },
+                "& .textPrimary": {
+                    color: "textPrimary"
+                }
+            }}
+        >
+            <DataGrid
+                rows={rows}
+                columns={columns}
+                editMode="row"
+                rowModesModel={rowModesModel}
+                onRowEditStop={handleRowEditStop}
+                processRowUpdate={processRowUpdate}
+                onProcessRowUpdateError={handleProcessRowUpdateError}
+                components={{
+                    Toolbar: EditToolbar
+                }}
+                componentsProps={{
+                    toolbar: { setRows, setRowModesModel }
+                }}
+                experimentalFeatures={{ newEditingApi: true }}
+            />
+        </Box>
+    );
+}

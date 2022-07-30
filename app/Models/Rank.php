@@ -9,12 +9,21 @@ class Rank extends Model
 {
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'image'
+    ];
+
+    /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Http\Response
      */
-    public function getRankById(int $id) : string
+    public function getRankById(int $id): string
     {
-       return $this->where(['id' => $id])->value('name');
+        return $this->where(['id' => $id])->value('name');
     }
 }

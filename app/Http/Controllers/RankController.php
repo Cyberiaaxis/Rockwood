@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rank;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 
 class RankController extends Controller
@@ -14,7 +15,8 @@ class RankController extends Controller
      */
     public function index()
     {
-        //
+        $rank = new Rank();
+        return response()->json(['ranks' => $rank->all()]);
     }
 
     /**
@@ -22,9 +24,15 @@ class RankController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'image' => 'string',
+
+        ]);
+
+        return $this->store($request);
     }
 
     /**
@@ -33,9 +41,18 @@ class RankController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($request)
     {
-        //
+        $rank = new Rank([
+            'name' => $request->name,
+        ]);
+
+        $rank->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Successfully created rank!'
+        ], 201);
     }
 
     /**
@@ -57,7 +74,6 @@ class RankController extends Controller
      */
     public function edit(Rank $rank)
     {
-        //
     }
 
     /**

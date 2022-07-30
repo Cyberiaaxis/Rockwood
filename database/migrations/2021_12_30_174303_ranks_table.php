@@ -18,6 +18,7 @@ class RanksTable extends Migration
             $table->string('name');
             $table->string('image');
             $table->longText('description');
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

@@ -30,6 +30,8 @@ $router->group(['middleware' => 'auth:sanctum'], function($router){
     $router->get('/ping', 'App\Http\Controllers\LoginController@ping');
     $router->get('/saccess', 'App\Http\Controllers\UsersController@AddSaccessStatus');
     $router->get('/rsaccess', 'App\Http\Controllers\UsersController@RemoveSaccessStatus');
+    $router->post('/makeRank', 'App\Http\Controllers\RankController@create');
+    $router->get('/ranks', 'App\Http\Controllers\RankController@index');
 
     //i am can do anthing if i got login form for login first
     //lets try

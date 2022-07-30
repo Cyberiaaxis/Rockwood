@@ -33,7 +33,7 @@
         "@material-ui/icons": "^4.11.3",
         "@mui/icons-material": "^5.4.2",
         "@mui/material": "^5.4.3",
-        "@mui/x-data-grid": "^5.5.1",
+        "@mui/x-data-grid": "^5.15.0",
         "clsx": "^1.1.1",
         "js-cookie": "^3.0.1",
         "ky": "^0.29.0",
