@@ -32,6 +32,7 @@ $router->group(['middleware' => 'auth:sanctum'], function($router){
     $router->get('/rsaccess', 'App\Http\Controllers\UsersController@RemoveSaccessStatus');
     $router->post('/makeRank', 'App\Http\Controllers\RankController@create');
     $router->get('/ranks', 'App\Http\Controllers\RankController@index');
+    $router->post('/modifyRank', 'App\Http\Controllers\RankController@update');
 
     //i am can do anthing if i got login form for login first
     //lets try

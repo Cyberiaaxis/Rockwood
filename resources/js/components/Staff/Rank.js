@@ -114,10 +114,11 @@ const initialRows = [
 ];
 
 function UploadAvatar(params) {
+    console.log("UploadAvatar", params);
     return (
         <>
             <IconButton color="primary" aria-label="upload picture" component="label">
-                <input hidden accept="image/*" type="file" />
+                <input hidden accept="image/*" type="file" onChange={(event => console.log(event.target.value))} />
                 <Avatar sx={{ bgcolor: blue[700] }}>
                     <PhotoCamera />
                 </Avatar>
@@ -127,6 +128,7 @@ function UploadAvatar(params) {
 }
 
 const renderAvatarEdit = (params) => {
+    console.log("renderAvatarEdit", params);
     return <UploadAvatar {...params} />;
 };
 
@@ -135,7 +137,7 @@ function EditToolbar(props) {
 
     const handleClick = () => {
         const id = Math.floor(Math.random(1000));
-        setRows((oldRows) => [...oldRows, { id, name: "", age: "", isNew: true }]);
+        setRows((oldRows) => [...oldRows, { id, name: "", avatar: "", status: "", description: "", isNew: true }]);
         setRowModesModel((oldModel) => ({
             ...oldModel,
             [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" }
@@ -160,9 +162,10 @@ export default function Rank() {
     const [rows, setRows] = React.useState(initialRows);
     const [rowModesModel, setRowModesModel] = React.useState({});
 
-console.log("rows", rows);
+// console.log("rows", rows);
     React.useEffect(async () => {
         const result = await gameServerApi("ranks");
+        console.log("useEffect", result);
         setRows(result.ranks);
     }, []);
 
@@ -206,11 +209,13 @@ console.log("rows", rows);
     const processRowUpdate = async (newRow) => {
         const updatedRow = { ...newRow, isNew: false };
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-        console.log("processRowUpdate before");
-        const result = await gameServerApi("makeRank", 'POST', updatedRow);
+        console.log("updatedRow", updatedRow);
+        const result = await gameServerApi("modifyRank", 'POST', updatedRow);
 
         if (result.status) {
             toast.success(result.message)
+        }else{
+            toast.error(error.message)
         }
 
         return updatedRow;
@@ -225,7 +230,7 @@ console.log("rows", rows);
         {
             field: "avatar",
             headerName: "Avatar",
-            width: 300,
+            width: 200,
             editable: true,
             renderCell: renderAvatar,
             renderEditCell: renderAvatarEdit
@@ -233,7 +238,7 @@ console.log("rows", rows);
         {
             field: "status",
             headerName: "Status",
-            width: 300,
+            width: 200,
             editable: true,
             renderCell: renderStatus,
             renderEditCell: (params) => {
@@ -247,6 +252,8 @@ console.log("rows", rows);
             }
         },
         { field: "name", headerName: "Name", width: 380, editable: true },
+        { field: "description", headerName: "Description", width: 380, editable: true },
+
         {
             field: "actions",
             type: "actions",
@@ -255,9 +262,9 @@ console.log("rows", rows);
             cellClassName: "actions",
 
             getActions: ({ id }) => {
-                console.log("id", id);
+                // console.log("id", id);
                 const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-                console.log("isInEditMode", isInEditMode);
+                // console.log("isInEditMode", isInEditMode);
                 if (isInEditMode) {
                     return [
                         <GridActionsCellItem
@@ -326,3 +333,6 @@ console.log("rows", rows);
         </Box>
     );
 }
+
+
+//todo change the change name in param value and swtich button as well 2 reamin ponts

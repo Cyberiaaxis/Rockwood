@@ -28,7 +28,8 @@ class RankController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'image' => 'string',
+            'avatar' => 'string',
+            'status' => 'boolean',
 
         ]);
 
@@ -43,8 +44,11 @@ class RankController extends Controller
      */
     public function store($request)
     {
+        // dd($request);
         $rank = new Rank([
             'name' => $request->name,
+            'image' => $request->avatar,
+            'status' => $request->status,
         ]);
 
         $rank->save();
@@ -83,9 +87,9 @@ class RankController extends Controller
      * @param  \App\Model\Rank  $rank
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Rank $rank)
+    public function update(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
