@@ -44,7 +44,7 @@ class RankController extends Controller
      */
     public function store($request)
     {
-        // dd($request);
+        dd($request->file());
         $rank = new Rank([
             'name' => $request->name,
             'image' => $request->avatar,
@@ -80,7 +80,7 @@ class RankController extends Controller
     {
     }
 
-    /**
+ /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -89,9 +89,24 @@ class RankController extends Controller
      */
     public function update(Request $request)
     {
-        dd($request);
-    }
+        dd($_FILES);
+        $input = $request->only(['id', 'description', 'status']);
+        $fileExists = $request->hasFile('image');
+        $image = null;
 
+        if ($fileExists) {
+            $file = $request->file('image');
+            $image = [
+                'name' => $file->getClientOriginalName(),
+                'mime' => $file->getClientMimeType(),
+                'size' => $file->getSize(),
+                'path' => $file->getPath(),
+            ];
+        }
+
+        $input[] = ['hasFile' => $fileExists, 'image' => $image];
+	return response()->json($input);
+    }
     /**
      * Remove the specified resource from storage.
      *

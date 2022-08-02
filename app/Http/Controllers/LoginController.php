@@ -34,7 +34,6 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // dd("aaaaaaaaaaaa");
         $this->validateInputs($request);
 
 
@@ -119,7 +118,7 @@ class LoginController extends Controller
     {
         $user = auth()->user();
         $role = $user->getUserRoles();
-        $status = (session("saccess_status")) ? session("saccess_status") : false ;
+        $status = (session("saccess_status")) ? session("saccess_status") : false;
         return response()->json(["userId" => $user->id, "userName" => $user->name, "userRoles" => $role, "status" => $status]);
     }
 

@@ -30,9 +30,9 @@ const Login = () => {
     const history = useHistory()
 
     const onSubmit = async (data) => {
-        // console.log("data", data);
+        console.log("data", data);
         const result = await gameServerApi("auth/login", 'POST', data);
-        // console.log("result",result);
+        console.log("result", result);
         if (result.userId) {
             const userDetails = {
                 userId: result.userId,

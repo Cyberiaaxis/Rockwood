@@ -20,6 +20,8 @@ import { FormControlLabel, styled, Switch } from "@mui/material";
 import { toast } from "react-toastify";
 import gameServerApi from "../../libraries/gameServerApi";
 import { green, pink, deepPurple, blue } from "@mui/material/colors";
+import axios from "axios";
+import { useState } from "react";
 
 function renderAvatar(params) {
     return (
@@ -113,24 +115,7 @@ const initialRows = [
     }
 ];
 
-function UploadAvatar(params) {
-    console.log("UploadAvatar", params);
-    return (
-        <>
-            <IconButton color="primary" aria-label="upload picture" component="label">
-                <input hidden accept="image/*" type="file" onChange={(event => console.log(event.target.value))} />
-                <Avatar sx={{ bgcolor: blue[700] }}>
-                    <PhotoCamera />
-                </Avatar>
-            </IconButton>
-        </>
-    );
-}
 
-const renderAvatarEdit = (params) => {
-    console.log("renderAvatarEdit", params);
-    return <UploadAvatar {...params} />;
-};
 
 function EditToolbar(props) {
     const { setRows, setRowModesModel } = props;
@@ -161,13 +146,35 @@ EditToolbar.propTypes = {
 export default function Rank() {
     const [rows, setRows] = React.useState(initialRows);
     const [rowModesModel, setRowModesModel] = React.useState({});
+    const [uploadedFile, setUploadedFile] = React.useState(null);
+    const [currentAvatar, setCurrentAvatar] = useState(null);
 
-// console.log("rows", rows);
+    // console.log("rows", rows);
     React.useEffect(async () => {
         const result = await gameServerApi("ranks");
-        console.log("useEffect", result);
+
+        console.log(result);
         setRows(result.ranks);
+        setUploadedFile(null);
+        setCurrentAvatar(null);
     }, []);
+
+    function UploadAvatar() {
+        return (
+            <>
+                <IconButton color="primary" aria-label="upload picture" component="label">
+                    <input hidden accept="image/*" type="file" onChange={(event) => { setCurrentAvatar(URL.createObjectURL(event.target.files[0])); setUploadedFile(event.target.files[0]) }} />
+                    <Avatar sx={{ bgcolor: blue[700] }} src={currentAvatar}>
+                        <PhotoCamera />
+                    </Avatar>
+                </IconButton>
+            </>
+        );
+    }
+
+    const renderAvatarEdit = () => {
+        return <UploadAvatar />;
+    };
 
     const handleRowEditStart = (params, event) => {
         event.defaultMuiPrevented = true;
@@ -209,13 +216,25 @@ export default function Rank() {
     const processRowUpdate = async (newRow) => {
         const updatedRow = { ...newRow, isNew: false };
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-        console.log("updatedRow", updatedRow);
-        const result = await gameServerApi("modifyRank", 'POST', updatedRow);
+
+        const formData = new FormData()
+
+        Object.entries(updatedRow).forEach(([key, value]) => formData.append(key, value))
+
+
+
+        formData.append('image', uploadedFile)
+
+        const result = await gameServerApi("modifyRank", "post", formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        console.log('image', uploadedFile);
+        console.log('updatedrow', formData);
 
         if (result.status) {
             toast.success(result.message)
-        }else{
-            toast.error(error.message)
+        } else {
+            toast.error(result.message)
         }
 
         return updatedRow;
@@ -228,9 +247,9 @@ export default function Rank() {
             width: 100
         },
         {
-            field: "avatar",
-            headerName: "Avatar",
-            width: 200,
+            field: "image",
+            headerName: "Image",
+            width: 80,
             editable: true,
             renderCell: renderAvatar,
             renderEditCell: renderAvatarEdit
@@ -245,7 +264,7 @@ export default function Rank() {
                 // console.log("status", params);
                 return (
                     <FormControlLabel
-                        control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
+                        control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked name="status" />}
                         label="."
                     />
                 );
@@ -304,7 +323,7 @@ export default function Rank() {
     return (
         <Box
             sx={{
-                height: 700,
+                height: 400,
                 width: "100%",
                 "& .actions": {
                     color: "textSecondary"
