@@ -13,19 +13,20 @@ import {
     GridRowModes,
     GridToolbarContainer
 } from "@mui/x-data-grid";
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, Grid, IconButton, Paper, Skeleton } from "@mui/material";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import renderStatus from "./renderStatus";
 import { FormControlLabel, styled, Switch } from "@mui/material";
 import { toast } from "react-toastify";
 import gameServerApi from "../../libraries/gameServerApi";
 import { green, pink, deepPurple, blue } from "@mui/material/colors";
-import axios from "axios";
 import { useState } from "react";
+import ListSkeleton from "./ListSkeleton";
 
 function renderAvatar(params) {
+    console.log(params.row['avatar']);
     return (
-        <Avatar style={{ backgroundColor: params.value }}>
+        <Avatar style={{ backgroundColor: params.row['avatar'] }} src={'/ranks/' + params.row['avatar']}>
             {params.row.name?.toString().toUpperCase().substring(0, 1)}
         </Avatar>
     );
@@ -148,6 +149,8 @@ export default function Rank() {
     const [rowModesModel, setRowModesModel] = React.useState({});
     const [uploadedFile, setUploadedFile] = React.useState(null);
     const [currentAvatar, setCurrentAvatar] = useState(null);
+    const [currentStatus, setCurrentStatus] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     // console.log("rows", rows);
     React.useEffect(async () => {
@@ -155,8 +158,10 @@ export default function Rank() {
 
         console.log(result);
         setRows(result.ranks);
+        setLoading(false);
         setUploadedFile(null);
         setCurrentAvatar(null);
+        setCurrentStatus(null);
     }, []);
 
     function UploadAvatar() {
@@ -219,25 +224,27 @@ export default function Rank() {
 
         const formData = new FormData()
 
-        Object.entries(updatedRow).forEach(([key, value]) => formData.append(key, value))
+        updatedRow.status =(currentStatus === "on" ? 1 : 0);
 
+        Object.entries(updatedRow).forEach(([key, value]) => formData.append(key, value));
 
+        uploadedFile ? formData.append('image', uploadedFile) : formData.delete('image');
 
-        formData.append('image', uploadedFile)
-
-        const result = await gameServerApi("modifyRank", "post", formData, {
+        const result = await gameServerApi("makeRank", "post", formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         });
-        console.log('image', uploadedFile);
-        console.log('updatedrow', formData);
 
+        const newData = result.data;
         if (result.status) {
             toast.success(result.message)
+
+            setCurrentAvatar(null);
+            setUploadedFile(null);
         } else {
             toast.error(result.message)
         }
 
-        return updatedRow;
+        return newData;
     };
 
     const columns = [
@@ -264,7 +271,7 @@ export default function Rank() {
                 // console.log("status", params);
                 return (
                     <FormControlLabel
-                        control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked name="status" />}
+                        control={<MaterialUISwitch sx={{ m: 1 }} name="status" onChange={(e) => setCurrentStatus(e.target.value)} value={params.value} defaultValue="active" />}
                         label="."
                     />
                 );
@@ -333,25 +340,29 @@ export default function Rank() {
                 }
             }}
         >
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                editMode="row"
-                rowModesModel={rowModesModel}
-                onRowEditStop={handleRowEditStop}
-                processRowUpdate={processRowUpdate}
-                onProcessRowUpdateError={handleProcessRowUpdateError}
-                components={{
-                    Toolbar: EditToolbar
-                }}
-                componentsProps={{
-                    toolbar: { setRows, setRowModesModel }
-                }}
-                experimentalFeatures={{ newEditingApi: true }}
-            />
+            {loading ? <ListSkeleton /> : (
+                <DataGrid
+                    disableSelectionOnClick
+                    rows={rows}
+                    columns={columns}
+                    editMode="row"
+                    rowModesModel={rowModesModel}
+                    onRowEditStop={handleRowEditStop}
+                    processRowUpdate={processRowUpdate}
+                    onProcessRowUpdateError={handleProcessRowUpdateError}
+                    components={{
+                        Toolbar: EditToolbar,
+                        LoadingOverlay: ListSkeleton
+                    }}
+                    componentsProps={{
+                        toolbar: { setRows, setRowModesModel }
+                    }}
+                    experimentalFeatures={{ newEditingApi: true }}
+                    loading={loading}
+                />
+            )}
         </Box>
     );
 }
 
 
-//todo change the change name in param value and swtich button as well 2 reamin ponts

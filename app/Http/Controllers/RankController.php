@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rank;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
+use Throwable;
 
 class RankController extends Controller
 {
@@ -21,100 +21,91 @@ class RankController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string',
-            'avatar' => 'string',
-            'status' => 'boolean',
-
-        ]);
-
-        return $this->store($request);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($request)
+    public function Feed(Request $request)
     {
-        dd($request->file());
-        $rank = new Rank([
-            'name' => $request->name,
-            'image' => $request->avatar,
-            'status' => $request->status,
-        ]);
-
-        $rank->save();
-
+        $this->dataValidate($request);
+        $imageName = $this->imageUpload($request);
+        $rank = $this->store($request, $imageName);
         return response()->json([
             'status' => true,
-            'message' => 'Successfully created rank!'
+            'message' => 'Successfully!',
+            'data' => $rank,
         ], 201);
     }
 
     /**
-     * Display the specified resource.
-     *
+     * validattion of inputs.
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Model\Rank  $rank
-     * @return \Illuminate\Http\Response
+     * @return validation result
      */
-    public function show(Rank $rank)
+    public function dataValidate($request)
     {
-        //
+        try {
+            return $request->validate([
+                'name' => 'required|string',
+                'image' => ['nullable', 'sometimes', 'mimes:jpg,jpeg,bmp,png'],
+                'status' => 'boolean',
+                'description' => 'string'
+            ]);
+        } catch (Throwable $e) {
+            report($e);
+            return false;
+        }
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Rank  $rank
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Rank $rank)
-    {
-    }
-
- /**
-     * Update the specified resource in storage.
-     *
+     * upload the file.
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Rank  $rank
-     * @return \Illuminate\Http\Response
+     * @return string as images name
      */
-    public function update(Request $request)
+    public function imageUpload(Request $request)
     {
-        dd($_FILES);
-        $input = $request->only(['id', 'description', 'status']);
         $fileExists = $request->hasFile('image');
-        $image = null;
 
         if ($fileExists) {
             $file = $request->file('image');
-            $image = [
-                'name' => $file->getClientOriginalName(),
-                'mime' => $file->getClientMimeType(),
-                'size' => $file->getSize(),
-                'path' => $file->getPath(),
-            ];
+            $fileName = $file->getClientOriginalName();
+            $ext = $file->extension();
+            $path =  $file->storeAs('images', $request->id . '.' . $ext);
+            return $path;
         }
 
-        $input[] = ['hasFile' => $fileExists, 'image' => $image];
-	return response()->json($input);
+        return false;
     }
+
     /**
-     * Remove the specified resource from storage.
-     *
+     * Update the specified resource in storage.
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Model\Rank  $rank
-     * @return \Illuminate\Http\Response
+     * @return updateOrCreate result
      */
-    public function destroy(Rank $rank)
+    public function store($request, $imageName = null)
     {
-        //
+
+        try {
+            $rank = new Rank();
+
+            $data = [
+                'name' => $request->name,
+                'description' => $request->description,
+                'status' => $request->status,
+            ];
+
+            if ($imageName) {
+                $data['avatar'] =  $imageName;
+            }
+
+            return $rank->updateOrCreate([
+                'id' => $request->id
+            ], $data);
+        } catch (Throwable $e) {
+            report($e);
+
+            return $e->getMessage();
+        }
     }
 }

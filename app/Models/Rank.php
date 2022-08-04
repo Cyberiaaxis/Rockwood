@@ -14,7 +14,7 @@ class Rank extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'image'
+        'name', 'avatar', 'description', 'status'
     ];
 
     /**
