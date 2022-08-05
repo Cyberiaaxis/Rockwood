@@ -26,7 +26,7 @@ import ListSkeleton from "./ListSkeleton";
 function renderAvatar(params) {
     console.log(params.row['avatar']);
     return (
-        <Avatar style={{ backgroundColor: params.row['avatar'] }} src={'/ranks/' + params.row['avatar']}>
+        <Avatar style={{ backgroundColor: params.row['avatar'] }} src={"/storage/" + params.row['avatar']}>
             {params.row.name?.toString().toUpperCase().substring(0, 1)}
         </Avatar>
     );
@@ -224,7 +224,7 @@ export default function Rank() {
 
         const formData = new FormData()
 
-        updatedRow.status =(currentStatus === "on" ? 1 : 0);
+        updatedRow.status = (currentStatus === "on" ? 1 : 0);
 
         Object.entries(updatedRow).forEach(([key, value]) => formData.append(key, value));
 

@@ -31,7 +31,7 @@ class RankController extends Controller
         $rank = $this->store($request, $imageName);
         return response()->json([
             'status' => true,
-            'message' => 'Successfully!',
+            'message' => 'Successfully saved rank!',
             'data' => $rank,
         ], 201);
     }
@@ -104,7 +104,6 @@ class RankController extends Controller
             ], $data);
         } catch (Throwable $e) {
             report($e);
-
             return $e->getMessage();
         }
     }
