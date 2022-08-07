@@ -26,6 +26,7 @@ class RankController extends Controller
      */
     public function Feed(Request $request)
     {
+        // return $request;
         $this->dataValidate($request);
         $imageName = $this->imageUpload($request);
         $rank = $this->store($request, $imageName);
@@ -62,7 +63,7 @@ class RankController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return string as images name
      */
-    public function imageUpload(Request $request)
+    public function imageUpload($request)
     {
         $fileExists = $request->hasFile('image');
 

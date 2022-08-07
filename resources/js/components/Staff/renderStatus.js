@@ -31,14 +31,30 @@ const Status = (props) => {
     let className = null;
     let label = status;
     let icon = null;
-    if (status == 1) {
-        icon = <DoneIcon className="icon" />;
-        label = 'Active';
-        className = label;
-    } else if (status === 0) {
-        label = 'Inactive';
-        className = label;
-        icon = <InfoIcon className="icon" />;
+
+    const parseStatus = parseInt(status);
+
+    switch (parseStatus) {
+        case 0:
+
+            label = 'Inactive';
+            className = label;
+            icon = <InfoIcon className="icon" />;
+            break;
+
+        case 1:
+
+            icon = <DoneIcon className="icon" />;
+            label = 'Active';
+            className = label;
+            break;
+
+        default:
+            label = 'Inactive';
+            className = label;
+            icon = <InfoIcon className="icon" />;
+            break;
+
     }
 
     return (
