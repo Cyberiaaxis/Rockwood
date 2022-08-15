@@ -14,7 +14,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import Rank from "./Rank";
+import PanelComponent from "./PanelComponent";
+// import Rank from "./Rank";
+// import Role from "./Role";
 
 const drawerWidth = 250;
 
@@ -59,7 +61,7 @@ export default function Sidebar(props) {
     const theme = useTheme();
 
     const { open, setOpen, myComponent, setMyComponent } = props;
-console.log(myComponent);
+    console.log("myComponent", myComponent);
     const handleRSaccess = async () => {
         const result = await gameServerApi("rsaccess");
         history.push("/dashboard/");
@@ -73,14 +75,14 @@ console.log(myComponent);
     };
     const handleClick = async (e) => {
         console.log(e.target.innerText);
+        // <PanelComponent name='Rank' table='ranks' url="makeRank" />
         // const result = await gameServerApi("rsaccess");
         // history.push("/dashboard");
     }
-
     const pages = {
-        Rank: <Rank />,
+        Rank: { name: "Rank", table: "ranks", url: "saveRank" },
+        Role: { name: "Role", table: "roles", url: "saveRole" },
     };
-    console.log("pages[page]", pages['Rank']);
 
     return (
         <Drawer
@@ -103,7 +105,7 @@ console.log(myComponent);
             </div>
             <Divider />
             <List>
-                {['Back to profile', 'Rank',].map((text, index) => (
+                {['Back to profile', 'Rank', 'Role'].map((text, index) => (
                     <ListItem button key={text} onClick={(e) => setMyComponent(pages[text])}>
                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                         <ListItemText onClick={(e) => setMyComponent(pages[text])} primary={text} />
