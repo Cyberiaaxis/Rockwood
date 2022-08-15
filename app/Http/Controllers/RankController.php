@@ -47,10 +47,10 @@ class RankController extends Controller
     {
         try {
             return $request->validate([
-                'name' => 'required|string',
+                'name' =>  ['required', 'unique:ranks,name'],
                 'image' => ['nullable', 'sometimes', 'mimes:jpg,jpeg,bmp,png'],
                 'status' => 'boolean',
-                'description' => 'string'
+                'description' => ['nullable', 'sometimes', 'string']
             ]);
         } catch (Throwable $e) {
             report($e);

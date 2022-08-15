@@ -1,8 +1,8 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\RoleResource;
 use Spatie\Permission\Models\{Role, Permission};
 
 class RolesController extends Controller
@@ -12,16 +12,10 @@ class RolesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $roles = Role::with('permissions')->orderBy('name')->get();
-
-        if($request->ajax())
-        {
-            return RoleResource::collection($roles);
-        }
-
-    return view('staff.roles.role');
+        $role = new Role();
+        return response()->json(['roles' => $role->all()]);
     }
 
     /**
@@ -29,8 +23,24 @@ class RolesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function store(Request $request)
     {
+        $role = new Role();
+        $this->validateInputs($request);
+        $data = [
+            'name' => $request->name,
+            'description' => $request->description,
+            'status' => $request->status,
+        ];
+        $result = $role->updateOrCreate([
+            'id' => $request->id
+        ], $data);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Successfully saved role!',
+            'data' => $result,
+        ], 201);
     }
 
     /**
@@ -38,20 +48,16 @@ class RolesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function validateInputs($request)
     {
-        $request->validate([
-            'name' => ['required','unique:roles,name'],  'description' => ['required'],  'status' => ['required','integer']
-        ]);
-        $role = Role::create([  'name' => $request->name,
-                                'description' => $request->description,
-                                'status' => $request->status,
-                                'updated_at' => now(),
-                                'created_at' => now()
+        $id = (int)$request->id;
 
-                            ]);
-        $role->syncPermissions($request->permissions);
-    return response()->json(['success' => true, 'status' => true, 'msg' => 'Role has been created successfully','role' => $role]);
+        $name = ($id > 0) ? ['required', 'min:3'] : ['required', 'min:3', 'unique:roles' ];
+        return $request->validate([
+            'name' =>  $name,
+            'status' => 'boolean',
+            'description' => ['nullable', 'sometimes', 'string'],
+        ]);
     }
 
     /**
@@ -71,8 +77,6 @@ class RolesController extends Controller
      */
     public function edit(Request $request, Role $role)
     {
-        $permissions = Permission::orderBy('name')->get();
-    return view('staff.roles.edit', ['permissions' => $permissions, 'role' => $role]);
     }
 
     /**
@@ -83,18 +87,6 @@ class RolesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-             'name' => ['required','exists:roles,name'],
-             'description' => ['required'],
-             'status' => ['nullable','integer'],
-             'permissions' => ['required','array']
-         ]);
-        $role = Role::findorFail($id);
-        $input = $request->except(['url', 'method', 'csrfToken','permissions']);
-        $input['status'] = $request->input('status',0);
-        $role->fill($input)->save();
-        $role->syncPermissions($request->permissions);
-    return response()->json(['success' => true,'msg' => 'Role has been updated']);
     }
 
     /**
@@ -104,8 +96,5 @@ class RolesController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::findorFail($id);
-        $role->delete($id);
-    return response()->json(['success' => true, 'msg' => 'Role has been deleted']);
     }
 }
