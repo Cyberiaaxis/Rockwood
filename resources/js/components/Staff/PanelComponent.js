@@ -10,17 +10,9 @@ import ListSkeleton from "./ListSkeleton";
 import DataTable from "../../libraries/DataTable";
 import { blue } from "@mui/material/colors";
 
-function renderAvatar(params) {
-    // console.log(params.row['avatar']);
-    return (
-        <Avatar style={{ backgroundColor: params.row['avatar'] }} src={"/storage/" + params.row['avatar']}>
-            {params.row.avatar?.toString().toUpperCase().substring(0, 1)}
-        </Avatar>
-    );
-}
 
 export default function PanelComponent(props) {
-    console.log("PanelComponent(props)", props);
+    // console.log("PanelComponent(props)", props);
     const { name, table, url } = props.data;
     const [uploadedFile, setUploadedFile] = useState(null);
     const [currentAvatar, setCurrentAvatar] = useState(null);
@@ -32,6 +24,14 @@ export default function PanelComponent(props) {
         setUploadedFile(null);
         setCurrentAvatar(null);
     }, []);
+
+    function renderAvatar(params) {
+        return (
+            <Avatar style={{ backgroundColor: params.row['avatar'] }} src={"/storage/" + params.row['avatar']}>
+                {params.row.avatar?.toString().toUpperCase().substring(0, 1)}
+            </Avatar>
+        );
+    }
 
     function UploadAvatar() {
         return (
@@ -80,7 +80,7 @@ export default function PanelComponent(props) {
     if (noAvatar.includes(name)) {
         columns = columns.filter(col => col.field !== 'avatar');
     }
-    console.log("newColumns", columns);
+    // console.log("uploadedFile333", uploadedFile);
     return (
         <Box
             sx={{
@@ -100,6 +100,8 @@ export default function PanelComponent(props) {
                     table={table}
                     url={url}
                     columns={columns}
+                    file={uploadedFile}
+                    unsetFile={setUploadedFile}
                 />
             )}
         </Box>

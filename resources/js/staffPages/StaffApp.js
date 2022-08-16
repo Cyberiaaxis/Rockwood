@@ -16,7 +16,7 @@ export default function StaffApp() {
     const classes = useStyles();
     const theme = useTheme();
     const [myComponent, setMyComponent] = useState(<Footer />);
-    console.log("StaffApp()", myComponent);
+    // console.log("StaffApp()", myComponent);
     return (
         <React.Fragment>
             <div className={classes.root}>

@@ -82,6 +82,7 @@ export default function Sidebar(props) {
     const pages = {
         Rank: { name: "Rank", table: "ranks", url: "saveRank" },
         Role: { name: "Role", table: "roles", url: "saveRole" },
+        RealEstate: { name: "Real Estate", table: "real_estates", url: "saveRealEstate" },
     };
 
     return (
@@ -105,7 +106,7 @@ export default function Sidebar(props) {
             </div>
             <Divider />
             <List>
-                {['Back to profile', 'Rank', 'Role'].map((text, index) => (
+                {['Back to profile', 'Rank', 'Role', 'RealEstate'].map((text, index) => (
                     <ListItem button key={text} onClick={(e) => setMyComponent(pages[text])}>
                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                         <ListItemText onClick={(e) => setMyComponent(pages[text])} primary={text} />

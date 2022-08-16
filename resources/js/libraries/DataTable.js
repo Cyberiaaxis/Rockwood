@@ -38,8 +38,8 @@ EditToolbar.propTypes = {
 
 
 export default function DataTable(props) {
-    console.log("DataTable(props)", props)
-    const { name, columns, table, url } = props;
+    // console.log("DataTable(props)", props)
+    const { name, columns, table, url, file, unsetFile } = props;
 
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
@@ -97,8 +97,9 @@ export default function DataTable(props) {
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
         const formData = new FormData()
-
+        console.log("file", file);
         Object.entries(updatedRow).forEach(([key, value]) => formData.append(key, value));
+        (file) ? formData.append("image", file) : formData.delete('image')
 
         const result = await gameServerApi(url, "post", formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
@@ -107,13 +108,10 @@ export default function DataTable(props) {
         const newData = result.data;
 
 
-        console.log('New data ', newData);
+        // console.log('New data ', newData);
 
         if (result.status) {
             toast.success(result.message)
-
-            setCurrentAvatar(false);
-            setUploadedFile(false);
         } else {
             toast.error(result.message)
         }
@@ -170,7 +168,7 @@ export default function DataTable(props) {
 
     return (
         <>
-        <h1>{name}</h1>
+            <h1>{name}</h1>
             {loading ? <ListSkeleton /> : (
                 <DataGrid
                     {...props}
@@ -187,7 +185,7 @@ export default function DataTable(props) {
                         //    LoadingOverlay: ListSkeleton
                     }}
                     componentsProps={{
-                        toolbar: { setRows, setRowModesModel ,name }
+                        toolbar: { setRows, setRowModesModel, name }
                     }}
                     experimentalFeatures={{ newEditingApi: true }}
                 //    loading={loading}
