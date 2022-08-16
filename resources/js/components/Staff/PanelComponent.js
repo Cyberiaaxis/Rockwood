@@ -76,9 +76,10 @@ export default function PanelComponent(props) {
             renderEditCell: renderStatusEdit,
         }
     ];
-
-    columns = (name === 'rank') ? columns.filter(function (obj) { return obj.field !== 'avatar'; }) : columns;
-
+    const noAvatar = ["Role"];
+    if (noAvatar.includes(name)) {
+        columns = columns.filter(col => col.field !== 'avatar');
+    }
     console.log("newColumns", columns);
     return (
         <Box
@@ -95,6 +96,7 @@ export default function PanelComponent(props) {
         >
             {loading ? <ListSkeleton /> : (
                 <DataTable
+                    name={name}
                     table={table}
                     url={url}
                     columns={columns}

@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import gameServerApi from "./gameServerApi";
 
 function EditToolbar(props) {
-    const { setRows, setRowModesModel } = props;
+    const { setRows, setRowModesModel, name } = props;
 
     const handleClick = () => {
         const id = Math.floor(Math.random(1000));
@@ -25,7 +25,7 @@ function EditToolbar(props) {
     return (
         <GridToolbarContainer>
             <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-                Add record
+                Add {name}
             </Button>
         </GridToolbarContainer>
     );
@@ -39,7 +39,7 @@ EditToolbar.propTypes = {
 
 export default function DataTable(props) {
     console.log("DataTable(props)", props)
-    const { columns, table, url } = props;
+    const { name, columns, table, url } = props;
 
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
@@ -170,6 +170,7 @@ export default function DataTable(props) {
 
     return (
         <>
+        <h1>{name}</h1>
             {loading ? <ListSkeleton /> : (
                 <DataGrid
                     {...props}
@@ -186,7 +187,7 @@ export default function DataTable(props) {
                         //    LoadingOverlay: ListSkeleton
                     }}
                     componentsProps={{
-                        toolbar: { setRows, setRowModesModel }
+                        toolbar: { setRows, setRowModesModel ,name }
                     }}
                     experimentalFeatures={{ newEditingApi: true }}
                 //    loading={loading}
