@@ -2,11 +2,22 @@
 
 namespace App\Models;
 
+use Hamcrest\Description;
 use Illuminate\Database\Eloquent\Model;
 use Throwable;
 
 class RealEstate extends Model
 {
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+
+    protected $fillable = [
+        'id', 'name', 'description', 'avatar', 'status'
+    ];
     /**
      * Show the application dashboard.
      *
@@ -21,5 +32,4 @@ class RealEstate extends Model
             report($e);
         }
     }
-
 }

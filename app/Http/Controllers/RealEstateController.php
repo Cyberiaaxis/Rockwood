@@ -29,11 +29,11 @@ class RealEstateController extends Controller
         // return $request;
         $this->dataValidate($request);
         $imageName = $this->imageUpload($request);
-        $rank = $this->store($request, $imageName);
+        $realEstate = $this->store($request, $imageName);
         return response()->json([
             'status' => true,
-            'message' => 'Successfully saved rank!',
-            'data' => $rank,
+            'message' => 'Successfully saved real estate!',
+            'data' => $realEstate,
         ], 201);
     }
 
@@ -54,7 +54,7 @@ class RealEstateController extends Controller
             ]);
         } catch (Throwable $e) {
             report($e);
-            return false;
+            return $e->getMessage();
         }
     }
 
@@ -86,9 +86,9 @@ class RealEstateController extends Controller
      */
     public function store($request, $imageName = null)
     {
-
+        // dd($request->status);
         try {
-            $rank = new RealEstate();
+            $realEstate = new RealEstate();
 
             $data = [
                 'name' => $request->name,
@@ -99,8 +99,8 @@ class RealEstateController extends Controller
             if ($imageName) {
                 $data['avatar'] =  $imageName;
             }
-
-            return $rank->updateOrCreate([
+            // dd($data);
+            return $realEstate->updateOrCreate([
                 'id' => $request->id
             ], $data);
         } catch (Throwable $e) {
