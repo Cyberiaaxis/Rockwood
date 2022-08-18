@@ -33,8 +33,10 @@ $router->group(['middleware' => 'auth:sanctum'], function($router){
     $router->post('/saveRank', 'App\Http\Controllers\RankController@feed');
     $router->get('/ranks', 'App\Http\Controllers\RankController@index');
     $router->get('/roles', 'App\Http\Controllers\RolesController@index');
+    $router->get('/jobs', 'App\Http\Controllers\JobController@index');
     $router->get('/real_estates', 'App\Http\Controllers\RealEstateController@index');
     $router->post('/saveRealEstate', 'App\Http\Controllers\RealEstateController@feed');
+    $router->post('/saveJob', 'App\Http\Controllers\JobController@feed');
     // $router->post('/saveRank', 'App\Http\Controllers\RankController@update');
     $router->post('/saveRole', 'App\Http\Controllers\RolesController@store');
 
