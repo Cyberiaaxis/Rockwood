@@ -19,6 +19,10 @@ class Job extends Model
         'name', 'avatar', 'description', 'status'
     ];
 
+    // protected $cast =[
+    //     'status' => 'boolean'
+    // ];
+
     /**
      * Remove the specified resource from storage.
      *
@@ -119,6 +123,4 @@ class Job extends Model
             return $e->getMessage();
         }
     }
-
-
 }

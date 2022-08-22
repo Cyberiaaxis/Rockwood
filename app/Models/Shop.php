@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Shop extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'avatar', 'description', 'status'
+    ];
+
+    /**
      * get shops from storage.
      * @param
      * @return array
@@ -24,9 +33,5 @@ class Shop extends Model
      */
     public function getShopItems(int $typeId)
     {
-
     }
-
 }
-
-

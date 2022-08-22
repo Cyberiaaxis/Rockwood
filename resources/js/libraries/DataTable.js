@@ -15,7 +15,7 @@ function EditToolbar(props) {
 
     const handleClick = () => {
         const id = Math.floor(Math.random(1000));
-        setRows((oldRows) => [...oldRows, { id, name: "", avatar: "", status: "", description: "", isNew: true }]);
+        setRows((oldRows) => [...oldRows, { id, name: "", avatar: "", status: 0, description: "", isNew: true }]);
         setRowModesModel((oldModel) => ({
             ...oldModel,
             [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" }
@@ -100,7 +100,7 @@ export default function DataTable(props) {
         console.log("file", file);
         Object.entries(updatedRow).forEach(([key, value]) => formData.append(key, value));
         (file) ? formData.append("image", file) : formData.delete('image')
-
+        console.log("updatedRow", updatedRow);
         const result = await gameServerApi(url, "post", formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         });
@@ -110,7 +110,7 @@ export default function DataTable(props) {
 
         // console.log('New data ', newData);
 
-        if (result.status) {
+        if (result.status === true) {
             toast.success(result.message)
         } else {
             toast.error(result.message)

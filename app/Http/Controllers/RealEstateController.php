@@ -27,13 +27,14 @@ class RealEstateController extends Controller
     public function Feed(Request $request)
     {
         // return $request;
+        $realEstate = new RealEstate();
         $this->dataValidate($request);
         $imageName = $this->imageUpload($request);
-        $realEstate = $this->store($request, $imageName);
+        $data = $realEstate->realEstateStore($request, $imageName);
         return response()->json([
-            'status' => true,
+            'status' => (($data->status === "1") ? true : false),
             'message' => 'Successfully saved real estate!',
-            'data' => $realEstate,
+            'data' => $data,
         ], 201);
     }
 
@@ -45,17 +46,12 @@ class RealEstateController extends Controller
      */
     public function dataValidate($request)
     {
-        try {
-            return $request->validate([
-                'name' =>  ['required', 'unique:ranks,name'],
-                'image' => ['nullable', 'sometimes', 'mimes:jpg,jpeg,bmp,png'],
-                'status' => 'boolean',
-                'description' => ['nullable', 'sometimes', 'string']
-            ]);
-        } catch (Throwable $e) {
-            report($e);
-            return $e->getMessage();
-        }
+        return $request->validate([
+            'name' =>  ['required',  'unique:jobs,name,' . $request->id],
+            'image' => ['nullable', 'sometimes', 'mimes:jpg,jpeg,bmp,png'],
+            'status' => 'integer',
+            'description' => ['nullable', 'sometimes', 'string']
+        ]);
     }
 
     /**
@@ -78,36 +74,7 @@ class RealEstateController extends Controller
         return false;
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Rank  $rank
-     * @return updateOrCreate result
-     */
-    public function store($request, $imageName = null)
-    {
-        // dd($request->status);
-        try {
-            $realEstate = new RealEstate();
 
-            $data = [
-                'name' => $request->name,
-                'description' => $request->description,
-                'status' => $request->status,
-            ];
-
-            if ($imageName) {
-                $data['avatar'] =  $imageName;
-            }
-            // dd($data);
-            return $realEstate->updateOrCreate([
-                'id' => $request->id
-            ], $data);
-        } catch (Throwable $e) {
-            report($e);
-            return $e->getMessage();
-        }
-    }
 
     /**
      * Remove the specified resource from storage.

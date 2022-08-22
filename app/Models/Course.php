@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'avatar', 'description', 'status'
+    ];
+
     public $timestamps = false;
 
     public function scopeSubCourses($query)
@@ -17,6 +26,4 @@ class Course extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-
 }

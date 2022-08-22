@@ -26,14 +26,14 @@ class RankController extends Controller
      */
     public function Feed(Request $request)
     {
-        // return $request;
+        $rank = new Rank();
         $this->dataValidate($request);
         $imageName = $this->imageUpload($request);
-        $rank = $this->store($request, $imageName);
+        $data = $rank->rankStore($request, $imageName);
         return response()->json([
-            'status' => true,
+            'status' => (($data->status === "1") ? true : false),
             'message' => 'Successfully saved rank!',
-            'data' => $rank,
+            'data' => $data,
         ], 201);
     }
 
@@ -45,17 +45,12 @@ class RankController extends Controller
      */
     public function dataValidate($request)
     {
-        try {
-            return $request->validate([
-                'name' =>  ['required', 'unique:ranks,name'],
-                'image' => ['nullable', 'sometimes', 'mimes:jpg,jpeg,bmp,png'],
-                'status' => 'boolean',
-                'description' => ['nullable', 'sometimes', 'string']
-            ]);
-        } catch (Throwable $e) {
-            report($e);
-            return false;
-        }
+        return $request->validate([
+            'name' =>  ['required', 'unique:ranks,name'],
+            'image' => ['nullable', 'sometimes', 'mimes:jpg,jpeg,bmp,png'],
+            'status' => 'integer',
+            'description' => ['nullable', 'sometimes', 'string']
+        ]);
     }
 
     /**
@@ -76,36 +71,5 @@ class RankController extends Controller
         }
 
         return false;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Rank  $rank
-     * @return updateOrCreate result
-     */
-    public function store($request, $imageName = null)
-    {
-
-        try {
-            $rank = new Rank();
-
-            $data = [
-                'name' => $request->name,
-                'description' => $request->description,
-                'status' => $request->status,
-            ];
-
-            if ($imageName) {
-                $data['avatar'] =  $imageName;
-            }
-
-            return $rank->updateOrCreate([
-                'id' => $request->id
-            ], $data);
-        } catch (Throwable $e) {
-            report($e);
-            return $e->getMessage();
-        }
     }
 }

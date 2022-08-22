@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ {Job, UserDetail,ItemType, Inventory };
-use Illuminate\Http\Request;
+use App\Models\{Job, UserDetail, ItemType, Inventory};
+use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Arr;
+use App\Services\StoreService;
 use Throwable;
 
 class JobController extends Controller
@@ -25,14 +26,25 @@ class JobController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function Feed(Request $request)
+    public function Feed(StorePostRequest $request)
     {
-        // return $request;
-        $this->dataValidate($request);
         $imageName = $this->imageUpload($request);
-        $job = $this->store($request, $imageName);
+        $data = [
+            'name' => $request->name,
+            'description' => $request->description,
+            'status' => $request->status,
+        ];
+
+        if ($imageName) {
+            $data['avatar'] =  $imageName;
+        }
+
+        $service = new StoreService($request);
+        $service->setModel(new Job());
+        $job = $service->store($data);
+
         return response()->json([
-            'status' => true,
+            'status' => (($job->status === "1") ? true : false),
             'message' => 'Successfully saved rank!',
             'data' => $job,
         ], 201);
@@ -46,17 +58,12 @@ class JobController extends Controller
      */
     public function dataValidate($request)
     {
-        try {
-            return $request->validate([
-                'name' =>  ['required', 'unique:ranks,name'],
-                'image' => ['nullable', 'sometimes', 'mimes:jpg,jpeg,bmp,png'],
-                'status' => 'boolean',
-                'description' => ['nullable', 'sometimes', 'string']
-            ]);
-        } catch (Throwable $e) {
-            report($e);
-            return false;
-        }
+        return $request->validate([
+            'name' =>  ['required',  'unique:jobs,name,' . $request->id],
+            'image' => ['nullable', 'sometimes', 'mimes:jpg,jpeg,bmp,png'],
+            'status' => 'integer',
+            'description' => ['nullable', 'sometimes', 'string']
+        ]);
     }
 
     /**
@@ -80,37 +87,6 @@ class JobController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Rank  $rank
-     * @return updateOrCreate result
-     */
-    public function store($request, $imageName = null)
-    {
-
-        try {
-            $job = new Job();
-
-            $data = [
-                'name' => $request->name,
-                'description' => $request->description,
-                'status' => $request->status,
-            ];
-
-            if ($imageName) {
-                $data['avatar'] =  $imageName;
-            }
-
-            return $job->updateOrCreate([
-                'id' => $request->id
-            ], $data);
-        } catch (Throwable $e) {
-            report($e);
-            return $e->getMessage();
-        }
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Model\Job  $job
@@ -118,12 +94,12 @@ class JobController extends Controller
      */
     public function join(Job $job)
     {
-        if($job->jobNotExists(auth()->id())){
-             $job = $job->saveNewJob(auth()->id(), $job->id);
-             return "Congratulations for new joining";
+        if ($job->jobNotExists(auth()->id())) {
+            $job = $job->saveNewJob(auth()->id(), $job->id);
+            return "Congratulations for new joining";
         }
 
-    return "You are not unemployed";
+        return "You are not unemployed";
     }
 
     /**
@@ -137,7 +113,7 @@ class JobController extends Controller
         $job = new Job();
         $job->jobLeave(auth()->id());
 
-    return "Now, you are unemployed";
+        return "Now, you are unemployed";
     }
 
     /**
@@ -157,6 +133,4 @@ class JobController extends Controller
         $userItem = new Inventory();
         dd($userItem->incrementItem(auth()->user()->id, $random['id']));
     }
-
-
 }

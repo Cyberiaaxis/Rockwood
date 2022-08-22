@@ -84,6 +84,9 @@ export default function Sidebar(props) {
         Role: { name: "Role", table: "roles", url: "saveRole" },
         RealEstate: { name: "Real Estate", table: "real_estates", url: "saveRealEstate" },
         Job: { name: "Job", table: "jobs", url: "saveJob" },
+        Shop: { name: "Shop", table: "shops", url: "saveShop" },
+        Course: { name: "Course", table: "courses", url: "saveCourse" },
+        Gang: { name: "Gang", table: "Gangs", url: "saveGang" },
     };
 
     return (

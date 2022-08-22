@@ -23,7 +23,7 @@ $router->post('/register', 'App\Http\Controllers\RegistrationController@signup')
 //     // $router->post('/login', 'App\Http\Controllers\LoginController@login');
 //     });
 
-$router->group(['middleware' => 'auth:sanctum'], function($router){
+$router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/auth/logout', 'App\Http\Controllers\LoginController@logout');
     $router->get('/home', 'App\Http\Controllers\HomeController@index');
     // i think the 'ping' should go here? so it only works when authenticated
@@ -39,11 +39,17 @@ $router->group(['middleware' => 'auth:sanctum'], function($router){
     $router->post('/saveJob', 'App\Http\Controllers\JobController@feed');
     // $router->post('/saveRank', 'App\Http\Controllers\RankController@update');
     $router->post('/saveRole', 'App\Http\Controllers\RolesController@store');
+    $router->get('/shops', 'App\Http\Controllers\ShopsController@index');
+    $router->post('/saveShop', 'App\Http\Controllers\ShopsController@feed');
+    $router->get('/gangs', 'App\Http\Controllers\ShopsController@index');
+    $router->post('/saveGang', 'App\Http\Controllers\ShopsController@feed');
+    $router->get('/courses', 'App\Http\Controllers\ShopsController@index');
+    $router->post('/saveCourse', 'App\Http\Controllers\ShopsController@feed');
 
 
     //i am can do anthing if i got login form for login first
     //lets try
-//lets compile and see what happens now
-//ok
+    //lets compile and see what happens now
+    //ok
 
 });
