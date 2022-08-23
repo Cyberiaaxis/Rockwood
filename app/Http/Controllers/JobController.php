@@ -28,25 +28,10 @@ class JobController extends Controller
      */
     public function Feed(StorePostRequest $request)
     {
-        $imageName = $this->imageUpload($request);
-        $data = [
-            'name' => $request->name,
-            'description' => $request->description,
-            'status' => $request->status,
-        ];
-
-        if ($imageName) {
-            $data['avatar'] =  $imageName;
-        }
-
-        $service = new StoreService($request);
-        $service->setModel(new Job());
-        $job = $service->store($data);
-
+        $data = $this->handleData($request);
+        $job = (new StoreService($request))->store(new Job(), $data);
         return response()->json([
             'status' => (($job->status === "1") ? true : false),
-            'message' => 'Successfully saved rank!',
-            'data' => $job,
         ], 201);
     }
 
@@ -56,14 +41,19 @@ class JobController extends Controller
      * @param  \App\Model\Rank  $rank
      * @return validation result
      */
-    public function dataValidate($request)
+    public function handleData($request)
     {
-        return $request->validate([
-            'name' =>  ['required',  'unique:jobs,name,' . $request->id],
-            'image' => ['nullable', 'sometimes', 'mimes:jpg,jpeg,bmp,png'],
-            'status' => 'integer',
-            'description' => ['nullable', 'sometimes', 'string']
-        ]);
+        $imageName = $this->imageUpload($request);
+        $data =  [
+            'name' => $request->name,
+            'description' => $request->description,
+            'status' => $request->status,
+        ];
+
+        if ($imageName) {
+            $data['avatar'] =  $imageName;
+        }
+        return $data;
     }
 
     /**

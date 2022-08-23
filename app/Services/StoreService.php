@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Database\Eloquent\Model;
 use Throwable;
 
 class StoreService
@@ -13,21 +14,10 @@ class StoreService
         $this->request = $request;
     }
 
-    public function store($data)
+    public function store(Model $model, array $data):Model
     {
-        try {
-            return $this->model->updateOrCreate([
-                'id' => $this->request->id
-            ], $data);
-        } catch (Throwable $e) {
-            report($e);
-            return $e->getMessage();
-        }
-    }
-
-    public function setModel($model)
-    {
-        $this->model = $model;
-        return $this->model;
+        return $model->updateOrCreate([
+            'id' => $this->request->id
+        ], $data);
     }
 }
