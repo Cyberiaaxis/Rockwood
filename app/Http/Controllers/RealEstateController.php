@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\{RealEstate, UserDetail, UserRealEstate, UserStats};
-use Illuminate\Http\Request;
-use Throwable;
+use App\Http\Requests\StorePostRequest;
+use App\Services\StoreService;
 
 class RealEstateController extends Controller
 {
@@ -24,17 +24,12 @@ class RealEstateController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function Feed(Request $request)
+    public function Feed(StorePostRequest $request)
     {
-        // return $request;
-        $realEstate = new RealEstate();
-        $this->dataValidate($request);
-        $imageName = $this->imageUpload($request);
-        $data = $realEstate->realEstateStore($request, $imageName);
+        $data = $this->handleData($request);
+        $job = (new StoreService($request))->store(new RealEstate(), $data);
         return response()->json([
-            'status' => (($data->status === "1") ? true : false),
-            'message' => 'Successfully saved real estate!',
-            'data' => $data,
+            'status' => (($job->status === "1") ? true : false),
         ], 201);
     }
 
@@ -44,14 +39,19 @@ class RealEstateController extends Controller
      * @param  \App\Model\Rank  $rank
      * @return validation result
      */
-    public function dataValidate($request)
+    public function handleData($request)
     {
-        return $request->validate([
-            'name' =>  ['required',  'unique:jobs,name,' . $request->id],
-            'image' => ['nullable', 'sometimes', 'mimes:jpg,jpeg,bmp,png'],
-            'status' => 'integer',
-            'description' => ['nullable', 'sometimes', 'string']
-        ]);
+        $imageName = $this->imageUpload($request);
+        $data =  [
+            'name' => $request->name,
+            'description' => $request->description,
+            'status' => $request->status,
+        ];
+
+        if ($imageName) {
+            $data['avatar'] =  $imageName;
+        }
+        return $data;
     }
 
     /**

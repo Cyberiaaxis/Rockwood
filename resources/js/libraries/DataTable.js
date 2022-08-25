@@ -43,14 +43,14 @@ export default function DataTable(props) {
 
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
-
+    console.log(rows);
     const [loading, setLoading] = useState(true);
 
     // console.log("rows", rows);
     React.useEffect(async () => {
-
+        console.log('table', table);
         const result = await gameServerApi(table);
-
+        console.log('result', result);
         setRows(result[table]);
         setLoading(false);
     }, [table]);

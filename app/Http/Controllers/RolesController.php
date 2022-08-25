@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\{Role, Permission};
+use App\Http\Requests\StorePostRequest;
+use App\Services\StoreService;
 
 class RolesController extends Controller
 {
@@ -20,44 +22,57 @@ class RolesController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function Feed(StorePostRequest $request)
     {
-        $role = new Role();
-        $this->validateInputs($request);
-        $data = [
-            'name' => $request->name,
-            'description' => $request->description,
-            'status' => $request->status,
-        ];
-        $result = $role->updateOrCreate([
-            'id' => $request->id
-        ], $data);
-
+        $data = $this->handleData($request);
+        $job = (new StoreService($request))->store(new Role(), $data);
         return response()->json([
-            'status' => true,
-            'message' => 'Successfully saved role!',
-            'data' => $result,
+            'status' => (($job->status === "1") ? true : false),
         ], 201);
     }
 
     /**
-     * Store a newly created role with save assign permissions in storage.
+     * validattion of inputs.
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Model\Rank  $rank
+     * @return validation result
      */
-    public function validateInputs($request)
+    public function handleData($request)
     {
-        $id = (int)$request->id;
+        $imageName = $this->imageUpload($request);
+        $data =  [
+            'name' => $request->name,
+            'description' => $request->description,
+            'status' => $request->status,
+        ];
 
-        $name = ($id > 0) ? ['required', 'min:3'] : ['required', 'min:3', 'unique:roles' ];
-        return $request->validate([
-            'name' =>  $name,
-            'status' => 'boolean',
-            'description' => ['nullable', 'sometimes', 'string'],
-        ]);
+        if ($imageName) {
+            $data['avatar'] =  $imageName;
+        }
+        return $data;
+    }
+
+    /**
+     * upload the file.
+     * @param  \Illuminate\Http\Request  $request
+     * @return string as images name
+     */
+    public function imageUpload($request)
+    {
+        $fileExists = $request->hasFile('image');
+
+        if ($fileExists) {
+            $file = $request->file('image');
+            $fileName = $file->getClientOriginalName();
+            $ext = $file->extension();
+            $path =  $file->storeAs('images', $request->id . '.' . $ext);
+            return $path;
+        }
+
+        return false;
     }
 
     /**

@@ -45,7 +45,8 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->post('/saveGang', 'App\Http\Controllers\ShopsController@feed');
     $router->get('/courses', 'App\Http\Controllers\ShopsController@index');
     $router->post('/saveCourse', 'App\Http\Controllers\ShopsController@feed');
-
+    $router->get('/permissions', 'App\Http\Controllers\PermissionsController@index');
+    $router->post('/savePermission', 'App\Http\Controllers\PermissionsController@feed');
 
     //i am can do anthing if i got login form for login first
     //lets try

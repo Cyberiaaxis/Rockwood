@@ -14,8 +14,9 @@ class StoreService
         $this->request = $request;
     }
 
-    public function store(Model $model, array $data):Model
+    public function store(Model $model, Array $data):Model
     {
+        // dd($this->request);
         return $model->updateOrCreate([
             'id' => $this->request->id
         ], $data);

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Resources\PermissionResource;
 use Spatie\Permission\Models\{Permission};
+use App\Http\Requests\StorePostRequest;
+use App\Services\StoreService;
 
 class PermissionsController extends Controller
 {
@@ -13,26 +13,41 @@ class PermissionsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-         $permissions = Permission::orderBy('name')->get();
-
-         if($request->ajax())
-         {
-             return PermissionResource::collection($permissions);
-         }
-
-    return view('staff.permissions.permissions');
+        $permission = new Permission();
+        return response()->json(['permissions' => $permission->all()]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function Feed(StorePostRequest $request)
     {
-        //
+        $data = $this->handleData($request);
+        $permission = (new StoreService($request))->store(new Permission(), $data);
+        return response()->json([
+            'status' => (($permission->status === "1") ? true : false),
+            'data' => $permission,
+        ], 201);
+    }
+
+    /**
+     * validattion of inputs.
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Model\Rank  $rank
+     * @return validation result
+     */
+    public function handleData($request)
+    {
+        $data =  [
+            'name' => $request->name,
+            'status' => $request->status,
+        ];
+
+        return $data;
     }
 
     /**
@@ -42,14 +57,6 @@ class PermissionsController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([ 'permissions' => ['required','array'] ]);
-
-        foreach($request->permissions as $permissionName)
-        {
-            Permission::firstorCreate(['name' => $permissionName]);
-        }
-
-    return response()->json(['success' => true,'msg' => 'Permissions has been created.']);
     }
 
     /**
@@ -80,14 +87,6 @@ class PermissionsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => ['required','unique:permissions,name']
-        ]);
-
-        $permission = Permission::findorFail($id);
-        $permission->name = $request->input('name');
-        $permission->save();
-    return response()->json(['success' => true,'msg' => 'Permission has been updated']);
     }
 
     /**
@@ -97,8 +96,5 @@ class PermissionsController extends Controller
      */
     public function destroy($id)
     {
-        $permission = Permission::findorFail($id);
-        $permission->delete($id);
-    return response()->json(['success' => true, 'msg' => 'Permission has been deleted']);
     }
 }

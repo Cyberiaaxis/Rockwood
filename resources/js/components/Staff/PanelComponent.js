@@ -76,10 +76,15 @@ export default function PanelComponent(props) {
             renderEditCell: renderStatusEdit,
         }
     ];
-    const noAvatar = ["Role"];
+    const noAvatar = ["Role", "Permission"];
     if (noAvatar.includes(name)) {
         columns = columns.filter(col => col.field !== 'avatar');
     }
+    const noDescription = ["Permission"];
+    if (noDescription.includes(name)) {
+        columns = columns.filter(col => col.field !== 'description');
+    }
+
     // console.log("uploadedFile333", uploadedFile);
     return (
         <Box

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rank;
-use Illuminate\Http\Request;
-use Throwable;
+use App\Http\Requests\StorePostRequest;
+use App\Services\StoreService;
 
 class RankController extends Controller
 {
@@ -24,16 +24,12 @@ class RankController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function Feed(Request $request)
+    public function Feed(StorePostRequest $request)
     {
-        $rank = new Rank();
-        $this->dataValidate($request);
-        $imageName = $this->imageUpload($request);
-        $data = $rank->rankStore($request, $imageName);
+        $data = $this->handleData($request);
+        $job = (new StoreService($request))->store(new Rank(), $data);
         return response()->json([
-            'status' => (($data->status === "1") ? true : false),
-            'message' => 'Successfully saved rank!',
-            'data' => $data,
+            'status' => (($job->status === "1") ? true : false),
         ], 201);
     }
 
@@ -43,14 +39,19 @@ class RankController extends Controller
      * @param  \App\Model\Rank  $rank
      * @return validation result
      */
-    public function dataValidate($request)
+    public function handleData($request)
     {
-        return $request->validate([
-            'name' =>  ['required', 'unique:ranks,name'],
-            'image' => ['nullable', 'sometimes', 'mimes:jpg,jpeg,bmp,png'],
-            'status' => 'integer',
-            'description' => ['nullable', 'sometimes', 'string']
-        ]);
+        $imageName = $this->imageUpload($request);
+        $data =  [
+            'name' => $request->name,
+            'description' => $request->description,
+            'status' => $request->status,
+        ];
+
+        if ($imageName) {
+            $data['avatar'] =  $imageName;
+        }
+        return $data;
     }
 
     /**
