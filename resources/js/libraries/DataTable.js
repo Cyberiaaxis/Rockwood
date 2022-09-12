@@ -43,7 +43,7 @@ export default function DataTable(props) {
 
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
-    console.log(rows);
+    console.log("rows", rows);
     const [loading, setLoading] = useState(true);
 
     // console.log("rows", rows);

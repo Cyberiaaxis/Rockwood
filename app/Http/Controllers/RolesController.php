@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\{Role, Permission};
 use App\Http\Requests\StorePostRequest;
+use App\Http\Resources\RoleResource;
 use App\Services\StoreService;
 
 class RolesController extends Controller
@@ -17,7 +18,10 @@ class RolesController extends Controller
     public function index()
     {
         $role = new Role();
-        return response()->json(['roles' => $role->all()]);
+        $role_list = $role->with('permissions')->get();
+        $roleResource = new RoleResource($role_list);
+        $roles = $roleResource->collection($role_list);
+        return response()->json(['roles' => $roles]);
     }
 
     /**
@@ -28,9 +32,10 @@ class RolesController extends Controller
     public function Feed(StorePostRequest $request)
     {
         $data = $this->handleData($request);
-        $job = (new StoreService($request))->store(new Role(), $data);
+        $role = (new StoreService($request))->store(new Role(), $data);
+        $role->syncPermissions($request->permissions);
         return response()->json([
-            'status' => (($job->status === "1") ? true : false),
+            'status' => (($role->status === "1") ? true : false),
         ], 201);
     }
 
@@ -80,9 +85,12 @@ class RolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function getAllPermissionOfRole()
     {
-        //
+        $role = new Role();
+        return $role->with(['permissions' => function ($q) {
+            return $q->pluck('name');
+        }])->get(['id', 'name']);
     }
 
     /**
@@ -90,8 +98,25 @@ class RolesController extends Controller
      * @param  Request $request, Role $role
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, Role $role)
+    public function permissionsToRole(Request $request, Role $role, Permission $permissions)
     {
+        $role->syncPermissions($request->permissions);
+        $permissions->syncRoles($request->roles);
+    }
+
+
+    /**
+     * Show the form for editing.
+     * @param  Request $request, Role $role
+     * @return \Illuminate\Http\Response
+     */
+    public function permissionsAndRoles()
+    {
+        $role = new Role();
+        $roles = $role->all(['id', 'name']);
+        $permission = new Permission();
+        $permissions = $permission->all(['id', 'name']);
+        return response()->json(['rolePermission' => $roles, 'permissions' => $permissions]);
     }
 
     /**

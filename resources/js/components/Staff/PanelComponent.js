@@ -9,6 +9,7 @@ import gameServerApi from "../../libraries/gameServerApi";
 import ListSkeleton from "./ListSkeleton";
 import DataTable from "../../libraries/DataTable";
 import { blue } from "@mui/material/colors";
+import renderListEdit from "./RenderListEdit";
 
 
 export default function PanelComponent(props) {
@@ -67,6 +68,14 @@ export default function PanelComponent(props) {
         { field: "name", headerName: "Name", width: 380, editable: true },
         { field: "description", headerName: "Description", width: 380, editable: true },
         {
+            field: "permissions",
+            headerName: "Permissions",
+            width: 200,
+            editable: true,
+            type: 'singleSelect',
+            renderEditCell: renderListEdit,
+        },
+        {
             field: "status",
             headerName: "Status",
             width: 200,
@@ -74,12 +83,16 @@ export default function PanelComponent(props) {
             type: 'boolean',
             renderCell: renderStatus,
             renderEditCell: renderStatusEdit,
-        }
+        },
+
+
     ];
+
     const noAvatar = ["Role", "Permission"];
     if (noAvatar.includes(name)) {
         columns = columns.filter(col => col.field !== 'avatar');
     }
+
     const noDescription = ["Permission"];
     if (noDescription.includes(name)) {
         columns = columns.filter(col => col.field !== 'description');

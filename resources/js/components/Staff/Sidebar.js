@@ -88,6 +88,7 @@ export default function Sidebar(props) {
         Course: { name: "Course", table: "courses", url: "saveCourse" },
         Gang: { name: "Gang", table: "Gangs", url: "saveGang" },
         Permission: { name: "Permission", table: "permissions", url: "savePermission" },
+        // RolePermission: { name: "Role's Permissions", table: "rolesPermissions", url: "saveRolePermissions" },
     };
 
     return (
@@ -111,7 +112,7 @@ export default function Sidebar(props) {
             </div>
             <Divider />
             <List>
-                {['Back to profile', 'Rank', 'Role', 'RealEstate', 'Job', 'Permission'].map((text, index) => (
+                {['Back to profile', 'Rank', 'Role', 'RealEstate', 'Job', 'Permission', "RolePermission"].map((text, index) => (
                     <ListItem button key={text} onClick={(e) => setMyComponent(pages[text])}>
                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                         <ListItemText onClick={(e) => setMyComponent(pages[text])} primary={text} />

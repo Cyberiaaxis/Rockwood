@@ -37,8 +37,8 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/real_estates', 'App\Http\Controllers\RealEstateController@index');
     $router->post('/saveRealEstate', 'App\Http\Controllers\RealEstateController@feed');
     $router->post('/saveJob', 'App\Http\Controllers\JobController@feed');
-    // $router->post('/saveRank', 'App\Http\Controllers\RankController@update');
-    $router->post('/saveRole', 'App\Http\Controllers\RolesController@store');
+    // $router->post('/saveRank', 'App\Http\Controllers\RankController@update');`
+    $router->post('/saveRole', 'App\Http\Controllers\RolesController@Feed');
     $router->get('/shops', 'App\Http\Controllers\ShopsController@index');
     $router->post('/saveShop', 'App\Http\Controllers\ShopsController@feed');
     $router->get('/gangs', 'App\Http\Controllers\ShopsController@index');
@@ -47,6 +47,10 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->post('/saveCourse', 'App\Http\Controllers\ShopsController@feed');
     $router->get('/permissions', 'App\Http\Controllers\PermissionsController@index');
     $router->post('/savePermission', 'App\Http\Controllers\PermissionsController@feed');
+    $router->get('/roleWithPermissions', 'App\Http\Controllers\RolesController@getAllPermissionOfRole');
+    $router->post('/saveRolePermissions', 'App\Http\Controllers\RolesController@permissionsToRole');
+    $router->get('/rolesPermissions', 'App\Http\Controllers\RolesController@permissionsAndRoles');
+
 
     //i am can do anthing if i got login form for login first
     //lets try

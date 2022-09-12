@@ -781,7 +781,7 @@ article{
 
 
 body{
-    background-image: url(../images/mafia.jpg);
+    background-image: url('../images/mafia.jpg');
     background-size: cover;
     min-height: 100vh;
     color: white;
