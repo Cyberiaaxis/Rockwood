@@ -15,7 +15,7 @@ function EditToolbar(props) {
 
     const handleClick = () => {
         const id = Math.floor(Math.random(1000));
-        setRows((oldRows) => [...oldRows, { id, name: "", avatar: "", status: 0, description: "", isNew: true }]);
+        setRows((oldRows) => [...oldRows, { id, name: "", avatar: "", status: 0, permissions: [], description: "", isNew: true }]);
         setRowModesModel((oldModel) => ({
             ...oldModel,
             [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" }
@@ -43,7 +43,7 @@ export default function DataTable(props) {
 
     const [rows, setRows] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
-    console.log("rows", rows);
+    // console.log("rows", rows);
     const [loading, setLoading] = useState(true);
 
     // console.log("rows", rows);
@@ -108,7 +108,7 @@ export default function DataTable(props) {
         const newData = result.data;
 
 
-        // console.log('New data ', newData);
+        console.log('New data ', newData);
 
         if (result.status === true) {
             toast.success(result.message)

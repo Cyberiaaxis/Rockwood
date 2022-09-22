@@ -32,10 +32,13 @@ class RolesController extends Controller
     public function Feed(StorePostRequest $request)
     {
         $data = $this->handleData($request);
+        $data["guard_name"] = "web";
         $role = (new StoreService($request))->store(new Role(), $data);
-        $role->syncPermissions($request->permissions);
+        $permissions =  explode(",", $request->permissions);
+        $role->syncPermissions($permissions);
         return response()->json([
             'status' => (($role->status === "1") ? true : false),
+            'data' => $role,
         ], 201);
     }
 

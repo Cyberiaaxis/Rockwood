@@ -70,10 +70,10 @@ export default function PanelComponent(props) {
         {
             field: "permissions",
             headerName: "Permissions",
-            width: 200,
             editable: true,
             type: 'singleSelect',
             renderEditCell: renderListEdit,
+            width: 200,
         },
         {
             field: "status",
@@ -92,6 +92,13 @@ export default function PanelComponent(props) {
     if (noAvatar.includes(name)) {
         columns = columns.filter(col => col.field !== 'avatar');
     }
+
+    const noPermissions = ["Rank", "Real Estate", "Job", "Shop", "Course", "Gang", "Permission"];
+    if (noPermissions.includes(name)) {
+        columns = columns.filter(col => col.field !== 'permissions');
+    }
+
+    // console.log("noPermissions", noPermissions);
 
     const noDescription = ["Permission"];
     if (noDescription.includes(name)) {
