@@ -14,7 +14,7 @@ class ItemTypesTable extends Migration
     public function up()
     {
         Schema::create('item_types', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('type')->unique();
         });
     }

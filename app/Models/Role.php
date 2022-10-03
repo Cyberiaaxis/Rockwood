@@ -2,10 +2,33 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role as ModelsRole;
 
-class Role extends Model
+class Role extends ModelsRole
 {
-    use HasFactory;
+
+
+        /**
+     * Show the ranks list.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getRoles(){
+        return $this->with('permissions')->get();
+    }
+
+    /**
+     * Show the ranks list.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function storeRole(int $id, array $data)
+    {
+        return $this->updateOrCreate([
+            'id' => $id
+        ], $data);
+    }
+
+
+
 }

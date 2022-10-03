@@ -14,7 +14,7 @@ class AttackLogsTable extends Migration
     public function up()
     {
         Schema::create('attack_logs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->longText('attack_logs');
         });
     }

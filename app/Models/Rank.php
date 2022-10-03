@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Throwable;
 
 class Rank extends Model
 {
@@ -14,36 +13,29 @@ class Rank extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'avatar', 'description', 'status'
+        'name', 'description', 'status'
     ];
 
     /**
-     * Update the specified resource in storage.
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Rank  $rank
-     * @return updateOrCreate result
+     * Show the ranks list.
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function rankStore($request, $imageName = null)
+    public function getRanks()
     {
+        return $this->all();
+    }
 
-        try {
-            $data = [
-                'name' => $request->name,
-                'description' => $request->description,
-                'status' => $request->status,
-            ];
-
-            if ($imageName) {
-                $data['avatar'] =  $imageName;
-            }
-
-            return $this->updateOrCreate([
-                'id' => $request->id
-            ], $data);
-        } catch (Throwable $e) {
-            report($e);
-            return $e->getMessage();
-        }
+    /**
+     * Show the ranks list.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function storeRank(int $id, array $data)
+    {
+        return $this->updateOrCreate([
+            'id' => $id
+        ], $data);
     }
 
     /**

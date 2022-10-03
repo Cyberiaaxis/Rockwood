@@ -11,10 +11,10 @@ import { toast } from "react-toastify";
 import gameServerApi from "./gameServerApi";
 
 function EditToolbar(props) {
-    const { setRows, setRowModesModel, name } = props;
+    const { rows, setRows, setRowModesModel, name } = props;
 
     const handleClick = () => {
-        const id = Math.floor(Math.random(1000));
+        const id = Math.max(...rows.map(o => o.id), 0) + 1;
         setRows((oldRows) => [...oldRows, { id, name: "", avatar: "", status: 0, permissions: [], description: "", isNew: true }]);
         setRowModesModel((oldModel) => ({
             ...oldModel,
@@ -106,8 +106,6 @@ export default function DataTable(props) {
         });
 
         const newData = result.data;
-
-
         console.log('New data ', newData);
 
         if (result.status === true) {
@@ -185,7 +183,7 @@ export default function DataTable(props) {
                         //    LoadingOverlay: ListSkeleton
                     }}
                     componentsProps={{
-                        toolbar: { setRows, setRowModesModel, name }
+                        toolbar: { rows, setRows, setRowModesModel, name }
                     }}
                     experimentalFeatures={{ newEditingApi: true }}
                 //    loading={loading}

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Spatie\Permission\Models\{Permission};
 use App\Http\Requests\StorePostRequest;
 use App\Services\StoreService;
 use Laravel\Sanctum\Guard as SanctumGuard;
-use Spatie\Permission\Guard;
+use App\Models\Permission;
 
 class PermissionsController extends Controller
 {
@@ -18,7 +17,7 @@ class PermissionsController extends Controller
     public function index()
     {
         $permission = new Permission();
-        return response()->json(['permissions' => $permission->all()]);
+        return response()->json(['permissions' => $permission->getListPermissions()]);
     }
 
     /**
@@ -29,11 +28,12 @@ class PermissionsController extends Controller
     public function Feed(StorePostRequest $request)
     {
         $data = $this->handleData($request);
-        $data["guard_name"] = "web";
-        $permission = (new StoreService($request))->store(new Permission(), $data);
+        // $data["guard_name"] = "web";
+        $permission = new Permission();
+        $permissionSaved = $permission->storePermission($request->id, $data);
         return response()->json([
-            'status' => (($permission->status === "1") ? true : false),
-            'data' => $permission,
+            'status' => (($permissionSaved->status === "1") ? true : false),
+            'data' => $permissionSaved,
         ], 201);
     }
 

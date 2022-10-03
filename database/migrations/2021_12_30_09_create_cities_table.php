@@ -14,10 +14,10 @@ class CreateCitiesTable extends Migration
     public function up()
     {
         Schema::create('cities', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
-            $table->foreignId('country_id');
-            $table->foreign('country_id')->references('id')->on('countries');
+            $table->string('avatar');
+            $table->longText('description');
         });
     }
 

@@ -80,15 +80,17 @@ export default function Sidebar(props) {
         // history.push("/dashboard");
     }
     const pages = {
-        Rank: { name: "Rank", table: "ranks", url: "saveRank" },
         Role: { name: "Role", table: "roles", url: "saveRole" },
+        Permission: { name: "Permission", table: "permissions", url: "savePermission" },
+        Rank: { name: "Rank", table: "ranks", url: "saveRank" },
         RealEstate: { name: "Real Estate", table: "real_estates", url: "saveRealEstate" },
         Job: { name: "Job", table: "jobs", url: "saveJob" },
         Shop: { name: "Shop", table: "shops", url: "saveShop" },
         Course: { name: "Course", table: "courses", url: "saveCourse" },
         Gang: { name: "Gang", table: "Gangs", url: "saveGang" },
-        Permission: { name: "Permission", table: "permissions", url: "savePermission" },
-        // RolePermission: { name: "Role's Permissions", table: "rolesPermissions", url: "saveRolePermissions" },
+        Country: { name: "Country", table: "countries", url: "saveCountry" },
+        City: { name: "City", table: "cities", url: "saveCity" },
+        Area: { name: "Area", table: "areas", url: "saveArea" },
     };
 
     return (
@@ -112,7 +114,20 @@ export default function Sidebar(props) {
             </div>
             <Divider />
             <List>
-                {['Back to profile', 'Rank', 'Role', 'RealEstate', 'Job', 'Permission', "RolePermission"].map((text, index) => (
+                {[
+                    // 'Back to profile',
+                    'Rank',
+                    'Role',
+                    'RealEstate',
+                    'Job',
+                    // 'Course',
+                    'Country',
+                    // 'City',
+                    // 'Area',
+                    'Permission',
+                    // 'Shop',
+                    // 'Gang'
+                ].map((text, index) => (
                     <ListItem button key={text} onClick={(e) => setMyComponent(pages[text])}>
                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                         <ListItemText onClick={(e) => setMyComponent(pages[text])} primary={text} />
@@ -120,15 +135,15 @@ export default function Sidebar(props) {
                 ))}
             </List>
             <Divider />
-            <List>
+            {/* <List>
                 {['All mail', 'Trash', 'Spam'].map((text, index) => (
                     <ListItem button key={text}>
                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItem>
                 ))}
-            </List>
-        </Drawer>
+            </List> */}
+        </Drawer >
     )
 }
 // https://paste.gg/p/anonymous/72c10ffc7ec741f28658c8c1d3a20279

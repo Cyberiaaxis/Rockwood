@@ -7,12 +7,12 @@ use Throwable;
 
 class StoreService
 {
-    protected $request;
+    // protected $request;
 
-    public function __construct($request)
-    {
-        $this->request = $request;
-    }
+    // public function __construct($request)
+    // {
+    //     $this->request = $request;
+    // }
 
     public function store(Model $model, Array $data):Model
     {

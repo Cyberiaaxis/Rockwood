@@ -14,7 +14,7 @@ class CreateRealEstatesTable extends Migration
     public function up()
     {
         Schema::create('real_estates', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('image');
             $table->longText('description');

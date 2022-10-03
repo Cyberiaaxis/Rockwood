@@ -14,7 +14,7 @@ class CrimeMessagesTable extends Migration
     public function up()
     {
         Schema::create('crime_messages', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('message_type');
             $table->longText('message');
             $table->foreignId('crime_id');

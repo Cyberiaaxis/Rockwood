@@ -14,11 +14,10 @@ class AreasTable extends Migration
     public function up()
     {
         Schema::create('areas', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
+            $table->string('avatar');
             $table->longText('description');
-            $table->foreignId('city_id');
-            $table->foreign('city_id')->references('id')->on('cities');
         });
     }
 

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\{Role, Permission};
+use App\Models\Role;
+use Spatie\Permission\Models\{Permission};
 use App\Http\Requests\StorePostRequest;
 use App\Http\Resources\RoleResource;
 use App\Services\StoreService;
@@ -18,7 +19,7 @@ class RolesController extends Controller
     public function index()
     {
         $role = new Role();
-        $role_list = $role->with('permissions')->get();
+        $role_list = $role->getRoles();
         $roleResource = new RoleResource($role_list);
         $roles = $roleResource->collection($role_list);
         return response()->json(['roles' => $roles]);
@@ -32,13 +33,14 @@ class RolesController extends Controller
     public function Feed(StorePostRequest $request)
     {
         $data = $this->handleData($request);
-        $data["guard_name"] = "web";
-        $role = (new StoreService($request))->store(new Role(), $data);
+        // $data["guard_name"] = "web";
+        $role = new Role();
+        $roleSaved = $role->storeRole($request->id, $data);
         $permissions =  explode(",", $request->permissions);
         $role->syncPermissions($permissions);
         return response()->json([
-            'status' => (($role->status === "1") ? true : false),
-            'data' => $role,
+            'status' => (($roleSaved->status === "1") ? true : false),
+            'data' => $roleSaved,
         ], 201);
     }
 
@@ -50,37 +52,13 @@ class RolesController extends Controller
      */
     public function handleData($request)
     {
-        $imageName = $this->imageUpload($request);
         $data =  [
             'name' => $request->name,
             'description' => $request->description,
             'status' => $request->status,
         ];
 
-        if ($imageName) {
-            $data['avatar'] =  $imageName;
-        }
         return $data;
-    }
-
-    /**
-     * upload the file.
-     * @param  \Illuminate\Http\Request  $request
-     * @return string as images name
-     */
-    public function imageUpload($request)
-    {
-        $fileExists = $request->hasFile('image');
-
-        if ($fileExists) {
-            $file = $request->file('image');
-            $fileName = $file->getClientOriginalName();
-            $ext = $file->extension();
-            $path =  $file->storeAs('images', $request->id . '.' . $ext);
-            return $path;
-        }
-
-        return false;
     }
 
     /**

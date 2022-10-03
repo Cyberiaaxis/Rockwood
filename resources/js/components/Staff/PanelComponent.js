@@ -55,7 +55,7 @@ export default function PanelComponent(props) {
         {
             field: "id",
             headerName: "ID",
-            width: 100
+            width: 30
         },
         {
             field: "avatar",
@@ -65,8 +65,8 @@ export default function PanelComponent(props) {
             renderCell: renderAvatar,
             renderEditCell: renderAvatarEdit
         },
-        { field: "name", headerName: "Name", width: 380, editable: true },
-        { field: "description", headerName: "Description", width: 380, editable: true },
+        { field: "name", headerName: "Name", width: 180, editable: true },
+        { field: "description", headerName: "Description", width: 250, editable: true },
         {
             field: "permissions",
             headerName: "Permissions",
@@ -88,9 +88,14 @@ export default function PanelComponent(props) {
 
     ];
 
-    const noAvatar = ["Role", "Permission"];
+    const noAvatar = ["Rank","Role", "Permission"];
     if (noAvatar.includes(name)) {
         columns = columns.filter(col => col.field !== 'avatar');
+    }
+
+    const noStatus = ["Permission"];
+    if (noAvatar.includes(name)) {
+        columns = columns.filter(col => col.field !== 'status');
     }
 
     const noPermissions = ["Rank", "Real Estate", "Job", "Shop", "Course", "Gang", "Permission"];

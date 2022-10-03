@@ -14,10 +14,9 @@ class RanksTable extends Migration
     public function up()
     {
         Schema::create('ranks', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
-            $table->string('image');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->boolean('status')->default(0);
             $table->timestamps();
         });
