@@ -26,20 +26,19 @@ class RolesController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store request and sync it as well with a resource.
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function Feed(StorePostRequest $request)
     {
         $data = $this->handleData($request);
-        // $data["guard_name"] = "web";
         $role = new Role();
-        $roleSaved = $role->storeRole($request->id, $data);
-        $permissions =  explode(",", $request->permissions);
-        $role->syncPermissions($permissions);
+        // dd($data);
+        $roleSaved = $role->storeRole($data);
+        $roleSaved->syncPermissions($data['permissions']);
+
         return response()->json([
-            'status' => (($roleSaved->status === "1") ? true : false),
             'data' => $roleSaved,
         ], 201);
     }
@@ -53,9 +52,9 @@ class RolesController extends Controller
     public function handleData($request)
     {
         $data =  [
+            'id' => $request->id,
             'name' => $request->name,
-            'description' => $request->description,
-            'status' => $request->status,
+            'permissions' => explode(",", $request->permissions),
         ];
 
         return $data;

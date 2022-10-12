@@ -22,10 +22,10 @@ class Role extends ModelsRole
      *
      * @return \Illuminate\Http\Response
      */
-    public function storeRole(int $id, array $data)
+    public function storeRole(array $data)
     {
         return $this->updateOrCreate([
-            'id' => $id
+            'id' => $data['id'],
         ], $data);
     }
 

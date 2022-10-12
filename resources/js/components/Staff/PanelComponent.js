@@ -105,7 +105,7 @@ export default function PanelComponent(props) {
 
     // console.log("noPermissions", noPermissions);
 
-    const noDescription = ["Permission"];
+    const noDescription = ["Permission", 'Role'];
     if (noDescription.includes(name)) {
         columns = columns.filter(col => col.field !== 'description');
     }
