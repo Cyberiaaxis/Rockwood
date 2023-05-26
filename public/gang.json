@@ -1,0 +1,34 @@
+{
+    "success": true,
+    "results": {
+      "usage": [
+        "Medical Item Usage",
+        "Booster Item Usage",
+        "Drug Item Usage",
+        "Energy Refill Usage",
+        "Nerve Refill Usage"
+      ],
+      "loaning": [
+        "Temporary Item Loaning",
+        "Weapon & Armor Loaning"
+      ],
+      "retrieving": [
+        "Item Retrieving"
+      ],
+      "donate": [
+        "Item Giving",
+        "Money Giving",
+        "Points Giving"
+      ],
+      "gangApplicationManagement": [
+        "Forum Management",
+        "Kick Members",
+        "Balance Adjustment",
+        "War Management",
+        "Upgrade Management",
+        "Newsletter Sending",
+        "Announcement Changes",
+        "Description Changes"
+      ]
+    }
+  }

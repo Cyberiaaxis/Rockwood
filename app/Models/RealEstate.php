@@ -16,36 +16,30 @@ class RealEstate extends Model
      */
 
     protected $fillable = [
-        'id', 'name', 'description', 'avatar', 'status'
+        'id', 'name', 'description', 'image'
     ];
 
-        /**
+    /**
+     * get the RealEstate list.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getRealEstate()
+    {
+        return $this->all();
+    }
+
+    /**
      * Update the specified resource in storage.
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Model\Rank  $rank
      * @return updateOrCreate result
      */
-    public function realEstateStore($request, $imageName = null)
+    public function realEstateStore(array $data)
     {
-        // dd($request->status);
-        try {
-            $data = [
-                'name' => $request->name,
-                'description' => $request->description,
-                'status' => $request->status,
-            ];
-
-            if ($imageName) {
-                $data['avatar'] =  $imageName;
-            }
-            // dd($data);
-            return $this->updateOrCreate([
-                'id' => $request->id
-            ], $data);
-        } catch (Throwable $e) {
-            report($e);
-            return $e->getMessage();
-        }
+        return $this->updateOrCreate([
+            'id' => $data['id'],
+        ], $data);
     }
 
     /**

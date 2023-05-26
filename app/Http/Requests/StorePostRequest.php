@@ -23,6 +23,7 @@ class StorePostRequest extends FormRequest
      */
     public function rules()
     {
+        // dd($this);
         return [
             'name' =>  ['required',  'unique:jobs,name,' . $this->id],
             'image' => ['nullable', 'sometimes', 'mimes:jpg,jpeg,bmp,png'],

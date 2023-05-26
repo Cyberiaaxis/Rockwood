@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\{RealEstate, UserDetail, UserRealEstate, UserStats};
 use App\Http\Requests\StorePostRequest;
+use App\Http\Resources\RealEstateResource;
 use App\Services\StoreService;
 
 class RealEstateController extends Controller
@@ -16,7 +17,10 @@ class RealEstateController extends Controller
     public function index()
     {
         $realEstate = new RealEstate();
-        return response()->json(['real_estates' => $realEstate->all()]);
+        $realEstate_list = $realEstate->getrealEstate();
+        $realEstateResource = new RealEstateResource($realEstate_list);
+        $realEstates = $realEstateResource->collection($realEstate_list);
+        return response()->json(['real_estates' => $realEstates]);
     }
 
     /**
@@ -27,9 +31,11 @@ class RealEstateController extends Controller
     public function Feed(StorePostRequest $request)
     {
         $data = $this->handleData($request);
-        $job = (new StoreService($request))->store(new RealEstate(), $data);
+        // dd($data);
+        $realEstate = new RealEstate();
+        $realEstateSaved = $realEstate->realEstateStore($data);
         return response()->json([
-            'status' => (($job->status === "1") ? true : false),
+            'data' => $realEstateSaved,
         ], 201);
     }
 
@@ -43,13 +49,14 @@ class RealEstateController extends Controller
     {
         $imageName = $this->imageUpload($request);
         $data =  [
+            'id' => $request->id,
             'name' => $request->name,
             'description' => $request->description,
-            'status' => $request->status,
+            // 'status' => $request->status,
         ];
 
         if ($imageName) {
-            $data['avatar'] =  $imageName;
+            $data['image'] =  $imageName;
         }
         return $data;
     }

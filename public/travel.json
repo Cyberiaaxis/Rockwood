@@ -1,0 +1,153 @@
+{
+    "success": true,
+    "results": {
+        "currentRouteId": 1,
+        "currentCountryName": "currentCountryName",
+        "currentCityName": "currentCityName",
+        "currentAreaName": "currentAreaName",
+        "locations": [
+            {
+                "id": 0,
+                "locationName": "locationName0",
+                "travelMode": 0,
+                "top": 5,
+                "left": 10,
+                "distance": 100,
+                "travelRequirements": {
+                    "productName": "passport",
+                    "money": 10000000,
+                    "status": false
+                }
+            },
+            {
+                "id": 1,
+                "locationName": "locationName1",
+                "travelMode": 2,
+                "top": 99,
+                "left": 12,
+                "distance": 100,
+                "travelRequirements": {
+                    "productName": "passport",
+                    "money": 10000000,
+                    "status": true
+                }
+            },
+            {
+                "id": 2,
+                "locationName": "locationName2",
+                "travelMode": 1,
+                "top": 41,
+                "left": 51,
+                "distance": 100,
+                "travelRequirements": {
+                    "productName": "passport",
+                    "money": 10000000,
+                    "status": true
+                }
+            },
+            {
+                "id": 3,
+                "locationName": "locationName3",
+                "travelMode": 2,
+                "top": 89,
+                "left": 61,
+                "distance": 100,
+                "travelRequirements": {
+                    "productName": "passport",
+                    "money": 10000000,
+                    "status": true
+                }
+            },
+            {
+                "id": 4,
+                "locationName": "locationName4",
+                "travelMode": 0,
+                "top": 44,
+                "left": 22,
+                "distance": 100,
+                "travelRequirements": {
+                    "productName": "passport",
+                    "money": 10000000,
+                    "status": true
+                }
+            },
+            {
+                "id": 5,
+                "locationName": "locationName5",
+                "travelMode": 2,
+                "top": 45,
+                "left": 99,
+                "distance": 100,
+                "travelRequirements": {
+                    "productName": "passport",
+                    "money": 10000000,
+                    "status": true
+                }
+            },
+            {
+                "id": 6,
+                "locationName": "locationName6",
+                "travelMode": 1,
+                "top": 67,
+                "left": 22,
+                "distance": 100,
+                "travelRequirements": {
+                    "productName": "passport",
+                    "money": 10000000,
+                    "status": true
+                }
+            }
+        ],
+        "travelModes": [
+            {
+                "id": 0,
+                "type": "Road",
+                "travelTransportations": [
+                    {
+                        "id": 0,
+                        "transportName": "Bus",
+                        "speed": 60
+                    },
+                    {
+                        "id": 1,
+                        "transportName": "Bike",
+                        "speed": 60
+                    },
+                    {
+                        "id": 2,
+                        "transportName": "Train",
+                        "speed": 60
+                    },
+                    {
+                        "id": 3,
+                        "transportName": "Car",
+                        "speed": 60
+                    }
+                ]
+            },
+            {
+                "id": 1,
+                "type": "Water",
+                "travelTransportations": [
+                    {
+                        "id": 4,
+                        "transportName": "Ship",
+                        "speed": 60
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "type": "Air",
+                "travelTransportations": [
+                    {
+                        "id": 5,
+                        "transportName": "Aeroplane",
+                        "speed": 60
+                    }
+                ]
+            }
+        ],
+        "estimatedTravelTime": 600
+    }
+}

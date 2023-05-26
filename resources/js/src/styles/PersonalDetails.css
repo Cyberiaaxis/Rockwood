@@ -1,0 +1,22 @@
+.PersonalDetailsContainer {
+  display: flex;
+}
+.profileSignature {
+  width: 100%;
+}
+
+.PersonalDetailsContainer ul, .PersonalDetailsContainer li {
+  list-style: none;
+  text-align: left;
+  border: 1px solid gray;
+  padding: 0;
+  width: 250px;
+}
+
+.PersonalDetailsContainer ul {
+  list-style: none;
+  text-align: left;
+  border: 1px solid gray;
+  padding: 0;
+  width: 250px;
+}

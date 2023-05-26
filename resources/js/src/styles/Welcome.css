@@ -1,0 +1,76 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.background-carousel {
+  display: block;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  /* background-color: brown; */
+}
+
+.background-carousel::after {
+  display: block;
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  z-index: -1;
+  --blend-opacity: 0.2;
+  /* Custom opacity */
+  --blend-color-1: rgba(0, 128, 0, var(--blend-opacity));
+  /* Custom blend color 1 */
+  --blend-color-2: rgba(0, 0, 255, var(--blend-opacity));
+  /* Custom blend color 2 */
+  --blend-mode: custom-mode;
+  /* Custom blend mode */
+
+  background-image: linear-gradient(to bottom, var(--blend-color-1), var(--blend-color-2)), var(--bg-img);
+  mix-blend-mode: var(--blend-mode);
+  /* opacity: var(--blend-opacity); */
+  background-size: cover;
+  background-position: center;
+  /* background-image: linear-gradient(to right, rgba(109, 179, 242, .6), rgba(109, 179, 242, .6)), url('images/checked.png'); */
+  animation-name: animName;
+  animation-duration: 35s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* .background-carousel::before {
+
+  display: block;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: rgb(237, 226, 226);
+} */
+
+@keyframes animName {
+  0% {
+    transform: rotate(0deg);
+
+    opacity: 0.2;
+    /* background-color: black; */
+  }
+
+  20% {
+    transform: rotate(10deg) scale(1);
+    opacity: 0.4;
+    /* background-color: black; */
+  }
+
+  100% {
+    transform: rotate(20deg) scale(1);
+    opacity: 0;
+    /* background-color: black; */
+  }
+}

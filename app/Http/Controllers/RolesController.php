@@ -54,67 +54,10 @@ class RolesController extends Controller
         $data =  [
             'id' => $request->id,
             'name' => $request->name,
+            'status' => $request->status,
             'permissions' => explode(",", $request->permissions),
         ];
 
         return $data;
-    }
-
-    /**
-     * Display the specified role.
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function getAllPermissionOfRole()
-    {
-        $role = new Role();
-        return $role->with(['permissions' => function ($q) {
-            return $q->pluck('name');
-        }])->get(['id', 'name']);
-    }
-
-    /**
-     * Show the form for editing.
-     * @param  Request $request, Role $role
-     * @return \Illuminate\Http\Response
-     */
-    public function permissionsToRole(Request $request, Role $role, Permission $permissions)
-    {
-        $role->syncPermissions($request->permissions);
-        $permissions->syncRoles($request->roles);
-    }
-
-
-    /**
-     * Show the form for editing.
-     * @param  Request $request, Role $role
-     * @return \Illuminate\Http\Response
-     */
-    public function permissionsAndRoles()
-    {
-        $role = new Role();
-        $roles = $role->all(['id', 'name']);
-        $permission = new Permission();
-        $permissions = $permission->all(['id', 'name']);
-        return response()->json(['rolePermission' => $roles, 'permissions' => $permissions]);
-    }
-
-    /**
-     * Update the specified role in storage.
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Request $request, int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
     }
 }

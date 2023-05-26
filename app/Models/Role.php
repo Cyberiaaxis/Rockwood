@@ -8,12 +8,13 @@ class Role extends ModelsRole
 {
 
 
-        /**
+    /**
      * Show the ranks list.
      *
      * @return \Illuminate\Http\Response
      */
-    public function getRoles(){
+    public function getRoles()
+    {
         return $this->with('permissions')->get();
     }
 
@@ -24,11 +25,9 @@ class Role extends ModelsRole
      */
     public function storeRole(array $data)
     {
+        // dd($data);
         return $this->updateOrCreate([
             'id' => $data['id'],
         ], $data);
     }
-
-
-
 }

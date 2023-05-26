@@ -19,7 +19,7 @@ class RealEstateResource extends JsonResource
             'name' => $this->name,
             'image' => $this->image,
             'description' => $this->description,
-            'status' => $this->status,
+            // 'status' => $this->status,
         ];
     }
 }
