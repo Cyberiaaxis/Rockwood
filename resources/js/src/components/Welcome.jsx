@@ -41,7 +41,8 @@ export default function Welcome() {
     const [welcomeData, setWelcomeData] = React.useState({
         players: [],
         images: [],
-        events: []
+        events: [],
+        gangs: []
     });
     const navigate = useNavigate();
 
@@ -60,10 +61,10 @@ export default function Welcome() {
     } = useForm();
 
     const getWelcomeData = async () => {
-        const { events, players, images } = await gameServerApi("welcomelist");
-        setWelcomeData({ ...welcomeData, events, players, images });
+        const { gangs, events, players, images } = await gameServerApi("welcomelist");
+        setWelcomeData({ ...welcomeData, gangs, events, players, images });
     };
-    // console.log("**players names**", welcomeData.events);
+    console.log("**gangs name**", welcomeData.gangs);
     const menuItems = [
         {
             id: 'about',
@@ -98,14 +99,14 @@ export default function Welcome() {
     ];
 
 
-    const images = ["https://picsum.photos/1024/768", "https://picsum.photos/1280/1024"];
+    // const images = ["https://picsum.photos/1024/768", "https://picsum.photos/1280/1024"];
 
     React.useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentBackgroundImage((prevImage) => (prevImage + 1) % images.length);
+            setCurrentBackgroundImage((prevImage) => (prevImage + 1) % welcomeData.images.length);
         }, 45000);
         return () => clearInterval(interval);
-    }, [images.length, currentBackgroundImage]);
+    }, [welcomeData.images.length, currentBackgroundImage]);
 
     React.useEffect(() => {
         getWelcomeData();
@@ -164,7 +165,7 @@ export default function Welcome() {
             <Box
                 className="background-carousel"
                 sx={{
-                    "--bg-img": `url(${images[currentBackgroundImage]})`
+                    "--bg-img": `url(${welcomeData.images[currentBackgroundImage]})`
                 }}
 
             >
@@ -266,7 +267,7 @@ export default function Welcome() {
                                 <AnimatedScrollDiv
                                     className="topplayers"
                                     style={{ height: 200 }}
-                                    items={welcomeData.players}
+                                    items={welcomeData.gangs}
                                 />
                             </Box>
                         </Item>

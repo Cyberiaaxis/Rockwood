@@ -82,7 +82,7 @@ function EventTooltips({ fieldWidth, fieldHeight, events }) {
             displayNextTooltip(nextIndex < events.length ? nextIndex : 0)
         }, delayBeforeNextTooltip)
     }
-    console.log("tooltips having this data", tooltips);
+    // console.log("tooltips having this data", tooltips);
     return (
         tooltips.map((box, idx) => (
             <Box

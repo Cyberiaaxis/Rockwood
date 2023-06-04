@@ -14,4 +14,12 @@ class Gang extends Model
     protected $fillable = [
         'name', 'avatar', 'description', 'status'
     ];
+
+    /**
+     * get total posts
+     */
+    public function getGangNames()
+    {
+        return  $this->take(5)->orderBy('name')->pluck('name');
+    }
 }
