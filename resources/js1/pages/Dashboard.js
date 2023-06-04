@@ -211,7 +211,7 @@ const Dashboard = () => {
                 <Grid item xs={12}>
 
                     <Box display="flex">
-                        <Box paddingTop={1} flexGrow={1}>
+                        <Box sx={{ paddingTop: 1 }} flexGrow={1}>
                             <Button className={classes.startButton} variant="contained" color="primary" size="large">
                                 Start
                             </Button>

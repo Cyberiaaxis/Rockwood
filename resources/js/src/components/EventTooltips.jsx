@@ -28,9 +28,9 @@ function isOverlap(boxA, boxB) {
         &&*/ Math.max(boxA.top, boxB.top) < Math.min(boxA.top + BOX_HEIGHT, boxB.top + BOX_HEIGHT)
     );
 }
-
+// 9911464112 Nitesh
 function EventTooltips({ fieldWidth, fieldHeight, events }) {
-    console.log("** fieldWidth **", fieldWidth, "** fieldHeight **", fieldHeight, "events", events);
+    // console.log("** fieldWidth **", fieldWidth, "** fieldHeight **", fieldHeight, "events", events);
     const [tooltips, setTooltips] = useState([]);
     const timeoutIdRef = useRef(0)
     const tooltipsRef = useRef(tooltips)
@@ -51,7 +51,7 @@ function EventTooltips({ fieldWidth, fieldHeight, events }) {
             const top = Math.floor(Math.random() * (fieldHeight - BOX_HEIGHT));
             const tooltip = {
                 id,
-                mainText: tooltipData.mainText,
+                event: tooltipData.event,
                 top,
                 [(isLeftSide ? 'left' : 'right')]: offsetX
             }
@@ -82,7 +82,7 @@ function EventTooltips({ fieldWidth, fieldHeight, events }) {
             displayNextTooltip(nextIndex < events.length ? nextIndex : 0)
         }, delayBeforeNextTooltip)
     }
-
+    console.log("tooltips having this data", tooltips);
     return (
         tooltips.map((box, idx) => (
             <Box
@@ -97,7 +97,7 @@ function EventTooltips({ fieldWidth, fieldHeight, events }) {
                 }}
                 key={box.id}
             >
-                <HtmlTooltip sx={{ top: box.top, left: box.left }} title={box.mainText} placement='top' open={true} arrow={true}>
+                <HtmlTooltip sx={{ top: box.top, left: box.left }} title={box.event} placement='top' open={true} arrow={true}>
                     <Box sx={{ top: box.top, left: box.left }}></Box>
                 </HtmlTooltip>
             </Box>

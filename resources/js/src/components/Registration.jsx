@@ -2,42 +2,49 @@ import React from "react";
 import Typography from '@mui/material/Typography';
 import { Box, Button, Container, Grid, TextField } from "@mui/material";
 import { AccountCircle, Email, Lock } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import gameServerApi from "../libraries/gameServerApi";
+import ValidationErrors from "../libraries/ValidationErrors";
+import { Form } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 export default function Registration() {
-    const [password, setPassword] = React.useState('');
-    const [confirmPassword, setConfirmPassword] = React.useState('');
-    const [formData, setFormData] = React.useState({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        termsAccepted: false,
-    });
 
-    const handlePasswordChange = (event) => {
-        setPassword(event.target.value);
+    const {
+        register,
+        setError,
+        formState: { errors },
+        handleSubmit,
+        clearErrors,
+    } = useForm();
+
+
+    const onSubmit = async (data) => {
+
+        const response = await toast.promise(
+            gameServerApi('/register', 'post', data),
+            {
+                pending: 'Please wait, We are creating your account',
+                success: 'Your account has been created!',
+                error: {
+                    theme: 'colored',
+                    render({ data }) {
+
+                        return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message;
+                    },
+                },
+                // error: 'An error occurred while creating your account',
+            }
+        );
+
     };
 
-    const handleConfirmPasswordChange = (event) => {
-        setConfirmPassword(event.target.value);
-    };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log("formData", formData);
-        if (password === confirmPassword) {
-            console.log('Passwords match!');
-            // Do something here, like submitting the form
-        } else {
-            console.log('Passwords do not match!');
-            // Show an error message or something
-        }
-    };
 
     return (
         <React.Fragment>
             <Container component="main" maxWidth="xs">
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                <Form noValidate sx={{ mt: 1 }} method="post" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Typography variant="h3">Join Us</Typography>
@@ -47,13 +54,12 @@ export default function Registration() {
                                 required
                                 fullWidth
                                 label="Username"
+                                placeholder="User Name"
                                 name="name"
+                                autoComplete="none"
+                                autoFocus
                                 color="success"
-                                focused
-                                value={formData.name}
-                                onChange={(event) =>
-                                    setFormData({ ...formData, username: event.target.value })
-                                }
+                                {...register("name", { required: true })}
                                 InputProps={{
                                     startAdornment: (
                                         <AccountCircle color="secondary" />
@@ -66,14 +72,11 @@ export default function Registration() {
                                 required
                                 fullWidth
                                 label="Email"
+                                placeholder="Enter your E-Mail Address"
                                 name="email"
                                 type="email"
                                 color="success"
-                                focused
-                                value={formData.email}
-                                onChange={(event) =>
-                                    setFormData({ ...formData, email: event.target.value })
-                                }
+                                {...register("email", { required: true })}
                                 InputProps={{
                                     startAdornment: (
                                         <Email color="secondary" />
@@ -85,14 +88,14 @@ export default function Registration() {
                             <TextField
                                 type="password"
                                 label="Password"
+                                placeholder="Password"
                                 color="success"
-                                focused
-                                value={password}
-                                onChange={handlePasswordChange}
+
                                 name="password"
                                 margin="normal"
                                 fullWidth
                                 required
+                                {...register("password", { required: true })}
                                 InputProps={{
                                     startAdornment: (
                                         <Lock color="secondary" />
@@ -105,10 +108,10 @@ export default function Registration() {
                                 name="confirmPassword"
                                 type="password"
                                 label="Confirm Password"
+                                placeholder="Repeat your Password"
                                 color="success"
-                                focused
-                                value={confirmPassword}
-                                onChange={handleConfirmPasswordChange}
+
+                                {...register("password_confirmation", { required: true })}
                                 margin="normal"
                                 fullWidth
                                 required
@@ -131,10 +134,7 @@ export default function Registration() {
                             </Button>
                         </Grid>
                     </Grid>
-                </Box>
-                <form onSubmit={handleSubmit}>
-
-                </form>
+                </Form>
             </Container>
 
         </React.Fragment >

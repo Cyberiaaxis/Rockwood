@@ -15,6 +15,7 @@
 
 $router->get('rightList', 'App\Http\Controllers\LandingPageController@rightList');
 $router->get('leftList', 'App\Http\Controllers\LandingPageController@leftList');
+$router->get('welcomelist', 'App\Http\Controllers\WelcomeController');
 $router->post('auth/login', 'App\Http\Controllers\LoginController@login');
 $router->post('/register', 'App\Http\Controllers\RegistrationController@signup');
 // dd();

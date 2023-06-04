@@ -19,10 +19,9 @@ import Registration from "./Registration";
 import gameServerApi from "../libraries/gameServerApi";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../libraries/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { renderMatches, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 // import axios, { isCancel, AxiosError } from "axios";
-
-
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -39,6 +38,11 @@ export default function Welcome() {
     const [currentBackgroundImage, setCurrentBackgroundImage] = React.useState(0);
     const { user, setUser } = React.useContext(AuthContext);
     const [page, setPage] = React.useState(false);
+    const [welcomeData, setWelcomeData] = React.useState({
+        players: [],
+        images: [],
+        events: []
+    });
     const navigate = useNavigate();
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -55,24 +59,11 @@ export default function Welcome() {
         clearErrors,
     } = useForm();
 
-    const items = [
-        "Rockwood",
-        "efdee",
-        "Bill Gates",
-        "Steve Jobs",
-        "Linus Torvalds",
-        "Rockwood",
-        "efdee",
-        "Bill Gates",
-        "Steve Jobs",
-        "Linus Torvalds",
-        "Rockwood",
-        "efdee",
-        "Bill Gates",
-        "Steve Jobs",
-        "Linus Torvalds"
-    ];
-
+    const getWelcomeData = async () => {
+        const { events, players, images } = await gameServerApi("welcomelist");
+        setWelcomeData({ ...welcomeData, events, players, images });
+    };
+    // console.log("**players names**", welcomeData.events);
     const menuItems = [
         {
             id: 'about',
@@ -116,6 +107,10 @@ export default function Welcome() {
         return () => clearInterval(interval);
     }, [images.length, currentBackgroundImage]);
 
+    React.useEffect(() => {
+        getWelcomeData();
+    }, [])
+
     function ActivePage() {
         const pages = {
             about: <About />,
@@ -132,28 +127,36 @@ export default function Welcome() {
         setPage(e.target.value);
     }
     const onSubmit = async (data) => {
-        console.log("data", data);
-        const result = await gameServerApi("auth/login", 'POST', data);
-        // console.log("result", result);
-        if (result.userId) {
-            const userDetails = {
-                userId: result.userId,
-                loggedIn: true
-            };
-            setUser(userDetails);
-            navigate("/dashboard");
-        } else {
-            console.log("*** error display ", result);
-            for (const [fieldName, errors] of Object.entries(result.errors)) {
-                setError(fieldName, {
-                    type: "manual",
-                    message: errors[0],
-                });
-            }
+        const response = await toast.promise(
+            gameServerApi("auth/login", 'POST', data),
+            {
+                pending: "Please wait, we are logging you in.",
+                success: {
+                    theme: 'colored',
+                    position: 'top-center',
+                    render({ data }) {
+                        return `Welcome ${data.userName}`
+                    },
+                },
+                error: {
+                    theme: 'colored',
+                    position: 'top-center',
+                    render({ data }) {
+                        return Array.isArray(data) ? <>
+                            {data.length ? data.map((x, i) =>
+                                <div key={i}>
+                                    {i + 1}.  {x}
+                                </div>
+                            ) : <div>{data?.message}</div>}
+                        </> : data?.message;
+                    },
+                },
+            },
 
-            setTimeout(() => {
-                clearErrors();
-            }, 10000);
+        );
+
+        if (response) {
+            setUser(response);
         }
     };
     return (
@@ -172,7 +175,7 @@ export default function Welcome() {
                                 edge="start"
                                 color="inherit"
                                 aria-label="open drawer"
-                                href="/welcome"
+                                href="/"
                                 sx={{ mr: 2 }}
                             >
                                 <Avatar sx={{ width: 60, height: 60 }} alt="Cyberia" src="/images/logo.jpg" />
@@ -220,7 +223,7 @@ export default function Welcome() {
                                     />
 
                                     <Tooltip title="Login">
-                                        <IconButton type='submit' paddingTop={1} color="success">
+                                        <IconButton type='submit' sx={{ paddingTop: 1 }} color="success">
                                             <ArrowForwardIosIcon sx={{ color: "red" }} />
                                         </IconButton>
                                     </Tooltip>
@@ -240,7 +243,7 @@ export default function Welcome() {
                                 <AnimatedScrollDiv
                                     className="topplayers"
                                     style={{ height: 200 }}
-                                    items={items}
+                                    items={welcomeData.players}
                                 />
                             </Box>
                         </Item>
@@ -249,7 +252,7 @@ export default function Welcome() {
                         <Item sx={{ backgroundColor: "transparent" }}>
                             <Box sx={{ textAlign: "center", top: 0, bottom: 0, height: 550, width: "100%" }}>
                                 <Typography variant="h5" color="common.black" gutterBottom>
-                                    {page ? <ActivePage /> : <DisplayEvent switched={currentBackgroundImage} />}
+                                    {page ? <ActivePage /> : <DisplayEvent events={welcomeData.events} />}
                                 </Typography>
                             </Box>
                         </Item>
@@ -263,7 +266,7 @@ export default function Welcome() {
                                 <AnimatedScrollDiv
                                     className="topplayers"
                                     style={{ height: 200 }}
-                                    items={items}
+                                    items={welcomeData.players}
                                 />
                             </Box>
                         </Item>
@@ -271,7 +274,7 @@ export default function Welcome() {
                     <Grid item xs={12} md={12}>
                         <Item sx={{ backgroundColor: "transparent", position: "fixed", bottom: 0 }}>
                             <Typography variant="h5" color="common.white" gutterBottom>
-                                Copyright &copy; 2023
+                                Cyberia &copy; 2023
                             </Typography>
                         </Item>
                     </Grid>

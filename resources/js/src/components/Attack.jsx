@@ -405,7 +405,7 @@ function Attack(props) {
 }
 
 export default Attack;
-//to do list 
+//to do list
 //shaking effect
-//blood effect 
+//blood effect
 //smoke effect of weapons like guns

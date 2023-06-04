@@ -306,7 +306,7 @@ class UsersController extends Controller
         return true;
     }
 
-        /**
+    /**
      * Remove the specified resource from storage.
      * @param  int  $id
      * @return \Illuminate\Http\Response

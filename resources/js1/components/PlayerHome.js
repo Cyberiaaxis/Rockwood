@@ -106,7 +106,7 @@ export default function PlayerHome() {
 
     return (
         <React.Fragment>
-            <Grid container paddingTop={2} rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid container sx={{ paddingTop: 2 }} rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 <Grid item xs={6}>
                     <div>
                         <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
