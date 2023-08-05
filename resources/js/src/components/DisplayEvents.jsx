@@ -29,7 +29,7 @@ export default function DisplayEvent({ events }) {
     //         fetchEvents();
     //     }
     // }, [])
-    console.log("** after useEffect events **", events)
+    // console.log("** after useEffect events **", events)
     return (
         <Box
             ref={ref}

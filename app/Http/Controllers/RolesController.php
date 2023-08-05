@@ -7,7 +7,7 @@ use App\Models\Role;
 use Spatie\Permission\Models\{Permission};
 use App\Http\Requests\StorePostRequest;
 use App\Http\Resources\RoleResource;
-use App\Services\StoreService;
+use Illuminate\Support\Arr;
 
 class RolesController extends Controller
 {
@@ -35,12 +35,12 @@ class RolesController extends Controller
         $data = $this->handleData($request);
         $role = new Role();
         // dd($data);
-        $roleSaved = $role->storeRole($data);
+        $roleSaved = $role->storeRole(Arr::except($data, 'permissions'));
         $roleSaved->syncPermissions($data['permissions']);
 
-        return response()->json([
-            'data' => $roleSaved,
-        ], 201);
+        $roleResource = new RoleResource($roleSaved);
+
+        return response()->json(['data' => $roleResource], 201);
     }
 
     /**

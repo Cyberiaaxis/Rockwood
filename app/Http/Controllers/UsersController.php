@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Http\Resources\UserResource;
 use App\Models\{UserTravel, TravelRoute, UserDetail, User, UserStats};
 use Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 // use Auth;
@@ -36,22 +37,93 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $users = User::with('permissions')->orderBy('name')->get();
-        if ($request->ajax()) {
-            return UserResource::collection($users);
-        }
+        $users = new User();
+        $user_list = $users->with('roles')->orderBy('name')->get();
+        $roleResource = new UserResource($user_list);
+        $user_list = $roleResource->collection($user_list);
 
-        return view('staff.users.users');
+        return response()->json(['users' => $user_list]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the users.
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    // public function getUsers()
+    // {
+    //     $users = new User();
+    //     $usersList = $users->all();
+    //     return response()->json(['users' => $usersList]);
+    // }
+
+
+    /**
+     * Store request and sync it as well with a resource.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function feed(Request $request)
     {
+
+        $request->validate([
+            'id' => ['required'],
+            'name' => ['required', 'string'],
+            'roles' => ['string'],
+        ]);
+
+        $data = $this->handleData($request);
+        $user = new user();
+
+        $userStored = $user->updateOrCreate([
+            'id' => $data['id'],
+        ], Arr::except($data, 'roles'));
+
+        $msg = 'No Changes were made.';
+
+        if ($userStored) {
+
+            $userStored->syncRoles($data['roles']);
+
+            $msg = "new changes were applied";
+        }
+
+        $userResource = new UserResource($user->findOrFail($data['id']));
+
+        return response()->json(["message" => $msg, 'data' => $userResource], 201);
+    }
+
+
+    /**
+     * validation of inputs.
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Model\Rank  $rank
+     * @return array
+     */
+    public function handleData($request)
+    {
+        $data =  [
+            'id' => $request->id,
+            'name' => $request->name,
+            'status' => $request->has('status') ? true : false,
+            'roles' => explode(",", $request->roles),
+        ];
+        // dd($request->hasFile('image'));
+        if ($request->hasFile('image')) {
+
+            try {
+                $extension = $request->file('image')->extension();
+                $path = $request->file('image')->storeAs('images', $request->id . '.' . $extension);
+
+                $data['avatar'] = $path;
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        }
+        // dd($data);
+        return $data;
     }
 
     /**

@@ -21,8 +21,10 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'gender', 'type'
+        'name', 'email', 'password', 'gender', 'type', 'avatar'
     ];
+
+    protected $guard_name = 'sanctum';
 
     /**
      * The attributes that should be hidden for arrays.
@@ -87,6 +89,21 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * regiration of new player's in storage.
+     * @param  int $course_id
+     * @return boolean
+     */
+    public function saveUser($request)
+    {
+        return $this->create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ]);
+    }
+
+
+    /**
      * get player's name by id from storage.
      * @param  int $userId
      * @return string
@@ -104,6 +121,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getAge(int $userId): string
     {
         return  $this->where(['id' => $userId])->value('created_at');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Model\Rank  $rank
+     * @return updateOrCreate result
+     */
+    public function realEstateStore(array $data)
+    {
+        return $this->updateOrCreate([
+            'id' => $data['id'],
+        ], $data);
     }
 
     /**
@@ -141,7 +171,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param
      * @return a collection
      */
-    public function getSaccessAttribute(){
-
+    public function getSaccessAttribute()
+    {
     }
 }

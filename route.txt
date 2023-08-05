@@ -1,0 +1,43 @@
+
+  POST       _ignition/execute-solution .......................... ignition.executeSolution › Spatie\LaravelIgnition › ExecuteSolutionController
+  GET|HEAD   _ignition/health-check ...................................... ignition.healthCheck › Spatie\LaravelIgnition › HealthCheckController
+  POST       _ignition/update-config ................................... ignition.updateConfig › Spatie\LaravelIgnition › UpdateConfigController
+  POST       api/auth/login .............................................................................................. LoginController@login
+  GET|HEAD   api/auth/logout ............................................................................................ LoginController@logout
+  GET|HEAD   api/cities ................................................................................................. CitiesController@index
+  GET|HEAD   api/countries ............................................................................................. CountryController@index
+  GET|HEAD   api/courses ................................................................................................. ShopsController@index
+  GET|HEAD   api/gangs ................................................................................................... ShopsController@index
+  GET|HEAD   api/home ..................................................................................................... HomeController@index
+  GET|HEAD   api/jobs ...................................................................................................... JobController@index
+  GET|HEAD   api/leftList ....................................................................................... LandingPageController@leftList
+  GET|HEAD   api/permissions ....................................................................................... PermissionsController@index
+  GET|HEAD   api/ping ..................................................................................................... LoginController@ping
+  GET|HEAD   api/ranks ................................................................................................... RanksController@index
+  GET|HEAD   api/real_estates ....................................................................................... RealEstateController@index
+  POST       api/register ........................................................................................ RegistrationController@signup
+  GET|HEAD   api/rightList ..................................................................................... LandingPageController@rightList
+  GET|HEAD   api/roleWithPermissions .................................................................... RolesController@getAllPermissionOfRole
+  GET|HEAD   api/roles ................................................................................................... RolesController@index
+  GET|HEAD   api/rolesPermissions .......................................................................... RolesController@permissionsAndRoles
+  GET|HEAD   api/rsaccess .................................................................................. UsersController@RemoveSaccessStatus
+  GET|HEAD   api/saccess ...................................................................................... UsersController@AddSaccessStatus
+  POST       api/saveCity ................................................................................................. ShopsController@feed
+  POST       api/saveCountry .............................................................................................. ShopsController@feed
+  POST       api/saveCourse ............................................................................................... ShopsController@feed
+  POST       api/saveGang ................................................................................................. ShopsController@feed
+  POST       api/saveJob .................................................................................................... JobController@feed
+  POST       api/savePermission ..................................................................................... PermissionsController@feed
+  POST       api/saveRank ................................................................................................. RanksController@feed
+  POST       api/saveRealEstate ...................................................................................... RealEstateController@feed
+  POST       api/saveRole ................................................................................................. RolesController@Feed
+  POST       api/saveRolePermissions ......................................................................... RolesController@permissionsToRole
+  POST       api/saveShop ................................................................................................. ShopsController@feed
+  POST       api/saveUsers ................................................................................................ UsersController@Feed
+  GET|HEAD   api/shops ................................................................................................... ShopsController@index
+  GET|HEAD   api/users ................................................................................................... UsersController@index
+  GET|HEAD   api/welcomelist ................................................................................................. WelcomeController
+  GET|HEAD   home .............................................................................................................................. 
+  GET|HEAD   sanctum/csrf-cookie ................................................................... Laravel\Sanctum › CsrfCookieController@show
+  GET|HEAD   {path?} ........................................................................................................................... 
+

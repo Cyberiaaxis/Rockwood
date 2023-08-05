@@ -21,6 +21,8 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../libraries/AuthContext";
 import { renderMatches, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import CloseIcon from '@mui/icons-material/Close';
+import { Navigate } from "react-router-dom";
 // import axios, { isCancel, AxiosError } from "axios";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -36,7 +38,7 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function Welcome() {
     const [showPassword, setShowPassword] = React.useState(false);
     const [currentBackgroundImage, setCurrentBackgroundImage] = React.useState(0);
-    const { user, setUser } = React.useContext(AuthContext);
+    const { setUser } = React.useContext(AuthContext);
     const [page, setPage] = React.useState(false);
     const [welcomeData, setWelcomeData] = React.useState({
         players: [],
@@ -44,6 +46,9 @@ export default function Welcome() {
         events: [],
         gangs: []
     });
+
+    // console.log('*** Welcome: render: authCtx = ', authCtx)
+
     const navigate = useNavigate();
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -54,6 +59,7 @@ export default function Welcome() {
 
     const {
         register,
+        reset,
         setError,
         formState: { errors },
         handleSubmit,
@@ -64,7 +70,7 @@ export default function Welcome() {
         const { gangs, events, players, images } = await gameServerApi("welcomelist");
         setWelcomeData({ ...welcomeData, gangs, events, players, images });
     };
-    console.log("**gangs name**", welcomeData.gangs);
+    // console.log("**gangs name**", welcomeData.gangs);
     const menuItems = [
         {
             id: 'about',
@@ -98,9 +104,6 @@ export default function Welcome() {
         },
     ];
 
-
-    // const images = ["https://picsum.photos/1024/768", "https://picsum.photos/1280/1024"];
-
     React.useEffect(() => {
         const interval = setInterval(() => {
             setCurrentBackgroundImage((prevImage) => (prevImage + 1) % welcomeData.images.length);
@@ -128,7 +131,7 @@ export default function Welcome() {
         setPage(e.target.value);
     }
     const onSubmit = async (data) => {
-        const response = await toast.promise(
+        await toast.promise(
             gameServerApi("auth/login", 'POST', data),
             {
                 pending: "Please wait, we are logging you in.",
@@ -136,13 +139,16 @@ export default function Welcome() {
                     theme: 'colored',
                     position: 'top-center',
                     render({ data }) {
-                        return `Welcome ${data.userName}`
+                        console.log("data.userId render", data);
+                        setUser(data.userId)
+                        navigate('/dashboard')
                     },
                 },
                 error: {
                     theme: 'colored',
                     position: 'top-center',
                     render({ data }) {
+                        reset();
                         return Array.isArray(data) ? <>
                             {data.length ? data.map((x, i) =>
                                 <div key={i}>
@@ -155,10 +161,6 @@ export default function Welcome() {
             },
 
         );
-
-        if (response) {
-            setUser(response);
-        }
     };
     return (
         <React.Fragment>
@@ -253,6 +255,9 @@ export default function Welcome() {
                         <Item sx={{ backgroundColor: "transparent" }}>
                             <Box sx={{ textAlign: "center", top: 0, bottom: 0, height: 550, width: "100%" }}>
                                 <Typography variant="h5" color="common.black" gutterBottom>
+                                    {page ? <IconButton sx={{ color: "red" }} onClick={() => setPage(false)}>
+                                        <CloseIcon />
+                                    </IconButton> : ''}
                                     {page ? <ActivePage /> : <DisplayEvent events={welcomeData.events} />}
                                 </Typography>
                             </Box>

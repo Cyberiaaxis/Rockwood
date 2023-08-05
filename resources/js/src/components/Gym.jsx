@@ -7,16 +7,16 @@ import "../styles/Gym.css";
 export default function Gym() {
     const [value, setValue] = React.useState(0);
     const [select, setSelect] = React.useState("");
-    
+
     const handleChange = (event) => {
         setSelect(event.target.value);
-      };
+    };
 
     const handleClick = (e) => {
-        console.log("value", value);
-        console.log("select", select);
+        // console.log("value", value);
+        // console.log("select", select);
     };
-    
+
     return (
         <React.Fragment>
             <Box>
@@ -31,11 +31,11 @@ export default function Gym() {
                     </Box>
                 </Box>
                 <Box margin="{5}" display="flex" justifyContent="center" padding={5}>
-                    <RadioGroup 
+                    <RadioGroup
                         row
-                        aria-labelledby="demo-row-radio-buttons-group-label" 
-                        name="row-radio-buttons-group" 
-                        value={select} 
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                        value={select}
                         onChange={handleChange}
                     >
                         <FormControlLabel value="strength" control={<Radio />} label="Strength" />

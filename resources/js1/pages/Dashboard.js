@@ -15,9 +15,6 @@ import Inventory from "../components/Inventory";
 import Profile from "../components/Profile";
 import PlayerHome from "../components/PlayerHome";
 
-
-
-
 // https://codesandbox.io/s/material-demo-forked-9ot1z?file=/menuStyle.css
 const useStyles = makeStyles((theme) => ({
     root: {

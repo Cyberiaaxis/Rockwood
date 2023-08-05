@@ -31,6 +31,7 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/ping', 'App\Http\Controllers\LoginController@ping');
     $router->get('/saccess', 'App\Http\Controllers\UsersController@AddSaccessStatus');
     $router->get('/rsaccess', 'App\Http\Controllers\UsersController@RemoveSaccessStatus');
+    $router->get('/users', 'App\Http\Controllers\UsersController@index');
     $router->post('/saveRank', 'App\Http\Controllers\RanksController@feed');
     $router->get('/ranks', 'App\Http\Controllers\RanksController@index');
     $router->get('/roles', 'App\Http\Controllers\RolesController@index');
@@ -39,6 +40,7 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->post('/saveRealEstate', 'App\Http\Controllers\RealEstateController@feed');
     $router->post('/saveJob', 'App\Http\Controllers\JobController@feed');
     // $router->post('/saveRank', 'App\Http\Controllers\RankController@update');`
+    $router->post('/saveUsers', 'App\Http\Controllers\UsersController@Feed');
     $router->post('/saveRole', 'App\Http\Controllers\RolesController@Feed');
     $router->get('/shops', 'App\Http\Controllers\ShopsController@index');
     $router->post('/saveShop', 'App\Http\Controllers\ShopsController@feed');

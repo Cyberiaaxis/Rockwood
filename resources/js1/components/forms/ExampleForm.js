@@ -4,14 +4,14 @@ import { gameServerService } from '../../services';
 const ExampleForm = () => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const onSubmit = (data) => {
-        console.log(data);
+        // console.log(data);
 
         gameServerService('test3');
 
         alert(JSON.stringify(data));
     };
 
-    console.log(watch("example"));
+    // console.log(watch("example"));
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>

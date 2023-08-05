@@ -7,7 +7,6 @@ use Spatie\Permission\Models\Role as ModelsRole;
 class Role extends ModelsRole
 {
 
-
     /**
      * Show the ranks list.
      *

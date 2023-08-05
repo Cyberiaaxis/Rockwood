@@ -75,7 +75,7 @@ function Attack(props) {
         display: "block",
         width: "100%",
     }));
-// console.log(weapon);
+    // console.log(weapon);
     // function Gunfire() {
     //     console.log(gunfire);
     //     return (
@@ -128,8 +128,8 @@ function Attack(props) {
             ...prevState,
             [name]: value
         }));
-        console.log("name", name);
-        console.log("value", value);
+        // console.log("name", name);
+        // console.log("value", value);
     };
 
     const handleOpen = (newPlacement) => (event) => {
@@ -139,14 +139,14 @@ function Attack(props) {
     };
 
     const handleClose = (event) => {
-        console.log(event);
+        // console.log(event);
         event.preventDefault();
         setAnchorEl(null);
         setOpen(null);
         setPlacement(null);
     };
 
-    const colorChange = (event) => {};
+    const colorChange = (event) => { };
 
     const UserAvatar = styled("div")(({ theme, left, right }) => ({
         position: "absolute",
@@ -306,16 +306,16 @@ function Attack(props) {
                                     pm1
                                 </MenuItem>
                                 <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={70}>
-                                pm2
+                                    pm2
                                 </MenuItem>
                                 <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={80}>
-                                pm3
+                                    pm3
                                 </MenuItem>
                                 <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={90}>
                                     pm4
                                 </MenuItem>
                                 <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={100}>
-                                pm5
+                                    pm5
                                 </MenuItem>
                             </Select>
                         </FormControl>
@@ -338,16 +338,16 @@ function Attack(props) {
                                     sw1
                                 </MenuItem>
                                 <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={70}>
-                                sw2
+                                    sw2
                                 </MenuItem>
                                 <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={80}>
-                                sw3
+                                    sw3
                                 </MenuItem>
                                 <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={90}>
-                                sw4
+                                    sw4
                                 </MenuItem>
                                 <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={100}>
-                                sw5
+                                    sw5
                                 </MenuItem>
                             </Select>
                         </FormControl>
@@ -371,16 +371,16 @@ function Attack(props) {
                                     ar1
                                 </MenuItem>
                                 <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={70}>
-                                ar2
+                                    ar2
                                 </MenuItem>
                                 <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={80}>
-                                ar3
+                                    ar3
                                 </MenuItem>
                                 <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={90}>
-                                ar4
+                                    ar4
                                 </MenuItem>
                                 <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={100}>
-                                ar5
+                                    ar5
                                 </MenuItem>
                             </Select>
                         </FormControl>

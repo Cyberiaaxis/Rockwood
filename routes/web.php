@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get(
+    '/home',
+    function () {
+        return response()->json(
+            [
+                'userId' => auth()->id()
+            ]
+        );
+    }
+);
+
 Route::get('/{path?}', function () {
     return view('welcome');
 });

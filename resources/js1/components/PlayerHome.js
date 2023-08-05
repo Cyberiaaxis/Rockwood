@@ -98,7 +98,7 @@ export default function PlayerHome() {
     React.useEffect(() => {
         const userDetails = async () => {
             const result = await gameServerApi("home");
-            console.log("playerhome", result);
+            // console.log("playerhome", result);
         }
         userDetails();
     }, []);

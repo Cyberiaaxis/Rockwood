@@ -5,25 +5,25 @@ import gameServerApi from './gameServerApi';
 
 // this will make sure there is a logged in user
 const AuthenticationGuard = ({ children }) => {
-    const { user, loggedIn, setUser } = React.useContext(AuthContext);
-    const navigate = useHistory()
-    // console.log('AuthGuard.js rendering')
+    const { user, setUser } = React.useContext(AuthContext);
+    const navigate = useHistory();
+    console.log("AuthenticationGuard", user);
 
     React.useEffect(() => {
-        if (!loggedIn) {
+        if (!user) {
             // console.log('AuthGuard: not logged in, redirecting')
             navigate('/')
         } else {
             // console.log('AuthGuard: logged in')
         }
-    }, [loggedIn])
+    }, [user])
 
-    if (loggedIn)
+    if (user)
         return children
 
     // this is not allowed directly in your render method
     //return navigate("/");;
-    return <div>Not logged in, redirecting</div>
+    // return <div>Not logged in, redirecting</div>
 }
 
 export default AuthenticationGuard

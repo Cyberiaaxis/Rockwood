@@ -31,18 +31,16 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except(['logout', 'ping']);
     }
-
+    // $user = auth()->user();
+    // $role = $user->getUserRoles();
     public function login(Request $request)
     {
         $this->validateInputs($request);
 
-
         if ($this->attemptLogin($request)) {
-            $user = auth()->user();
-            $role = $user->getUserRoles();
-            return response()->json(["userId" => $user->id, "userName" => $user->name, "userRole" => $role]);
-        }
 
+            return response()->json(['userId' => auth()->id()]);
+        }
 
         return $this->sendFailedLoginResponse($request);
     }

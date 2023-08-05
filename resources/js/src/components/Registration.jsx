@@ -29,7 +29,6 @@ export default function Registration() {
                 error: {
                     theme: 'colored',
                     render({ data }) {
-
                         return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message;
                     },
                 },

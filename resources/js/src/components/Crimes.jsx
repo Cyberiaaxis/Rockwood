@@ -30,10 +30,10 @@ export default function Crimes() {
     async function fetchCrimes() {
         try {
             const response = await axios.get("/test.json");
-            console.log(response.data.results);
+            // console.log(response.data.results);
             setData(response.data.results);
         } catch (error) {
-            console.log(error);
+            // console.log(error);
         }
     }
     // console.log("dimensions:", width, height);

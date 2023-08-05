@@ -268,14 +268,14 @@ const Attack = () => {
     };
 
     const handleClose = (event) => {
-        console.log(event);
-         event.preventDefault();
+        // console.log(event);
+        event.preventDefault();
         setAnchorEl(null);
         setOpen(null);
         setPlacement(null);
     };
 
-    const colorChange = (event) => {};
+    const colorChange = (event) => { };
 
     return (
         <>
@@ -507,9 +507,9 @@ const Attack = () => {
                                 </Box>
                             </Box>
                         </Box>
-                        <Box  width="30%">
+                        <Box width="30%">
                             {/* <Chat /> */}
-                       </Box>
+                        </Box>
                     </Box>
                 </Grid>
             </Box>

@@ -7,7 +7,7 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Bank from "./Bank";
 import Investments from "./Investments";
-import Stockmarket  from "./Stockmarket";
+import Stockmarket from "./Stockmarket";
 
 export default function Savings() {
     const [activePage, setActivePage] = React.useState(<Bank />);
@@ -26,7 +26,7 @@ export default function Savings() {
         setActivePage(<Page page={event.currentTarget.value} />);
     }
 
-    console.log("activePage", activePage);
+    // console.log("activePage", activePage);
     return (
         <React.Fragment>
             <FormControl>
