@@ -1,49 +1,456 @@
-import React from "react";
-// import { Link } from "react-router-dom";
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import { Button, Box, Paper, Tooltip, IconButton, Avatar, Menu, MenuItem, ListItemIcon, Divider, MenuList, ListItemText } from '@mui/material';
+import Progress from './Progress';
+import { MdOutlineAttachMoney } from 'react-icons/md';
+import PersonAdd from '@mui/icons-material/PersonAdd';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
+import { Check } from '@mui/icons-material';
 
 export default function Header({ setPage }) {
-  function selectPage(event) {
-    setPage(event.target.innerText);
-  }
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (index, event) => {
+    setAnchorEl({ [index]: event.currentTarget });
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const Item = styled(Paper)(({ theme }) => ({
+    position: 'relative',
+    backgroundColor: 'transparent',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    // textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }));
+
+  const GradientButton = styled(Button)`
+    background: linear-gradient(90deg, #f29216 30%, #e9ec0c 90%);
+    color: white;
+    height: 4.6rem;
+  `;
   return (
     <React.Fragment>
-      <button>Start</button>
-      <span>
-        <progress id="progress1" max="100" value="70">
-          60%
-        </progress>
-        <progress id="progress2" max="100" value="70">
-          80%
-        </progress>
-        <progress id="progress3" max="100" value="70">
-          40%
-        </progress>
-        <progress id="progress4" max="100" value="70">
-          50%
-        </progress>
-      </span>
-      <span>
-        <ul>
-          <li>
-            <p onClick={selectPage}>One</p>
-          </li>
-          <li>
-            <p>two</p>
 
-            <ul className="dropdown">
-              <li>
-                <p onClick={selectPage}>Sub-One</p>
-              </li>
-              <li>
-                <p onClick={selectPage}>Sub-Two</p>
-              </li>
-              <li>
-                <p onClick={selectPage}>Sub-Three</p>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </span>
-    </React.Fragment>
+      <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
+        <Box gridColumn="span 2">
+          <GradientButton fullWidth onClick={() => setPage('explore')} size="large">Explore</GradientButton>
+        </Box>
+        <Box gridColumn="span 7">
+          <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
+            <Box gridColumn="span 4" display="grid" gridTemplateColumns="repeat(12, 1fr)" rowGap={1} columnGap={2}>
+              <Box gridColumn="span 12">
+                <Item> <Progress label="Energy Bar" percentComplete={70} /></Item>
+              </Box>
+              <Box gridColumn="span 6">
+                <Button
+                  fullWidth
+                  onClick={(e) => handleClick('one-menu', e)}
+                  aria-controls={open ? 'one-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}>
+                  1
+                </Button>
+
+                <Menu
+                  anchorEl={anchorEl && anchorEl['one-menu']}
+                  id="one-menu"
+                  open={Boolean(anchorEl && anchorEl['one-menu'])}
+                  onClose={handleClose}
+                  onClick={handleClose}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  <MenuList dense>
+                    <MenuItem>
+                      <ListItemText inset>Single</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText inset>1.15</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText inset>Double</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Check />
+                      </ListItemIcon>
+                      Custom: 1.2
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      <ListItemText>Add space before paragraph</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText>Add space after paragraph</ListItemText>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      <ListItemText>Custom spacing...</ListItemText>
+                    </MenuItem>
+                  </MenuList>
+
+                </Menu>
+              </Box>
+              <Box gridColumn="span 6">
+                <Button
+                  fullWidth
+                  onClick={(e) => handleClick('two-menu', e)}
+                  aria-controls={open ? 'two-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}>
+                  2
+                </Button>
+
+                <Menu
+                  anchorEl={anchorEl && anchorEl['two-menu']}
+                  id="two-menu"
+                  open={Boolean(anchorEl && anchorEl['two-menu'])}
+                  onClose={handleClose}
+                  onClick={handleClose}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  <MenuList dense>
+                    <MenuItem>
+                      <ListItemText inset>Single</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText inset>1.15</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText inset>Double</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Check />
+                      </ListItemIcon>
+                      Custom: 1.2
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      <ListItemText>Add space before paragraph</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText>Add space after paragraph</ListItemText>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      <ListItemText>Custom spacing...</ListItemText>
+                    </MenuItem>
+                  </MenuList>
+
+                </Menu>
+              </Box>
+            </Box>
+            <Box gridColumn="span 4" display="grid" gridTemplateColumns="repeat(12, 1fr)" rowGap={1} columnGap={2}>
+              <Box gridColumn="span 12">
+                <Item> <Progress label="Nerve Bar" percentComplete={10} /> </Item>
+              </Box>
+              <Box gridColumn="span 6">
+                <Button
+                  fullWidth
+                  onClick={(e) => handleClick('three-menu', e)}
+                  aria-controls={open ? 'three-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}>
+                  3
+                </Button>
+
+                <Menu
+                  anchorEl={anchorEl && anchorEl['three-menu']}
+                  id="three-menu"
+                  open={Boolean(anchorEl && anchorEl['three-menu'])}
+                  onClose={handleClose}
+                  onClick={handleClose}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  <MenuList dense>
+                    <MenuItem>
+                      <ListItemText inset>Single</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText inset>1.15</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText inset>Double</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Check />
+                      </ListItemIcon>
+                      Custom: 1.2
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      <ListItemText>Add space before paragraph</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText>Add space after paragraph</ListItemText>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      <ListItemText>Custom spacing...</ListItemText>
+                    </MenuItem>
+                  </MenuList>
+
+                </Menu>
+              </Box>
+              <Box gridColumn="span 6">
+                <Button
+                  fullWidth
+                  onClick={(e) => handleClick('four-menu', e)}
+                  aria-controls={open ? 'four-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}>
+                  4
+                </Button>
+
+                <Menu
+                  anchorEl={anchorEl && anchorEl['four-menu']}
+                  id="four-menu"
+                  open={Boolean(anchorEl && anchorEl['four-menu'])}
+                  onClose={handleClose}
+                  onClick={handleClose}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  <MenuList dense>
+                    <MenuItem>
+                      <ListItemText inset>Single</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText inset>1.15</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText inset>Double</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Check />
+                      </ListItemIcon>
+                      Custom: 1.2
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      <ListItemText>Add space before paragraph</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText>Add space after paragraph</ListItemText>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      <ListItemText>Custom spacing...</ListItemText>
+                    </MenuItem>
+                  </MenuList>
+
+                </Menu>
+              </Box>
+            </Box>
+            <Box gridColumn="span 4" display="grid" gridTemplateColumns="repeat(12, 1fr)" rowGap={1} columnGap={2}>
+              <Box gridColumn="span 12">
+                <Item> <Progress label="Agility Bar" percentComplete={20} /></Item>
+              </Box>
+              <Box gridColumn="span 6">
+                <Button
+                  fullWidth
+                  onClick={(e) => handleClick('d-menu', e)}
+                  aria-controls={open ? 'd-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}>
+                  5
+                </Button>
+
+                <Menu
+                  anchorEl={anchorEl && anchorEl['d-menu']}
+                  id="d-menu"
+                  open={Boolean(anchorEl && anchorEl['d-menu'])}
+                  onClose={handleClose}
+                  onClick={handleClose}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  <MenuList dense>
+                    <MenuItem>
+                      <ListItemText inset>Single</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText inset>1.15</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText inset>Double</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Check />
+                      </ListItemIcon>
+                      Custom: 1.2
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      <ListItemText>Add space before paragraph</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText>Add space after paragraph</ListItemText>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      <ListItemText>Custom spacing...</ListItemText>
+                    </MenuItem>
+                  </MenuList>
+
+                </Menu>
+              </Box>
+              <Box gridColumn="span 6">
+                <Button
+                  fullWidth
+                  onClick={(e) => handleClick('six-menu', e)}
+                  aria-controls={open ? 'six-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}>
+                  6
+                </Button>
+
+                <Menu
+                  anchorEl={anchorEl && anchorEl['six-menu']}
+                  id="six-menu"
+                  open={Boolean(anchorEl && anchorEl['six-menu'])}
+                  onClose={handleClose}
+                  onClick={handleClose}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  <MenuList dense>
+                    <MenuItem>
+                      <ListItemText inset>Single</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText inset>1.15</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText inset>Double</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Check />
+                      </ListItemIcon>
+                      Custom: 1.2
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      <ListItemText>Add space before paragraph</ListItemText>
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemText>Add space after paragraph</ListItemText>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem>
+                      <ListItemText>Custom spacing...</ListItemText>
+                    </MenuItem>
+                  </MenuList>
+
+                </Menu>
+              </Box>
+
+            </Box>
+          </Box>
+        </Box>
+        <Box gridColumn="span 2">
+          <Item>
+            <Box sx={{ textAlign: 'left' }}>
+              <MdOutlineAttachMoney style={{ color: 'red' }} /> : 156
+            </Box>
+            <Box sx={{ textAlign: 'left' }}>
+              <MdOutlineAttachMoney style={{ color: 'red' }} /> : 156
+            </Box>
+            <Box sx={{ textAlign: 'left' }}>
+              <MdOutlineAttachMoney style={{ color: 'red' }} /> : 156
+            </Box>
+          </Item>
+        </Box>
+        <Box gridColumn="span 1">
+          <Box sx={{ marginTop: 2 }}>
+            <Tooltip title="Account settings">
+              <IconButton
+                onClick={(e) => handleClick('account-menu', e)}
+                size="small"
+                sx={{ ml: 2 }}
+                aria-controls={open ? 'account-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+              >
+                <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+              </IconButton>
+            </Tooltip>
+            <Menu
+              anchorEl={anchorEl && anchorEl['account-menu']}
+              id="account-menu"
+              open={Boolean(anchorEl && anchorEl['account-menu'])}
+              onClose={handleClose}
+              onClick={handleClose}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: 'visible',
+                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                  mt: 1.5,
+                  '& .MuiAvatar-root': {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  '&:before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: 'background.paper',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+              <MenuItem onClick={handleClose}>
+                <Avatar /> Profile
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Avatar /> My account
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <PersonAdd fontSize="small" />
+                </ListItemIcon>
+                Add another account
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <Settings fontSize="small" />
+                </ListItemIcon>
+                Settings
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <Logout fontSize="small" />
+                </ListItemIcon>
+                Logout
+              </MenuItem>
+            </Menu>
+          </Box>
+        </Box>
+      </Box>
+    </React.Fragment >
   );
 }

@@ -17,7 +17,7 @@ import Gym from "./Gym";
 import Attack from "./Attack";
 import Crimes from "./Crimes";
 import Travel from "./Travel";
-import Chat from "./chat";
+// import Chat from "./Chat";
 
 
 export default function Dashboard() {
@@ -43,7 +43,7 @@ export default function Dashboard() {
             attack: <Attack />,
             crimes: <Crimes />,
             travel: <Travel />,
-            chat: <Chat />
+            // chat: <Chat />
         };
 
         return pages[page] || pages.home;
@@ -53,17 +53,16 @@ export default function Dashboard() {
     return (
         <React.Fragment>
             <div className="App">
-                <header>
-                    <nav
-                        className={
-                            openStates["top"] ? "primary_menu active" : "primary_menu"
-                        }
-                        tabIndex="0"
-                        onClick={() => toggleOpen("top")}
-                    >
-                        <Header setMenu={setActivePage} />
-                    </nav>
-                </header>
+                <nav
+                    className={
+                        openStates['top'] ? 'primary_menu active' : 'primary_menu'
+
+                    }
+                    tabIndex="0"
+                // onClick={() => toggleOpen("top")}
+                >
+                    <Header setPage={setActivePage} />
+                </nav>
                 <nav
                     className={
                         openStates["left"] ? "secondary_menu active" : "secondary_menu"
@@ -87,11 +86,11 @@ export default function Dashboard() {
                         openStates["bottom"] ? "quartary_menu active" : "quartary_menu"
                     }
                     tabIndex="0"
-                    onClick={() => toggleOpen("bottom")}
+                // onClick={() => toggleOpen("bottom")}
                 >
                     <Footer setPage={setActivePage} />
                 </nav>
-                <main className="content-area" sx={{ backgroundImage: `url("/14.jpg")`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                <main className="content-area">
                     <Page page={activePage} />
                 </main>
             </div>

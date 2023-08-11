@@ -1,33 +1,38 @@
 import React from "react";
-// import { Link } from "react-router-dom";
+import { Chat, Home } from "@mui/icons-material";
 
 export default function LeftSidebar({ setPage }) {
-  function selectPage(event) {
-    setPage(event.target.innerText);
-  }
+
+  const menuItems = [
+    {
+      text: 'Home',
+      url: 'home',
+      icon: <Home />
+    },
+    {
+      text: 'Profile',
+      url: 'profile',
+      icon: <Home />
+    },
+    {
+      text: 'Chat',
+      url: 'chat',
+      icon: <Chat />
+    },
+    {
+      text: 'Crimes',
+      url: 'crime',
+      icon: <Home />
+    },
+  ]
 
   return (
     <React.Fragment>
-      <span>
-        <ol>
-          <li onClick={selectPage}>
-            home
-            {/* <Link to="#">Home</Link> */}
-          </li>
-          <li onClick={selectPage}>
-            profile
-            {/* <Link to="#">Stats</Link> */}
-          </li>
-          <li onClick={selectPage}>
-            chat
-            {/* <Link to="#">Profile</Link> */}
-          </li>
-          <li onClick={selectPage}>
-            crimes
-            {/* <Link to="#">Profile</Link> */}
-          </li>
-        </ol>
-      </span>
+      <ul>
+        {menuItems.map((x, i) => <li key={i} onClick={setPage(x.url)}>
+          {x.text}
+        </li>)}
+      </ul>
     </React.Fragment>
   );
 }

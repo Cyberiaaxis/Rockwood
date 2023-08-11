@@ -21,9 +21,10 @@ const CurrentUserGuard = ({ children }) => {
                 setUser({ userId: response.userId, userName: response.userName, userRole: response.userRoles })
                 console.log("response.status", response.status);
                 if (response.status === "staff") {
+                    navigate('/staff/');;
+                }
+                else {
                     navigate('/Dashboard/');
-                } else {
-                    navigate('/staff/');
                 }
 
             }
