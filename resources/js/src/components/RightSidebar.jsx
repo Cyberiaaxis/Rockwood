@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Chat, Home } from "@mui/icons-material";
+import { Box } from "@mui/material";
 
 export default function RightSidebar({ setPage }) {
   function selectPage(event) {
@@ -8,29 +9,58 @@ export default function RightSidebar({ setPage }) {
 
   const menuItems = [
     {
-      text: 'Recovery',
-      url: 'recovery',
-      icon: ''
+      text: 'Home',
+      url: 'home',
+      icon: <Home />
     },
     {
-      text: 'Travel',
-      url: 'travel',
-      icon: ''
+      text: 'Profile',
+      url: 'profile',
+      icon: <Home />
     },
     {
-      text: 'Gang',
-      url: 'gang',
-      icon: ''
+      text: 'Chat',
+      url: 'chat',
+      icon: <Chat />
+    },
+    {
+      text: 'Crimes',
+      url: 'crime',
+      icon: <Home />
+    },
+    {
+      text: 'Home',
+      url: 'home',
+      icon: <Home />
+    },
+    {
+      text: 'Profile',
+      url: 'profile',
+      icon: <Home />
+    },
+    {
+      text: 'Chat',
+      url: 'chat',
+      icon: <Chat />
+    },
+    {
+      text: 'Crimes',
+      url: 'crime',
+      icon: <Home />
     },
   ]
 
   return (
     <React.Fragment>
-      <ul>
+      <Box component='ul' sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        rowGap: '0.5rem',
+      }}>
         {menuItems.map((x, i) => <li key={i} onClick={() => setPage(x.url)}>
           {x.text}
         </li>)}
-      </ul>
+      </Box>
     </React.Fragment>
   );
 }
