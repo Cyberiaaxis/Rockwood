@@ -27,7 +27,7 @@ export default function Header({ setPage }) {
     ...theme.typography.body2,
     padding: theme.spacing(1),
     // textAlign: 'center',
-    color: theme.palette.text.secondary,
+    // color: theme.palette.text.secondary,
   }));
 
   const StyledMenu = styled((props) => (
@@ -75,13 +75,15 @@ export default function Header({ setPage }) {
     <React.Fragment>
       <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
         <Box gridColumn="span 2">
-          <GradientButton fullWidth onClick={() => setPage('explore')} size="large">Explore</GradientButton>
+          <GradientButton fullWidth onClick={() => setPage('explore')} size="large">
+            Explore, Pakistan
+          </GradientButton>
         </Box>
         <Box gridColumn="span 7">
           <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
             <Box gridColumn="span 4" display="grid" gridTemplateColumns="repeat(12, 1fr)" rowGap={1} columnGap={2}>
               <Box gridColumn="span 12">
-                <Item> <Progress label="Energy Bar" percentComplete={70} /></Item>
+                <Item> <Progress label="Energy" percentComplete={70} /></Item>
               </Box>
               <Box gridColumn="span 6">
                 <Button
@@ -179,7 +181,7 @@ export default function Header({ setPage }) {
             </Box>
             <Box gridColumn="span 4" display="grid" gridTemplateColumns="repeat(12, 1fr)" rowGap={1} columnGap={2}>
               <Box gridColumn="span 12">
-                <Item> <Progress label="Nerve Bar" percentComplete={10} /> </Item>
+                <Item> <Progress label="Nerve" percentComplete={10} /> </Item>
               </Box>
               <Box gridColumn="span 6">
                 <Button
@@ -282,7 +284,7 @@ export default function Header({ setPage }) {
             </Box>
             <Box gridColumn="span 4" display="grid" gridTemplateColumns="repeat(12, 1fr)" rowGap={1} columnGap={2}>
               <Box gridColumn="span 12">
-                <Item> <Progress label="Agility Bar" percentComplete={20} /></Item>
+                <Item> <Progress label="Agility" percentComplete={20} /></Item>
               </Box>
               <Box gridColumn="span 6">
                 <Button
@@ -398,7 +400,7 @@ export default function Header({ setPage }) {
           </Item>
         </Box>
         <Box gridColumn="span 1">
-          <Box sx={{ marginTop: 2 }}>
+          <Box>
             <Tooltip title="Account settings">
               <IconButton
                 onClick={(e) => handleClick('account-menu', e)}
@@ -408,7 +410,7 @@ export default function Header({ setPage }) {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
               >
-                <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                <Avatar sx={{ width: 70, height: 70 }}>M</Avatar>
               </IconButton>
             </Tooltip>
             <Menu

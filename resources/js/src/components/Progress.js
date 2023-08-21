@@ -1,34 +1,26 @@
-import React from "react";
-import { number } from "prop-types";
+import React from 'react'
+import { Box } from '@mui/material'
 import "../styles/ProgressBar.css";
-import { Box } from "@mui/material";
 
-
-const Progress = (props) => {
-
+export default function Progress({ label = '', progress = 100 }) {
     return (
-        <>
-            <div>
-                <Box className="bar" data-label={props.label}>
-                    <Box
-                        className="fill"
-                        style={{
-                            width: `${props.percentComplete}%`,
-                            borderRadius: `${props.percentComplete === 100 ? "2px" : "2px 0 0 2px"}`,
-                        }}
-                    />
-                </Box>
-            </div>
-        </>
-    );
+        <Box sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+        }}>
+            {label ? <Box>
+                {label}
+            </Box> : ''}
+            <Box className="bar">
+                <Box
+                    className="fill"
+                    style={{
+                        width: `${progress}%`,
+                        borderRadius: `${progress === 100 ? "2px" : "2px 0 0 2px"}`,
+                    }}
+                />
+            </Box>
+        </Box>
+    )
 }
-
-Progress.propTypes = {
-    percentComplete: number,
-};
-
-Progress.defaultProps = {
-    percentComplete: 20,
-};
-
-export default Progress;

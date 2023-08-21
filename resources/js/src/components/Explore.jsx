@@ -2,96 +2,88 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import "../styles/Explore.css";
 
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+
+import InboxIcon from '@mui/icons-material/Inbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import { Typography } from "@mui/material";
+import { Home } from "@mui/icons-material";
+
+
 export default function Explore({ setPage }) {
+
+
+  const menuitems = [
+    {
+      header: 'West Side',
+      items: [
+        {
+          id: 'home',
+          text: 'Home',
+          url: '/',
+          icon: <Home />
+        }
+      ],
+    },
+    {
+      header: 'North Side',
+      items: [
+        {
+          id: 'home',
+          text: 'Market',
+          url: '/',
+          icon: <Home />
+        }
+      ],
+    },
+    {
+      header: 'East Side',
+      items: [
+        {
+          id: 'home',
+          text: 'Garden',
+          url: '/',
+          icon: <Home />
+        }
+      ],
+    },
+    {
+      header: 'South Side',
+      items: [
+        {
+          id: 'home',
+          text: 'Jai ho',
+          url: '/',
+          icon: <Home />
+        }
+      ],
+    },
+  ]
+
+
   return (
     <React.Fragment>
-      <Box
-        sx={{
-          display: "flex",
-          width: "100%",
-          maxWidth: 360,
-          bgcolor: "transparent"
-        }}
-      >
-        <ul>
-          <li className="head">CITY CENTER</li>
-          <li>Chronicle Archives</li>
-          <li>City Hall</li>
-          <li>Community Center</li>
-          <li>Jail</li>
-          <li>Hospital</li>
-          <li>Player Committee</li>
-          <li>Staff</li>
-          <li>Visitor Center</li>
-        </ul>
-        <ul>
-          <li className="head">FINANCIAL</li>
-          <li onClick={() => setPage("savings")}>Savings</li>
-          <li>Donator House</li>
-          <li onClick={() => setPage("gang")}>Messaging Inc</li>
-          <li>Stock Market</li>
-        </ul>
-        <ul>
-          <li className="head">EAST SIDE</li>
-          <li>Big Al's Gun Shop</li>
-          <li>Bits 'n' Bobs</li>
-          <li>Cyber Force</li>
-          <li>Docks</li>
-          <li>Estate Agents</li>
-          <li>Office Super Store</li>
-          <li>Sweet Shop</li>
-          <li>Jewelry Store</li>
-          <li>Nikeh Sports</li>
-          <li>Token Shop</li>
-          <li>Docks</li>
-          <li>Pharmacy Post</li>
-          <li>Pawn Shop</li>
-          <li>TC Clothing</li>
-        </ul>
-        <ul>
-          <li className="head">Mysterious</li>
-          <li>Celebrity Beat-down</li>
-          <li>Mate Hookup</li>
-          <li>Homies Requests</li>
-          <li>Death Row</li>
-        </ul>
+      <Box>CityName:: Krachi (Rally wala) </Box>
+      <Box className="wrapper">
+        {menuitems.map((x, i) =>
+          <Box key={i}>
+            <Typography component="h6" className="head">{x.header}</Typography>
+            {x.items.map((x, i) => <List key={i}>
+              <ListItem>
+                <ListItemIcon>
+                  {x.icon}
+                </ListItemIcon>
+                <ListItemText primary={x.text} />
+              </ListItem>
+            </List>)}
+          </Box>
+        )}
       </Box>
-      <Box
-        sx={{
-          padding: 0,
-          display: "flex",
-          width: "100%",
-          maxWidth: 360,
-          bgcolor: "transparent"
-        }}
-      >
-        <ul>
-          <li className="head">WEST SIDE</li>
-          <li>Education</li>
-          <li>Sports Science Lab</li>
-          <li>Travel Agency</li>
-        </ul>
-        <ul>
-          <li className="head">NORTH SIDE</li>
-          <li>Auction House</li>
-          <li>Church</li>
-          <li>Item Market</li>
-          <li>Points Building</li>
-          <li>Points Market</li>
-        </ul>
-        <ul>
-          <li className="head">RED-LIGHT</li>
-          <li>Casino</li>
-          <li>Dump</li>
-          <li>Loan Shark</li>
-          <li>Missions</li>
-          <li>Raceway</li>
-        </ul>
-        <ul>
-          <li className="head">RESIDENTIAL</li>
-          <li>Your Private Island</li>
-        </ul>
-      </Box>
+
     </React.Fragment>
   );
 }
