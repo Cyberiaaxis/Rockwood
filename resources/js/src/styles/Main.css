@@ -238,7 +238,7 @@ nav.primary_menu span ul li ul li {
   width: 100%;
 }
 
-nav.primary_menu :nth-child(1) {
+nav.primary_menu> :first-child {
   /*   backgound-color:yellow; */
   /*   width: 2em; */
   flex-grow: 1;

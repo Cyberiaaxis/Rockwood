@@ -67,7 +67,7 @@ export default function Explore({ setPage }) {
 
   return (
     <React.Fragment>
-      <Box>CityName:: Krachi (Rally wala) </Box>
+      <Box display="flex" justifyContent="flex-start">Pakistan-Krachi(Rally Wala) </Box>
       <Box className="wrapper">
         {menuitems.map((x, i) =>
           <Box key={i}>
@@ -87,3 +87,5 @@ export default function Explore({ setPage }) {
     </React.Fragment>
   );
 }
+
+// https://www.npmjs.com/package/image-to-ascii

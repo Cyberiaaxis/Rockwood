@@ -17,6 +17,7 @@ import Gym from "./Gym";
 import Attack from "./Attack";
 import Crimes from "./Crimes";
 import Travel from "./Travel";
+import Event from "./Event";
 // import Chat from "./Chat";
 
 
@@ -34,6 +35,7 @@ export default function Dashboard() {
             home: <Home />,
             explore: <Explore setPage={setActivePage} />,
             profile: <Profile />,
+            event: <Event />,
             halloffame: <HallOfFame />,
             recovery: <Recovery />,
             lockup: <Lockup />,
