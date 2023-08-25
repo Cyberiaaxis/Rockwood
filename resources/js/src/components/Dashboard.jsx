@@ -18,6 +18,7 @@ import Attack from "./Attack";
 import Crimes from "./Crimes";
 import Travel from "./Travel";
 import Event from "./Event";
+import Mail from "./mail/Mailbox";
 // import Chat from "./Chat";
 
 
@@ -45,6 +46,7 @@ export default function Dashboard() {
             attack: <Attack />,
             crimes: <Crimes />,
             travel: <Travel />,
+            mail: <Mail />,
             // chat: <Chat />
         };
 

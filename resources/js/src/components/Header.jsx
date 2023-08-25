@@ -102,7 +102,7 @@ export default function Header({ setPage }) {
               </Button>
               <StyledMenu anchorEl={anchorEl && anchorEl["two-menu"]} id="two-menu" open={Boolean(anchorEl && anchorEl["two-menu"])} onClose={handleClose} onClick={handleClose}>
                 <MenuItem>
-                  <ListItemText>Mail</ListItemText>
+                  <ListItemText onClick={() => setPage("mail")}>Mail</ListItemText>
                 </MenuItem>
                 <MenuItem>
                   <ListItemText>Chat</ListItemText>
@@ -121,7 +121,7 @@ export default function Header({ setPage }) {
                   <ListItemText>fight Clubs</ListItemText>
                 </MenuItem>
                 <MenuItem>
-                  <ListItemText>Crimes</ListItemText>
+                  <ListItemText onClick={() => setPage("crimes")}>Crimes</ListItemText>
                 </MenuItem>
                 <MenuItem>
                   <ListItemText>Missions</ListItemText>
