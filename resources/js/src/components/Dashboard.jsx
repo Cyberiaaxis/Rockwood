@@ -18,6 +18,7 @@ import Attack from "./Attack";
 import Crimes from "./Crimes";
 import Travel from "./Travel";
 import Event from "./Event";
+import Forums from "./Forums";
 import Mail from "./mail/Mailbox";
 // import Chat from "./Chat";
 
@@ -47,7 +48,7 @@ export default function Dashboard() {
             crimes: <Crimes />,
             travel: <Travel />,
             mail: <Mail />,
-            // chat: <Chat />
+            forums: <Forums />
         };
 
         return pages[page] || pages.home;

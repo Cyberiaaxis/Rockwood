@@ -108,7 +108,7 @@ export default function Header({ setPage }) {
                   <ListItemText>Chat</ListItemText>
                 </MenuItem>
                 <MenuItem>
-                  <ListItemText>Forums</ListItemText>
+                  <ListItemText onClick={() => setPage("forums")}>Forums</ListItemText>
                 </MenuItem>
               </StyledMenu>
             </Box>
