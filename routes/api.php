@@ -57,8 +57,10 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->post('/saveCity', 'App\Http\Controllers\ShopsController@feed');
     $router->get('/countries', 'App\Http\Controllers\CountryController@index');
     $router->post('/saveCountry', 'App\Http\Controllers\ShopsController@feed');
-
-
+    // $router->get('/', 'ForumController@index')->name('forums.list');
+    $router->get('/forum/{forum}', 'ForumController@threadList')->name('forums.show')->where('forum', '[0-9]+');
+    $router->get('/thread/{thread}', 'ForumController@postList')->name('forums.thread')->where('thread', '[0-9]+');
+    $router->get('/forums', 'ForumController@index')->name('forums.list');
     //i am can do anthing if i got login form for login first
     //lets try
     //lets compile and see what happens now

@@ -2,37 +2,29 @@
 
 namespace App\Models;
 
-
-use App\Model\Thread;
 use Illuminate\Database\Eloquent\Model;
 
 class Forum extends Model
 {
 
-    protected $table = 'forums';
-    protected $appends = ['poster'];
-
-
-
     public function threads()
     {
-        return $this->hasMany(Thread::class);
+        return $this->hasMany(Thread::class)->with('latestPost');
     }
 
 
     public function posts()
     {
-        return $this->hasMany('App\Models\Post');
+        return $this->hasMany(Post::class);
     }
 
     public function users()
     {
-        return $this->belongsTo("User");
+        return $this->belongsTo(User::class);
     }
 
     public function latestPost()
     {
-         return $this->hasOne('App\Models\Post')->latest();
+        return $this->hasOne(Post::class)->latest();
     }
-
 }

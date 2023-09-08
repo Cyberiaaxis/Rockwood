@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Forums;
 
-use App\Models\Forum;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\PaginationResource;
 use Illuminate\Http\Request;
+use App\Models\Forum;
+use App\Models\Thread;
+use Illuminate\Support\Arr;
 
-class ForumsController extends Controller
+class ForumController extends Controller
 {
     /**
      * Forum List
@@ -13,33 +17,35 @@ class ForumsController extends Controller
     public function index()
     {
         $forums = new Forum();
-        $forumsCount = $forums->withCount(['threads', 'posts'])->get();
-        // dd($forumsCount);
-        return view('player.forums.index',['forums' => $forumsCount]);
+        $forumsCount = $forums->with('latestPost')->withCount(['threads', 'posts'])->get();
+        return response()->json($forumsCount);
     }
 
     /**
-     * Forum List
+     * Thread List
      */
-    public function show(Forum $forum)
+    public function threadList(Forum $forum)
     {
-        return view('player.forums.show', ['forum' => $forum]);
-    }
 
-    // /**
-    //  * Forum List
-    //  */
-    // public function create()
-    // {
-    //     return view('player.forums.create');
-    // }
+        $forum->loadCount(['threads', 'posts']);
+
+        $threads = $forum->threads()->paginate(30);
+
+        $forum->threads = new PaginationResource($threads);
+
+        return $forum;
+    }
 
     /**
-     * Forum List
+     * Posts List
      */
-    public function store(Request $request)
+    public function postList(Thread $thread)
     {
 
-    }
+        $posts = $thread->posts()->paginate(30);
 
+        $thread->posts = new PaginationResource($posts);
+
+        return $thread;
+    }
 }

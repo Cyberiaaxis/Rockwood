@@ -11,7 +11,7 @@ class Thread extends Model
 
     protected $table = 'threads';
 
-// Relationship
+    // Relationship
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -27,4 +27,11 @@ class Thread extends Model
         return $this->hasMany(Post::class);
     }
 
+    public function latestPost()
+    {
+        return $this->hasOne(Post::class)
+            ->select(['id', 'thread_id', 'user_id', 'created_at'])
+            ->with('user')
+            ->latest();
+    }
 }

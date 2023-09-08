@@ -1,8 +1,7 @@
 <?php
+
 namespace App\Models;
 
-use App\Forum;
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
@@ -13,7 +12,7 @@ class Post extends Model
     // Relationship
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->select(['id', 'name', 'avatar']);
     }
 
     public function thread()
@@ -33,5 +32,4 @@ class Post extends Model
     {
         return $this->user()->value('name');
     }
-
 }
