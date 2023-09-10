@@ -17,7 +17,7 @@ export default function Forums() {
     console.log(type);
 
     return (
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 mainContainer' >
             {
                 type === 'forums' ?
                     <ForumList handleClick={handleClick} /> :

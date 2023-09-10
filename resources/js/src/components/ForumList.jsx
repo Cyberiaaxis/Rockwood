@@ -1,9 +1,15 @@
-import React from 'react'
-import ForumCard from "./ForumCard"
+import React from 'react';
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+import { Avatar, Typography } from "@mui/material";
+import ForumCard from "./ForumCard";
 
 const data = [
     {
-        category: 'Official forums',
+        id: 1,
+        categoryName: 'Official forums',
         forumList: [
             {
                 id: 1,
@@ -95,24 +101,137 @@ const data = [
                 }
             },
         ]
+    },
+    {
+        id: 2,
+        categoryName: 'Discussion',
+        forumList: [
+            {
+                id: 1,
+                title: 'Announcements',
+                url: '/forums/forum/1',
+                description: 'Hello World!',
+                stats: {
+                    threads: 100,
+                    posts: 1000,
+                },
+                lastUpdate: new Date("2023-08-30"),
+                recentPost: {
+                    thread: {
+                        title: 'Hello World',
+                        url: '/',
+                    },
+                    poster: {
+                        name: 'Tom',
+                        avatar: '',
+                        url: '/user/@tom',
+                    },
+                    publishAt: new Date("2023-08-30"),
+                }
+            },
+            {
+                id: 1,
+                title: 'Announcements',
+                description: 'Hello World!',
+                stats: {
+                    threads: 100,
+                    posts: 1000,
+                },
+                lastUpdate: new Date("2023-08-30"),
+                recentPost: {
+                    thread: {
+                        title: 'Hello World',
+                        url: '/',
+                    },
+                    poster: {
+                        name: 'Tom',
+                        avatar: '',
+                        url: '/user/@tom',
+                    },
+                    publishAt: new Date("2023-08-30"),
+                }
+            },
+            {
+                id: 1,
+                title: 'Announcements',
+                description: 'Hello World!',
+                stats: {
+                    threads: 100,
+                    posts: 1000,
+                },
+                lastUpdate: new Date("2023-08-30"),
+                recentPost: {
+                    thread: {
+                        title: 'Hello World',
+                        url: '/',
+                    },
+                    poster: {
+                        name: 'Tom',
+                        avatar: '',
+                        url: '/user/@tom',
+                    },
+                    publishAt: new Date("2023-08-30"),
+                }
+            },
+            {
+                id: 1,
+                title: 'Announcements',
+                description: 'Hello World!',
+                stats: {
+                    threads: 100,
+                    posts: 1000,
+                },
+                lastUpdate: new Date("2023-08-30"),
+                recentPost: {
+                    thread: {
+                        title: 'Hello World',
+                        url: '/',
+                    },
+                    poster: {
+                        name: 'Tom',
+                        avatar: '',
+                        url: '/user/@tom',
+                    },
+                    publishAt: new Date("2023-08-30"),
+                }
+            },
+        ]
+
     }
 ]
 
+const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === "transparent",
+    ...theme.typography.body1,
+    padding: theme.spacing(0),
+    textAlign: "left",
+    color: theme.palette.text.primary
+}));
+
+
 export default function ForumList({ forumId, handleClick }) {
     return (
-        <div>
-            <h5>Forums</h5>
-            {
-                data.map((forum, i) =>
-                    <div key={i} className="flex flex-col">
-                        <h2 className="bg-gray-100 px-4 py-2">{forum.category}</h2>
+        <React.Fragment>
+            <Box>
+                <h5>Forums</h5>
+                {
+                    data.map((forum, i) =>
 
-                        <div className="flex flex-col gap-1 divide-y">
-                            {forum.forumList.map((x, i) => <ForumCard handleClick={handleClick} key={i} item={x} />)}
-                        </div>
-                    </div>
-                )
-            }
-        </div>
+                        <Grid key={i} container spacing={1}>
+                            <Grid item xs={12}>
+                                <Item>
+                                    <Typography variant="h5" component="h2">
+                                        {forum.categoryName}
+                                    </Typography>
+                                </Item>
+                            </Grid>
+                            <ForumCard handleClick={handleClick} item={forum.forumList} />
+                        </Grid>
+                    )
+                }
+            </Box>
+        </React.Fragment>
+
     )
 }
+// https://codesandbox.io/s/forumslayout-pks94c

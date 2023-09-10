@@ -1,50 +1,110 @@
-import { Avatar } from "@mui/material";
+import * as React from "react";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+import { Avatar, Typography } from "@mui/material";
+
 import { Link } from "react-router-dom";
+import "../styles/Forums.css";
+
+const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === "transparent",
+    ...theme.typography.body1,
+    padding: theme.spacing(1),
+    textAlign: "left",
+    color: theme.palette.text.primary
+}));
 
 export default function ForumCard({ item }) {
+    // item.map((x, y) => {
+    //     console.log("x", x);
+    // })
+    console.log("item", item);
     return (
-        <div className="px-2 py-1 w-full flex">
-            <div className="icon shrink-0">
-
-            </div>
-            <div className="flex flex-auto flex-col">
-                <Link to={`/forums/forum/${item.id}`} className="block text-lg">
-                    {item.title}
-                </Link>
-                <div className="block text-sm">
-                    {item.description}
-                </div>
-                <div className="flex item-center gap-2">
-
-                    {item?.subForums && item.subForums?.length ? item.subForums.map((x, i) =>
-                        <Link key={i} to={x.url} className="">
-                            {x.name}
-                        </Link>
-                    ) : ''}
-
-                </div>
-            </div>
-            <div className="flex items-center justify-center gap-2 w-40">
-                <div className="threads text-center">
-                    <div className="block text-xs font-semibold">Threads</div>
-                    {item.stats.threads}
-                </div>
-                <div className="posts text-center">
-                    <div className="block text-xs font-semibold">Posts</div>
-                    {item.stats.posts}
-                </div>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-                <Avatar alt={item.recentPost.poster.name} src={item.recentPost.poster.avatar} />
-                <div className="flex flex-col flex-1">
-                    <Link to={item.recentPost.thread.url}>
-                        {item.recentPost.thread.title}
-                    </Link>
-                    <Link to={item.recentPost.poster.url} className="text-sm">
-                        by {item.recentPost.poster.name}
-                    </Link>
-                </div>
-            </div>
-        </div>
+        <React.Fragment>
+            {
+                item.map((x, y) =>
+                    <React.Fragment>
+                        <Grid container>
+                            <Grid item xs>
+                                <Item>
+                                    <Box sx={{ paddingLeft: 1 }}>
+                                        <Typography variant="body" component="h2">
+                                            <Link to={`/forums/forum/${x.id}`} className="block text-lg">
+                                                {x.title}
+                                            </Link>
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ paddingLeft: 1 }}>
+                                        <Typography variant="subtitle1" component="h2">
+                                            {x.description}
+                                            {x?.subForums && x.subForums?.length ? x.subForums.map((h, k) =>
+                                                <Link key={k} to={h.url}>
+                                                    {h.name}
+                                                </Link>
+                                            ) : ''}
+                                        </Typography>
+                                    </Box>
+                                </Item>
+                            </Grid>
+                            <Grid item>
+                                <Item>
+                                    <Grid flexWrap="nowrap" container gap={1}>
+                                        <Grid item>
+                                            <Box>
+                                                <Typography variant="subtitle2" component="h2">
+                                                    Posts
+                                                </Typography>
+                                            </Box>
+                                            <Box>
+                                                <Typography variant="subtitle1" component="h2">
+                                                    {x.stats.posts}
+                                                </Typography>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item>
+                                            <Box>
+                                                <Typography variant="subtitle2" component="h2">
+                                                    Threads
+                                                </Typography>
+                                            </Box>
+                                            <Box >
+                                                <Typography variant="subtitle1" component="h2">
+                                                    {x.stats.threads}
+                                                </Typography>
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                </Item>
+                            </Grid>
+                            <Grid item sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
+                                <Item sx={{ display: "flex" }}>
+                                    <Box sx={{ flexGrow: 1, margin: 1 }}>
+                                        <Avatar alt={x.recentPost.poster.name} src={x.recentPost.poster.avatar} />
+                                    </Box>
+                                    <Grid item>
+                                        <Box >
+                                            <Typography variant="subtitle2" component="h2">
+                                                <Link to={x.recentPost.thread.url}>
+                                                    {x.recentPost.thread.title}
+                                                </Link>
+                                            </Typography>
+                                        </Box>
+                                        <Box >
+                                            <Typography variant="subtitle1" component="h2">
+                                                <Link to={x.recentPost.poster.url} className="text-sm">
+                                                    by {x.recentPost.poster.name}
+                                                </Link>
+                                            </Typography>
+                                        </Box>
+                                    </Grid>
+                                </Item>
+                            </Grid>
+                        </Grid>
+                    </React.Fragment>
+                )
+            }
+        </React.Fragment>
     )
 }

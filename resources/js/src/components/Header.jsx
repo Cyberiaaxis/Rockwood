@@ -138,14 +138,30 @@ export default function Header({ setPage }) {
         </Box>
         <Box gridColumn="span 2">
           <Item>
-            <Box sx={{ textAlign: "left" }}>
-              <MdOutlineAttachMoney style={{ color: "red" }} /> Money : 156,0000,000
+            <Box sx={{ textAlign: "left", display: "flex" }}>
+              <Box>
+                <MdOutlineAttachMoney style={{ color: "red" }} />
+              </Box>
+              <Box>
+                Money : 156,0000,000
+              </Box>
+
             </Box>
-            <Box sx={{ textAlign: "left" }}>
-              <GiCrystalBars style={{ color: "gold" }} /> Points : 2,00,000
+            <Box sx={{ textAlign: "left", display: "flex" }}>
+              <Box>
+                <GiCrystalBars style={{ color: "gold" }} />
+              </Box>
+              <Box>
+                Points : 2,00,000
+              </Box>
             </Box>
-            <Box sx={{ textAlign: "left" }}>
-              <GiMedal style={{ color: "green" }} /> Merits : 156
+            <Box sx={{ textAlign: "left", display: "flex" }}>
+              <Box>
+                <GiMedal style={{ color: "green" }} />
+              </Box>
+              <Box>
+                Merits : 156
+              </Box>
             </Box>
           </Item>
         </Box>
