@@ -24,7 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name', 'email', 'password', 'gender', 'type', 'avatar'
     ];
 
-    protected $guard_name = 'sanctum';
+    protected $guard_name = 'web';
 
     /**
      * The attributes that should be hidden for arrays.
@@ -163,7 +163,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getUserRoles()
     {
-        return  $this->getRoleNames();
+        return $this->getRoleNames();
     }
 
     /**

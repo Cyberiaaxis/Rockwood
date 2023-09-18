@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Forums;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Resources\PaginationResource;
 use Illuminate\Http\Request;
 use App\Models\Forum;
 use App\Models\Thread;
 use Illuminate\Support\Arr;
 
-class ForumController extends Controller
+class ForumsController extends Controller
 {
     /**
      * Forum List
@@ -18,6 +17,7 @@ class ForumController extends Controller
     {
         $forums = new Forum();
         $forumsCount = $forums->with('latestPost')->withCount(['threads', 'posts'])->get();
+        // dd($forumsCount);
         return response()->json($forumsCount);
     }
 

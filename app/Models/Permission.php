@@ -12,7 +12,8 @@ class Permission extends ModelsPermission
      *
      * @return \Illuminate\Http\Response
      */
-    public function getListPermissions(){
+    public function getListPermissions()
+    {
         return $this->all();
     }
 
@@ -27,7 +28,8 @@ class Permission extends ModelsPermission
             'id' => $id
         ], $data);
     }
-
-
-
+    protected function getDefaultGuardName(): string
+    {
+        return 'web';
+    }
 }

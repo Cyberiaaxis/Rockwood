@@ -5,6 +5,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { Avatar, Typography } from "@mui/material";
 import ForumCard from "./ForumCard";
+import gameServerApi from "../libraries/gameServerApi";
 
 const data = [
     {
@@ -200,6 +201,7 @@ const data = [
     }
 ]
 
+
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "transparent",
     ...theme.typography.body1,
@@ -210,6 +212,18 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 export default function ForumList({ forumId, handleClick }) {
+    const [forumList, setForumList] = React.useState();
+
+    React.useEffect(() => {
+        const fetchForums = async () => {
+            const response = await gameServerApi("forums");
+            setForumList(response);
+        };
+        fetchForums();
+    }, []);
+
+    console.log("forumsList", forumList)
+
     return (
         <React.Fragment>
             <Box>

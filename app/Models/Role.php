@@ -29,4 +29,8 @@ class Role extends ModelsRole
             'id' => $data['id'],
         ], $data);
     }
+    protected function getDefaultGuardName(): string
+    {
+        return 'web';
+    }
 }
