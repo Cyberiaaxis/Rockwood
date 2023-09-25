@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('description')->nullable();
+            $table->boolean('is_cat')->default(0);
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->timestamps();
         });

@@ -20,13 +20,14 @@ class UserStatsTable extends Migration
             $table->bigInteger('defense');
             $table->bigInteger('agility');
             $table->bigInteger('endurance');
-            $table->integer('hp');       
-            $table->integer('max_hp');       
-            $table->integer('energy');       
-            $table->integer('max_energy');       
-            $table->integer('max_nerve');       
-            $table->integer('will');       
-            $table->integer('max_will');       
+            $table->integer('hp');
+            $table->integer('max_hp');
+            $table->integer('energy');
+            $table->integer('max_energy');
+            $table->integer('nerve');
+            $table->integer('max_nerve');
+            $table->integer('will');
+            $table->integer('max_will');
         });
     }
 

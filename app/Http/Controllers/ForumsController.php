@@ -16,7 +16,7 @@ class ForumsController extends Controller
     public function index()
     {
         $forums = new Forum();
-        $forumsCount = $forums->with('latestPost')->withCount(['threads', 'posts'])->get();
+        $forumsCount = $forums->whereNull('parent_id')->with('latestPost')->withCount(['threads', 'posts'])->get();
         // dd($forumsCount);
         return response()->json($forumsCount);
     }
