@@ -29,14 +29,14 @@ export default function ForumCard({ item }) {
                         <Grid container>
                             <Grid item xs>
                                 <Item>
-                                    <Box sx={{ paddingLeft: 1 }}>
+                                    <Box sx={{ paddingLeft: 1, backgroundColor: "red" }}>
                                         <Typography variant="body" component="h2">
                                             <Link to={`/forums/forum/${x.id}`} className="block text-lg">
                                                 {x.title}
                                             </Link>
                                         </Typography>
                                     </Box>
-                                    <Box sx={{ paddingLeft: 1 }}>
+                                    <Box sx={{ paddingLeft: 1, backgroundColor: "blue" }}>
                                         <Typography variant="subtitle1" component="h2">
                                             {x.description}
                                             {x?.subForums && x.subForums?.length ? x.subForums.map((h, k) =>

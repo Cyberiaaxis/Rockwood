@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PaginationResource;
+use App\Http\Resources\ForumListResource;
 use Illuminate\Http\Request;
 use App\Models\Forum;
 use App\Models\Thread;
@@ -16,9 +17,10 @@ class ForumsController extends Controller
     public function index()
     {
         $forums = new Forum();
-        $forumsCount = $forums->whereNull('parent_id')->with('latestPost')->withCount(['threads', 'posts'])->get();
-        // dd($forumsCount);
-        return response()->json($forumsCount);
+        $forumsData = $forums->select([
+            'id', 'title'
+        ])->where('is_cat', 1)->with('subForums')->get();
+        return response()->json(ForumListResource::collection($forumsData));
     }
 
     /**
