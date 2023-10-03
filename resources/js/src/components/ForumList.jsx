@@ -45,7 +45,7 @@ export default function ForumList({ forumId, handleClick }) {
                                     </Typography>
                                 </Item>
                             </Grid>
-                            <ForumCard item={forum.forumList} />
+                            {forum.forumList && forum.forumList.length && forum.forumList.map((x, i) => <ForumCard key={i} item={x} handleClick={handleClick} />)}
                         </Grid>
                     )
                 }

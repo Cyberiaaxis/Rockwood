@@ -30,12 +30,9 @@ class ForumsController extends Controller
     {
 
         $forum->loadCount(['threads', 'posts']);
-
         $threads = $forum->threads()->paginate(30);
-
         $forum->threads = new PaginationResource($threads);
-
-        return $forum;
+        return response()->json($forum);
     }
 
     /**

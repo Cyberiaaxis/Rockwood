@@ -18,10 +18,10 @@ export default function ThreadCard({ item, handleClick }) {
             <div className="flex items-center justify-center gap-2 w-20">
                 <div className="posts text-center">
                     <div className="block text-xs font-semibold">Posts</div>
-                    {item.stats.posts}
+                    {item?.posts_count}
                 </div>
             </div>
-            <div className="flex items-center gap-2 shrink-0 w-60">
+            {item?.recentPosts && <div className="flex items-center gap-2 shrink-0 w-60">
                 <Avatar alt={item.recentPost.poster.name} src={item.recentPost.poster.avatar} />
                 <div className="flex flex-col flex-1">
                     <Link to={item.recentPost.thread.url}>
@@ -31,7 +31,7 @@ export default function ThreadCard({ item, handleClick }) {
                         by {item.recentPost.poster.name}
                     </Link>
                 </div>
-            </div>
+            </div>}
         </div>
     )
 }

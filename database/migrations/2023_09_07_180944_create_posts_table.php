@@ -20,7 +20,6 @@ return new class extends Migration
             $table->unsignedBigInteger('forum_id');
             $table->unsignedBigInteger('thread_id');
             $table->unsignedBigInteger('user_id');
-
             $table->foreign('forum_id')->references('id')->on('forums');
             $table->foreign('thread_id')->references('id')->on('threads');
             $table->foreign('user_id')->references('id')->on('users');

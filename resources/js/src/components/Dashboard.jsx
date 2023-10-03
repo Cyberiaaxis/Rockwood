@@ -20,12 +20,14 @@ import Travel from "./Travel";
 import Event from "./Event";
 import Forums from "./Forums";
 import Mail from "./mail/Mailbox";
+import Thread from "./Thread";
 // import Chat from "./Chat";
 
 
 export default function Dashboard() {
     const [openStates, setOpenStates] = React.useState({});
     const [activePage, setActivePage] = React.useState(<Home />);
+    const [threadId, setThreadId] = React.useState(<Home />);
     // console.log("**Dashboard**");
 
     function toggleOpen(menuName) {
@@ -48,7 +50,8 @@ export default function Dashboard() {
             crimes: <Crimes />,
             travel: <Travel />,
             mail: <Mail />,
-            forums: <Forums />
+            forums: <Forums />,
+            thread: <Thread threadId={threadId} />
         };
 
         return pages[page] || pages.home;

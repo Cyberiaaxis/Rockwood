@@ -38,11 +38,11 @@ body {
   overflow: hidden;
 }
 
-nav:not(.primary_menu, .quartary_menu)>* {
+/* nav:not(.primary_menu, .quartary_menu)>* {
   opacity: 0;
   visibility: hidden;
   transition: all 1s ease-in-out;
-}
+} */
 
 nav.active>* {
   opacity: 1;
