@@ -1,70 +1,48 @@
 import * as React from 'react'
-import CircularProgressBar from './CircularProgressBar'
-import { Avatar, Button } from '@mui/material';
+import { Avatar, Button, IconButton, Typography } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ReplyIcon from '@mui/icons-material/Reply';
+import QuickreplyIcon from '@mui/icons-material/Quickreply';
 
-export default function NewPostForm({ open, ...props }) {
-    const maxChars = 500;
-
-    const [charsLeft, setCharsLeft] = React.useState(maxChars);
-    const [percent, setPercent] = React.useState(0);
-    const [inputText, setInputText] = React.useState('');
-
-    const handleChange = (event) => {
-        const input = event.target.value;
-        setCharsLeft(maxChars - input.length);
-        setPercent(input.length);
-
-        setInputText(input);
-    };
-
-    const handleSubmit = () => {
-
-    }
-
-
-    const handleOnClose = () => {
-        setInputText('');
-        setPercent(0);
-        setCharsLeft(maxChars);
-    }
-
-    React.useEffect(() => {
-        return () => {
-            handleOnClose();
-        }
-    }, [open]);
-
-    const calcPercent = Math.floor(percent * 100 / maxChars);
-
+export default function PostCard({ item }) {
     return (
-        <div className='w-full bg-white dark:bg-black/20 dark:text-white rounded-md flex gap-2 p-2'>
-            <form onSubmit={handleSubmit} method="get" className='w-full flex flex-col gap-2'>
-                <div className="validation flex gap-2">
+        <div className='flex gap-2 bg-gray-100'>
+            <div className="poster w-60 flex flex-col items-center justify-center gap-1">
+                <Typography variant="h6">
+                    {item.poster.title}
+                </Typography>
 
-                </div>
-                <textarea
-                    value={inputText}
-                    onChange={handleChange}
-                    maxLength={maxChars}
-                    cols={30}
-                    rows={3}
-                    placeholder='What is in your mind?'
-                    className='px-2 py-1 w-full outline-none rounded-md border border-slate-300'
+                <Avatar
+                    src={item.poster.avatar}
+                    sx={{ width: 100, height: 100 }}
                 />
+                <div className="w-full flex flex-col items-center gap-1">
+                    <div className="bg-purple-700 text-center text-white rounded-md px-4 py-1 shadow">
+                        Admin
+                    </div>
+                </div>
+            </div>
+            <div className="flex-auto flex flex-col gap-2 py-2">
+                <Typography variant="subtitle2" className="post-header block"> Posted July 22, 2022 </Typography>
+                <Typography variant="body2" className="post-body flex flex-col gap-1">
+                    {item.content}
+                </Typography>
 
+                <div className="post-footer flex items-center justify-between">
+                    <Button startIcon={<QuickreplyIcon />} color="inherit">
+                        Quote Reply
+                    </Button>
 
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <div className="relative w-10 h-10 rounded-full">
-                            <CircularProgressBar text={charsLeft} value={calcPercent} remain={charsLeft} color="text-blue-400" />
-                        </div>
-
-                        <Button variant="contained" disabled={!inputText} >
-                            Post a Reply
+                    <div className="right">
+                        <Button startIcon={<ReplyIcon />} color="inherit">
+                            Reply
+                        </Button>
+                        <Button startIcon={<FavoriteIcon />} color="inherit">
+                            0
                         </Button>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     )
 }

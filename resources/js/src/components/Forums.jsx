@@ -14,7 +14,7 @@ export default function Forums() {
         setParentId(id);
     }
 
-    console.log(type);
+    // console.log(type);
 
     return (
         <div className='flex flex-col gap-2 mainContainer' >
@@ -24,7 +24,7 @@ export default function Forums() {
                     type === 'threads' ?
                         <ThreadList forumId={parentId} handleClick={handleClick} /> :
                         type === 'posts' ?
-                            <Thread theadId={parentId} handleClick={handleClick} /> : ''
+                            <Thread threadId={parentId} handleClick={handleClick} /> : ''
             }
         </div>
     )

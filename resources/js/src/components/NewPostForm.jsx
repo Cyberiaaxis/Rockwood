@@ -17,8 +17,9 @@ export default function NewPostForm({ open, ...props }) {
         setInputText(input);
     };
 
-    const handleSubmit = () => {
-
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        props.handlePostReply(inputText);
     }
 
 
@@ -59,7 +60,7 @@ export default function NewPostForm({ open, ...props }) {
                             <CircularProgressBar text={charsLeft} value={calcPercent} remain={charsLeft} color="text-blue-400" />
                         </div>
 
-                        <Button variant="contained" disabled={!inputText} >
+                        <Button variant="contained" disabled={!inputText} type="submit">
                             Post a Reply
                         </Button>
                     </div>

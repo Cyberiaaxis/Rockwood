@@ -5,44 +5,66 @@ import gameServerApi from '../libraries/gameServerApi';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
+import { toast } from "react-toastify";
+import ValidationErrors from "../libraries/ValidationErrors";
+import { useForm } from "react-hook-form";
+
+import { Editor } from "@tinymce/tinymce-react";
 
 export default function ThreadList({ forumId, handleClick }) {
+
+    const editorRef = React.useRef(null);
+
+    const {
+        register,
+        setError,
+        formState: { errors },
+        handleSubmit,
+        clearErrors,
+    } = useForm();
 
     const [page, setPage] = React.useState(1);
     const [forum, setForum] = React.useState(null)
     const [threadList, setThreadList] = React.useState([]);
     const [addNewTopic, setAddNewTopic] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
+    const [editorState, setEditorState] = React.useState(null);
+    const [editorContent, setEditorContent] = React.useState(null);
 
-    const kek = {
-        "id": 2,
-        "title": "General Discussions",
-        "description": null,
-        "is_cat": 0,
-        "parent_id": 1,
-        "created_at": null,
-        "updated_at": null,
-        "threads_count": 1,
-        "posts_count": 0,
-        "threads": {
-            "currentPage": 1,
-            "total": 1,
-            "data": [
-                {
-                    "id": 1,
-                    "title": "Introductions",
-                    "description": null,
-                    "forum_id": 2,
-                    "user_id": 1,
-                    "sticky": 0,
-                    "locked": 0,
-                    "created_at": "2023-09-28T19:37:39.000000Z",
-                    "updated_at": "2023-09-28T19:37:39.000000Z",
-                    "latest_post": null
-                }
-            ]
+    const onSubmit = async (data) => {
+
+        const formData = {
+            forum_id: forum.id,
+            title: data.topic,
+            content: editorRef.current.getContent(),
         }
-    }
+
+        const response = await toast.promise(
+            gameServerApi('/thread/create', 'post', formData),
+            {
+                pending: 'Please wait, We are creating a new Thread',
+                success: {
+                    theme: 'colored',
+                    render({ data }) {
+
+                        setAddNewTopic(false);
+
+                        fetchThreads();
+
+                        return 'Thread has been created successfully';
+                    }
+                },
+                error: {
+                    theme: 'colored',
+                    render({ data }) {
+                        return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message;
+                    },
+                },
+                // error: 'An error occurred while creating your account',
+            }
+        );
+
+    };
 
     const handlePageChange = (event, value) => {
         setPage(value);
@@ -57,6 +79,14 @@ export default function ThreadList({ forumId, handleClick }) {
         setAddNewTopic(false);
     }
 
+    const handleTopicCreate = (data, event) => {
+        event.preventDefault();
+    }
+
+    const onEditorStateChange = (editorState) => {
+        setEditorState(editorState);
+    };
+
     React.useEffect(() => {
         fetchThreads();
     }, []);
@@ -64,8 +94,8 @@ export default function ThreadList({ forumId, handleClick }) {
     const fetchThreads = async (page = 1) => {
         try {
             const response = await gameServerApi(`forum/${forumId}?page=${page}`);
-            setForum(kek)
-            setThreadList(kek.threads.data);
+            setForum(response)
+            setThreadList(response.threads.data);
             setLoading(false);
         } catch (error) {
             setLoading(true);
@@ -81,18 +111,42 @@ export default function ThreadList({ forumId, handleClick }) {
                     Start a new Topic
                 </Button>
             </h5>
-            {addNewTopic ? <Box>
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'flex-end'
-                }}>
-                    <CloseIcon onClick={handleAddNewTopicClose} />
-                </Box>
-                <Box>
-                    <TextField fullWidth label="fullWidth" id="fullWidth" />
-                </Box>
-                <Button variant="contained">Contained</Button>
-            </Box> :
+            {addNewTopic ?
+                <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+                    <Box textAlign="right">
+                        <CloseIcon onClick={handleAddNewTopicClose} />
+                    </Box>
+                    <Box sx={{ padding: 1 }}>
+                        <TextField fullWidth label="Topic" id="topic" name="topic" {...register("topic", { required: true })} />
+                    </Box>
+                    <Box sx={{ padding: 1 }}>
+                        <Editor
+                            apiKey="z0ofs10cgemuk3np8d585ugfc6gk6u6k6v32x2htj53u6pe4"
+                            onInit={(evt, editor) => (editorRef.current = editor)}
+                            initialValue="<p>This is the initial content of the editor.</p>"
+                            init={{
+                                height: 200,
+                                menubar: false,
+                                plugins: [
+                                    "advlist autolink lists link image charmap print preview anchor",
+                                    "searchreplace visualblocks code fullscreen",
+                                    "insertdatetime media table paste code help wordcount"
+                                ],
+                                toolbar:
+                                    "undo redo | formatselect | " +
+                                    "bold italic backcolor | alignleft aligncenter " +
+                                    "alignright alignjustify | bullist numlist outdent indent | " +
+                                    "removeformat | help",
+                                content_style:
+                                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
+                            }}
+                        />
+                    </Box>
+                    <Box sx={{ textAlign: "center", paddingTop: 5 }}>
+                        <Button type="submit" fullWidth variant="contained">Post Topic</Button>
+                    </Box>
+
+                </Box> :
                 <div className="block bg-white border shadow rounded">
                     <ThreadListHeader page={page} forum={forum} handlePageChange={handlePageChange} />
                     <div className="thread-list">

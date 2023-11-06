@@ -8,7 +8,7 @@ export default function ThreadCard({ item, handleClick }) {
                 <Avatar alt="Tom" />
             </div>
             <div className="flex flex-auto flex-col">
-                <div onClick={() => handleClick('posts', item.url)} className="cursor-pointer w-fit text-lg">
+                <div onClick={() => handleClick('posts', item.id)} className="cursor-pointer w-fit text-lg">
                     {item.title}
                 </div>
                 <div className="block text-sm">

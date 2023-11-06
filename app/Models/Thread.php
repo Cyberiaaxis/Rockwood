@@ -11,6 +11,15 @@ class Thread extends Model
 
     protected $table = 'threads';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'title', 'forum_id', 'user_id'
+    ];
+
     // Relationship
     public function user()
     {
