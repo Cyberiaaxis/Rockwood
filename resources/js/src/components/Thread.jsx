@@ -13,19 +13,18 @@ export default function Thread({ threadId }) {
     const [postList, setPostList] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
 
+
     const handlePageChange = (event, value) => {
         setPage(value);
         fetchData();
     };
 
-    const fetchData = async () => {
+    const fetchData = async (page = 1) => {
         setLoading(true);
 
         try {
-            const response = await gameServerApi(`thread/${threadId}`);
-
+            const response = await gameServerApi(`thread/${threadId}?page=${page}`);
             setThread(response)
-
             setPostList(response.posts.data ?? []);
             setLoading(false);
 
@@ -46,7 +45,7 @@ export default function Thread({ threadId }) {
         fetchData();
     }, [threadId]);
 
-    console.log("thread", thread, "postList", postList);
+    // console.log("thread", thread, "postList", postList);
 
     const handlePostReply = async (inputText) => {
         const data = { forum_id: thread.forum_id, thread_id: threadId, content: inputText }
@@ -54,7 +53,14 @@ export default function Thread({ threadId }) {
             gameServerApi('/savePost', 'post', data),
             {
                 pending: 'Please wait',
-                success: 'Sucessfully replied on the post!',
+                success: {
+                    render({ data }) {
+
+                        fetchData();
+
+                        return 'Post posted'
+                    },
+                },
                 error: {
                     theme: 'colored',
                     render({ data }) {

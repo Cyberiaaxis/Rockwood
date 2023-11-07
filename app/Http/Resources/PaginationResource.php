@@ -21,7 +21,7 @@ class PaginationResource extends JsonResource
 
         $response = [
             'currentPage' => $this->resource->currentPage(),
-            'total' => $this->resource->total(),
+            'total' => $this->resource->lastPage(),
             'data' => $request['data'],
         ];
 

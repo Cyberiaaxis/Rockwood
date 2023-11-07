@@ -18,7 +18,7 @@ class PostsPaginationResource extends JsonResource
 
         $response = [
             'currentPage' => $this->resource->currentPage(),
-            'total' => $this->resource->total(),
+            'total' => $this->resource->lastPage(),
             'data' => PostsResource::collection($this->resource),
         ];
 

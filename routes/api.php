@@ -63,9 +63,4 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->post('/savePost', 'App\Http\Controllers\ForumsController@postCreate')->name('forums.savePost');
     $router->post('/thread/create', 'App\Http\Controllers\ForumsController@threadCreate')->name('forums.thread.create')->where('thread', '[0-9]+');
     $router->get('/forums', 'App\Http\Controllers\ForumsController@index')->name('forums.list');
-    //i am can do anthing if i got login form for login first
-    //lets try
-    //lets compile and see what happens now
-    //ok
-
 });
