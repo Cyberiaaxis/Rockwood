@@ -12,7 +12,7 @@ import renderRoleEdit from "./RenderRoleEdit";
 
 
 export default function PanelComponent(props) {
-    console.log("PanelComponent(props)", props);
+    // console.log("PanelComponent(props)", props);
     const { name, table, url } = props.data;
     const [uploadedFile, setUploadedFile] = useState(null);
     const [currentAvatar, setCurrentAvatar] = useState(null);

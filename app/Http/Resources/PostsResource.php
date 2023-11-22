@@ -19,6 +19,8 @@ class PostsResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'content' => $this->content,
+            'editable' =>  auth()->id() === $this->user->id,
+            'createdAt' => $this->created_at->isoFormat('dddd, MMMM D, YYYY h:mm A'),
             'poster' => [
                 'id' => $this->user->id,
                 'title' => $this->user->name,

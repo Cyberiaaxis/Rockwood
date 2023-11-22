@@ -129,10 +129,10 @@ export default function Role() {
     const processRowUpdate = async (newRow) => {
         const updatedRow = { ...newRow, isNew: false };
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-        console.log("updatedRow2`", updatedRow);
+        // console.log("updatedRow2`", updatedRow);
         const formData = new FormData()
         Object.entries(updatedRow).forEach(([key, value]) => formData.append(key, value));
-        console.log("updatedRow2`", updatedRow);
+        // console.log("updatedRow2`", updatedRow);
         const result = await gameServerApi("saveRole", "post", formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         });

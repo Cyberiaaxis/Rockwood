@@ -7,7 +7,7 @@ import gameServerApi from './gameServerApi';
 const AuthenticationGuard = ({ children }) => {
     const { user, setUser } = React.useContext(AuthContext);
     const navigate = useHistory();
-    console.log("AuthenticationGuard", user);
+    // console.log("AuthenticationGuard", user);
 
     React.useEffect(() => {
         if (!user) {

@@ -106,4 +106,33 @@ class ForumsController extends Controller
             'content' => $request->content,
         ]);
     }
+
+    /**
+     * Post Create
+     */
+    public function postModify(Request $request)
+    {
+        // dd($request);
+        $post = new Post();
+        $post->findorFail($request->id)->update(['content' => $request->content]);
+        return response()->json($request->content);
+    }
+
+    /**
+     * Post Create
+     */
+    public function quotePost(Request $request)
+    {
+
+        $posts = new Post();
+        $post = $posts->find($request->id);
+
+        $post->create([
+            'forum_id' => $post->forum_id,
+            'thread_id' => $post->thread_id,
+            'user_id' => auth()->id(),
+            'parent_id' => $request->id,
+            'content' => $request->content,
+        ]);
+    }
 }

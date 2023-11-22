@@ -59,7 +59,7 @@ export default function Rank(props) {
     const [currentAvatar, setCurrentAvatar] = useState(null);
     // const [currentStatus, setCurrentStatus] = useState(false);
     const [loading, setLoading] = useState(true);
-    console.log("Rank(props)", props);
+    // console.log("Rank(props)", props);
     // console.log("rows", rows);
     React.useEffect(async () => {
         const result = await gameServerApi("ranks");
@@ -131,7 +131,7 @@ export default function Rank(props) {
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
 
         const formData = new FormData()
-        console.log("currentStatus", currentStatus);
+        // console.log("currentStatus", currentStatus);
         // updatedRow.status = currentStatus ? 1 : 0;
 
         Object.entries(updatedRow).forEach(([key, value]) => formData.append(key, value));
@@ -139,7 +139,7 @@ export default function Rank(props) {
         uploadedFile ? formData.append('image', uploadedFile) : formData.delete('image');
 
         //
-        console.log(updatedRow);
+        // console.log(updatedRow);
 
         const result = await gameServerApi("makeRank", "post", formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
@@ -148,7 +148,7 @@ export default function Rank(props) {
         const newData = result.data;
 
 
-        console.log('New data ', newData);
+        // console.log('New data ', newData);
 
         if (result.status) {
             toast.success(result.message)

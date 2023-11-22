@@ -30,7 +30,7 @@ export default function Thread({ threadId }) {
 
         } catch (error) {
             setLoading(true);
-            console.log(error);
+            // console.log(error);
             toast.error(error.message);
         }
 

@@ -48,9 +48,9 @@ export default function DataTable(props) {
 
     // console.log("rows", rows);
     React.useEffect(async () => {
-        console.log('table', table);
+        // console.log('table', table);
         const result = await gameServerApi(table);
-        console.log('result', result);
+        // console.log('result', result);
         setRows(result[table]);
         setLoading(false);
     }, [table]);
@@ -100,13 +100,13 @@ export default function DataTable(props) {
         // console.log("file", file);
         Object.entries(updatedRow).forEach(([key, value]) => formData.append(key, value));
         (file) ? formData.append("image", file) : formData.delete('image')
-        console.log("updatedRow", updatedRow);
+        // console.log("updatedRow", updatedRow);
         const result = await gameServerApi(url, "post", formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         });
 
         const newData = result.data;
-        console.log('New data ', newData);
+        // console.log('New data ', newData);
 
         if (result.status === true) {
             toast.success(result.message)

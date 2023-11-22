@@ -59,7 +59,7 @@ export default function Rank(props) {
     const [currentAvatar, setCurrentAvatar] = useState(null);
     // const [currentStatus, setCurrentStatus] = useState(false);
     const [loading, setLoading] = useState(true);
-    console.log("Rank(props)", props);
+    // console.log("Rank(props)", props);
     // console.log("rows", rows);
     React.useEffect(async () => {
         const result = await gameServerApi("ranks");

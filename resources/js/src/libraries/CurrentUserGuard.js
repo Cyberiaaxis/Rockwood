@@ -8,7 +8,7 @@ const CurrentUserGuard = ({ children }) => {
     const [state, setState] = React.useState('initial')
     const { user, loggedIn, setUser, unsetUser } = React.useContext(AuthContext);
     const navigate = useNavigate();
-    console.log("** here we are chking loggedin**", user);
+    // console.log("** here we are chking loggedin**", user);
     React.useEffect(() => {
         async function run() {
             // only execute if state is initial
@@ -19,7 +19,7 @@ const CurrentUserGuard = ({ children }) => {
                 const response = await gameServerApi('ping');
                 // TODO: if ping request says authenticated, call setUser to store username/id/type in context
                 setUser({ userId: response.userId, userName: response.userName, userRole: response.userRoles })
-                console.log("response.status", response.status);
+                // console.log("response.status", response.status);
                 if (response.status === "staff") {
                     navigate('/staff/');;
                 }

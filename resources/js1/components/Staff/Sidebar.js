@@ -61,7 +61,7 @@ export default function Sidebar(props) {
     const theme = useTheme();
 
     const { open, setOpen, myComponent, setMyComponent } = props;
-    console.log("myComponent", myComponent);
+    // console.log("myComponent", myComponent);
     const handleRSaccess = async () => {
         const result = await gameServerApi("rsaccess");
         history.push("/dashboard/");
@@ -74,7 +74,7 @@ export default function Sidebar(props) {
         setOpen(false);
     };
     const handleClick = async (e) => {
-        console.log(e.target.innerText);
+        // console.log(e.target.innerText);
         // <PanelComponent name='Rank' table='ranks' url="makeRank" />
         // const result = await gameServerApi("rsaccess");
         // history.push("/dashboard");
