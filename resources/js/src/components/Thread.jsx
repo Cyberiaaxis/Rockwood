@@ -13,6 +13,7 @@ export default function Thread({ threadId }) {
     const [postList, setPostList] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
 
+    const textAreaRef = React.useRef({});
 
     const handlePageChange = (event, value) => {
         setPage(value);
@@ -27,10 +28,9 @@ export default function Thread({ threadId }) {
             setThread(response)
             setPostList(response.posts.data ?? []);
             setLoading(false);
-
         } catch (error) {
             setLoading(true);
-            // console.log(error);
+            console.log(error);
             toast.error(error.message);
         }
 
@@ -57,7 +57,7 @@ export default function Thread({ threadId }) {
                     render({ data }) {
 
                         fetchData();
-
+                        console.log('handlePostReply-data', data);
                         return 'Post posted'
                     },
                 },
@@ -70,21 +70,30 @@ export default function Thread({ threadId }) {
                 // error: 'An error occurred while creating your account',
             }
         );
+        if (response) {
+            console.log('handlePostReply-response', response);
+        }
+
     };
+
+    const handleQuoteClick = (quote_postId) => {
+        textAreaRef.current.value = `>>${quote_postId}\n${textAreaRef.current.value}`;
+        textAreaRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
 
     return (
         <React.Fragment>
             <div className="flex flex-col gap-1 divide-y">
                 <PostHeader page={page} total={thread?.posts?.total} handlePageChange={handlePageChange} />
                 <div className="post-list divide-y flex flex-col gap-2">
-                    {loading ? <h1>Loading...</h1> : postList.length ? postList.map((x, i) => <PostCard key={i} item={x} />) : ''}
+                    {loading ? <h1>Loading...</h1> : postList.length ? postList.map((x, i) => <PostCard key={i} item={x} handleQuoteClick={handleQuoteClick} />) : ''}
                 </div>
                 <PostHeader page={page} total={thread?.posts?.total} handlePageChange={handlePageChange} />
                 <div className="block rounded shadow divide-y">
                     <Typography variant="subtitle1" className="px-4 py-2">
                         Post a new Reply
                     </Typography>
-                    <NewPostForm handlePostReply={handlePostReply} />
+                    <NewPostForm quotedRef={textAreaRef} handlePostReply={handlePostReply} />
                 </div>
             </div>
         </React.Fragment>
@@ -105,7 +114,6 @@ function PostHeader({ page, total = 1, handlePageChange }) {
                 showFirstButton
                 showLastButton
             />
-
             <Button color="inherit" className="">
                 Page {page} of {total}
             </Button>

@@ -65,4 +65,6 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->post('/quotePost', 'App\Http\Controllers\ForumsController@quotePost')->name('forums.quotePost');
     $router->post('/thread/create', 'App\Http\Controllers\ForumsController@threadCreate')->name('forums.thread.create')->where('thread', '[0-9]+');
     $router->get('/forums', 'App\Http\Controllers\ForumsController@index')->name('forums.list');
+    $router->post('/addLike', 'App\Http\Controllers\ForumsController@addLike')->name('forums.addLike');
+    $router->post('/addDislike', 'App\Http\Controllers\ForumsController@addDislike')->name('forums.addDislike');
 });

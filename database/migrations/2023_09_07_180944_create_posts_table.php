@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->longText('content');
+            $table->integer('like')->default(0);
+            $table->integer('dislike')->default(0);
             $table->unsignedBigInteger('forum_id');
             $table->unsignedBigInteger('thread_id');
             $table->unsignedBigInteger('user_id');

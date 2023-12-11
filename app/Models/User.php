@@ -6,10 +6,12 @@ use Hash;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash as FacadesHash;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Models\UserStats;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -92,7 +94,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->create([
             'name' => $request['name'],
             'email' => $request['email'],
-            'password' => Hash::make($request['password']),
+            'password' => FacadesHash::make($request['password']),
         ]);
     }
 
@@ -106,7 +108,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->create([
             'name' => $request['name'],
             'email' => $request['email'],
-            'password' => Hash::make($request['password']),
+            'password' => FacadesHash::make($request['password']),
         ]);
     }
 
@@ -172,6 +174,31 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getUserRoles()
     {
         return $this->getRoleNames();
+    }
+
+
+    /**
+     * get user from storage.
+     * @param
+     * @return a collection
+     */
+    public function getUserStatsForumRankId()
+    {
+        $userStat = new UserStats();
+        return $userStat->where(['user_id' => $this->id])->value('forum_rank_id');
+    }
+
+
+    /**
+     * get user from storage.
+     * @param
+     * @return a collection
+     */
+    public function getUserForumRankName()
+    {
+
+        $forumRanks =  new ForumRank();
+        return $forumRanks->where('id', $this->getUserStatsForumRankId())->value('rankName');
     }
 
     /**

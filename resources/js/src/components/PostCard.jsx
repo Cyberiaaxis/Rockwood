@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { Avatar, Button, IconButton, Typography, Box } from '@mui/material';
+import { Avatar, Button, IconButton, Typography, Box, Grid, Tooltip } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ReplyIcon from '@mui/icons-material/Reply';
+import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 import QuickreplyIcon from '@mui/icons-material/Quickreply';
 import EditIcon from '@mui/icons-material/Edit';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -9,45 +9,50 @@ import NewPostForm from "./NewPostForm";
 import { AuthContext } from "../libraries/AuthContext";
 import { toast } from "react-toastify";
 import gameServerApi from "../libraries/gameServerApi";
+import "../styles/fonts.css";
 
-export default function PostCard({ item }) {
+export default function PostCard({ item, handleQuoteClick }) {
     const { user, setUser } = React.useContext(AuthContext);
     const [editor, setEditor] = React.useState(false);
+    const [like, setLike] = React.useState(false);
+    const [dislike, setDislike] = React.useState(false);
     const [quote, setQuote] = React.useState(false);
 
     React.useEffect(() => {
 
-        // console.log('content updated');
+        console.log('content updated');
 
     }, [item.content]);
 
-    console.log("PostCard", item);
-    console.log("userconsolelogoutput", user);
-    const handleQuoteReply = (e) => {
+    React.useEffect(() => {
 
-        // console.log("condition", user.userId === item.poster.id, "user", user, "item", item);
-    }
-    // console.log("condition", user.userId === item.poster.id, "user", user, "item", item);
-    console.log("quote", quote);
+        console.log('like updated');
+
+    }, [item.like]);
+
+    React.useEffect(() => {
+
+        console.log('dislike updated');
+
+    }, [item.dislike]);
+
+    // console.log("handleQuoteClick", handleQuoteClick);
     const handlePostReply = async (inputText) => {
 
         const data = { id: item.id, content: inputText }
-        // console.log("quote", quote);
-        const pathName = quote ? '/quotePost' : '/modifyPost';
+        // console.log("data", data);
         const response = await toast.promise(
-            gameServerApi(pathName, 'post', data),
+            gameServerApi('/modifyPost', 'post', data),
             {
                 pending: 'Please wait',
                 success: {
-
-
                     render({ data }) {
 
-                        console.log(item);
+                        // console.log(item);
 
                         item.content = data;
 
-                        return quote ? 'Quoted Successfully' : 'Post posted';
+                        return 'Post posted'
                     },
                 },
                 error: {
@@ -67,58 +72,171 @@ export default function PostCard({ item }) {
             item.content = response;
         }
     };
-    const handleReply = () => { }
+    const handleAddLike = async (postId) => {
+        const response = await toast.promise(
+            gameServerApi('/addLike', 'post', { post_id: postId }),
+            {
+                pending: 'Please wait',
+                success: {
+                    render({ data }) {
+                        setLike(data);
+                        return 'Liked'
+                    },
+                },
+                error: {
+                    theme: 'colored',
+                    render({ data }) {
+                        return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message;
+                    },
+                },
+            },
+        );
+
+        if (response) {
+            item.like = response;
+        }
+
+    }
+
+    const handleAddDislike = async (postId) => {
+        const response = await toast.promise(
+            gameServerApi('/addDislike', 'post', { post_id: postId }),
+            {
+                pending: 'Please wait',
+                success: {
+                    render({ data }) {
+                        setDislike(data);
+
+                        return 'Disliked'
+                    },
+                },
+                error: {
+                    theme: 'colored',
+                    render({ data }) {
+                        return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message;
+                    },
+                },
+
+            },
+        );
+        if (response) {
+            item.dislike = response;
+        }
+    }
+
     const EditButtons = () => {
         return (
             <React.Fragment>
-                <Button onClick={() => setEditor(true)} startIcon={<EditIcon />} color="inherit"></Button>
-                <Button onClick={() => setEditor(false)} startIcon={<HighlightOffIcon />} color="inherit"></Button>
+                <Button
+                    onClick={() => setEditor(true)}
+                    startIcon={(
+                        <Tooltip title="Edit">
+                            <EditIcon sx={{ color: 'blue' }} />
+                        </Tooltip>
+                    )}
+                    color="inherit" />
+                {editor ? (
+                    <Button
+                        onClick={() => setEditor(false)}
+                        endIcon={(
+                            <Tooltip title="Close">
+                                <HighlightOffIcon sx={{ color: 'red' }} />
+                            </Tooltip>
+                        )}
+                        color="inherit" />
+                ) : ''}
             </React.Fragment>
         )
     }
-
+    // console.log("likeeeee", like);
     return (
         <div className='flex gap-2 bg-gray-100'>
             <div className="poster w-60 flex flex-col items-center justify-center gap-1">
-                <Typography variant="h6">
-                    {item.poster.title}
-                </Typography>
-
+                <Tooltip title={item.poster.title + " as " + item.poster.role}>
+                    <Typography variant="h6" sx={{ fontFamily: 'Carnevalee Freakshow', color: 'red' }}>
+                        {item.poster.title}
+                    </Typography>
+                </Tooltip>
                 <Avatar
                     src={item.poster.avatar}
                     sx={{ width: 100, height: 100 }}
                 />
                 <div className="w-full flex flex-col items-center gap-1">
                     <div className="bg-purple-700 text-center text-white rounded-md px-4 py-1 shadow">
-                        Admin
+                        {item.poster.forumRank}
+                    </div>
+                    <div className="bg-purple-700 text-center text-white rounded-md px-4 py-1 shadow">
+                        {item.poster.posts}
                     </div>
                 </div>
             </div>
             <div className="flex-auto flex flex-col gap-2 py-2">
-                <Typography variant="subtitle2" className="post-header block">Posted {item.createdAt}
-                    {item.editable ? <EditButtons /> : ""}
+                <Typography variant="subtitle2" className="post-header block"> Posted {item.createdAt}
+                    {user && user.userId === item.poster.id ? <EditButtons /> : ""}
                 </Typography>
 
                 <Typography variant="body2" className="post-body flex flex-col gap-1">
                     {
                         editor ?
-                            <NewPostForm handlePostReply={handlePostReply} oldContent={item.content} quote={quote} buttonText='Update Post' />
+                            <NewPostForm handlePostReply={handlePostReply} oldContent={item.content} buttonText='Update Post' />
                             :
-                            item.content
+                            <React.Fragment>
+
+                                {item?.quotes?.length ? item?.quotes?.map((quote, i) => <QuotePostCard item={quote} key={i} />) : ''}
+
+                                {item.content}
+                            </React.Fragment>
                     }
                 </Typography>
 
                 <div className="post-footer flex items-center justify-between">
-                    <Button startIcon={<QuickreplyIcon />} color="inherit" onClick={() => { setEditor(true), setQuote(true) }}>
+                    <Button startIcon={<Tooltip title="Quote"><QuickreplyIcon sx={{ color: 'yellowgreen' }} /></Tooltip>} onClick={() => handleQuoteClick(item.id)}>
                         Quote
                     </Button>
                     <div className="right">
-                        <Button startIcon={<FavoriteIcon />} color="inherit">
-                            0
+                        <Button startIcon={<Tooltip title="Like"><FavoriteIcon sx={{ color: 'green' }} onClick={() => handleAddLike(item.id)} /></Tooltip>} >
+                            {like ? like : item.like}
+                        </Button>
+                        <Button endIcon={<Tooltip title="Dislike"><HeartBrokenIcon sx={{ color: 'red' }} onClick={() => handleAddDislike(item.id)} /></Tooltip>} >
+                            {dislike ? dislike : item.dislike}
                         </Button>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
+    )
+}
+
+
+function QuotePostCard({ item }) {
+
+    const [open, setOpen] = React.useState(true);
+
+    return (
+        <Box component="blockquote" className="flex flex-col gap-4" sx={{
+            padding: '0.5rem',
+            background: 'rgba(0, 0, 0, 0.25)'
+        }}>
+            <Grid container>
+                <Grid item xs={12} className='flex items-center gap-2'>
+                    <Avatar src={item.poster.avatar} alt={item.poster.title} sx={{
+                        width: 30,
+                        height: 30,
+                    }} />
+
+                    <Typography variant="subtitle2" className="post-header block">
+                        {item.poster.title}
+                    </Typography>
+
+                    <Typography variant="subtitle2" className="post-header block">
+                        {item.createdAt}
+                    </Typography>
+                </Grid>
+            </Grid>
+
+            <Typography variant="body2" className="post-body flex flex-col gap-1">
+                {item.content}
+            </Typography>
+        </Box>
     )
 }

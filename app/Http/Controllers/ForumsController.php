@@ -97,7 +97,7 @@ class ForumsController extends Controller
      */
     public function postCreate(Request $request)
     {
-
+        $request->validate(['content' => 'unique:posts,content']);
         $post = new Post();
         $post->create([
             'forum_id' => $request->forum_id,
@@ -134,5 +134,40 @@ class ForumsController extends Controller
             'parent_id' => $request->id,
             'content' => $request->content,
         ]);
+    }
+
+    /**
+     * get add like
+     */
+    public function addLike(Request $request)
+    {
+        $request->validate([
+            'post_id' => ['required', 'integer', 'exists:posts,id']
+        ]);
+
+        $post = new Post();
+        $post = $post->where('id', $request->post_id);
+        $liked = $post->increment('like');
+        $liked = $post->value('like');
+
+        return response()->json($liked);
+    }
+
+    /**
+     * get add like
+     */
+    public function addDisLike(Request $request)
+    {
+
+        $request->validate([
+            'post_id' => ['required', 'integer', 'exists:posts,id']
+        ]);
+
+        $post = new Post();
+        $post = $post->where('id', $request->post_id);
+        $liked = $post->increment('dislike');
+        $liked = $post->value('dislike');
+
+        return response()->json($liked);
     }
 }

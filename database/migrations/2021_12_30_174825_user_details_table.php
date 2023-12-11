@@ -21,6 +21,7 @@ class UserDetailsTable extends Migration
             $table->bigInteger('money');
             $table->bigInteger('points');
             $table->bigInteger('rates');
+            $table->integer('forum_rank_id');
             $table->bigInteger('rank_id');
             $table->integer('level_id');
             $table->integer('location_id');

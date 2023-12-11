@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Http\Controllers\ForumsController;
 use App\Models\Forum;
+use App\Models\ForumRank;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserStats;
@@ -70,5 +72,15 @@ class DatabaseSeeder extends Seeder
             ['title' => 'Bug', 'parent_id' => null, 'is_cat' => 1],
             ['title' => "Bug & Issues", 'parent_id' => 28, 'is_cat' => 0],
         ]);
+
+        $forumRankData = [
+            'rankName' => '#noob',
+            'rankDescription' => 'for a begun',
+            'image' => null,
+            'requirement' => null,
+            'qty' => null
+        ];
+        $forumRank = new ForumRank();
+        $forumRank->create($forumRankData);
     }
 }

@@ -15,7 +15,7 @@ class Post extends Model
      * @var array
      */
     protected $fillable = [
-        "title", "user_id", "forum_id", "thread_id", "content"
+        "title", "user_id", "forum_id", "thread_id", "content", "like", "dislike"
     ];
 
     // Relationship

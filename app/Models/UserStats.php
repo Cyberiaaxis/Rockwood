@@ -42,6 +42,7 @@ class UserStats extends Model
             'max_nerve' => 10,
             'will' => 100,
             'max_will' => 100,
+            'forum_rank_id' => 1,
         ]);
     }
 
@@ -222,7 +223,7 @@ class UserStats extends Model
      * @param  int $userId
      * @return boolean
      */
-    public function getWill(int $userId) : int
+    public function getWill(int $userId): int
     {
         return $this->where('user_id', $userId)->value('will');
     }
@@ -236,5 +237,4 @@ class UserStats extends Model
     {
         return $this->where(['user_id' => $userId])->increment($field, $totalgain, ['energy' => $newenergy, 'will' => $will]);
     }
-
 }

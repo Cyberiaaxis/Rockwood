@@ -28,6 +28,7 @@ class UserStatsTable extends Migration
             $table->integer('max_nerve');
             $table->integer('will');
             $table->integer('max_will');
+            $table->integer('forum_rank_id');
         });
     }
 

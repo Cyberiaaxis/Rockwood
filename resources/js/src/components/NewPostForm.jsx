@@ -2,12 +2,13 @@ import * as React from 'react'
 import CircularProgressBar from './CircularProgressBar'
 import { Avatar, Button } from '@mui/material';
 
-export default function NewPostForm({ open, handlePostReply, oldContent = '', quote, buttonText = "Post a new Reply", ...props }) {
+export default function NewPostForm({ open, oldContent, quotedRef, ...props }) {
     const maxChars = 500;
-    console.log("oldContent", oldContent);
+
     const [charsLeft, setCharsLeft] = React.useState(maxChars);
     const [percent, setPercent] = React.useState(0);
-    const [inputText, setInputText] = React.useState(oldContent);
+    const [inputText, setInputText] = React.useState('');
+
 
     const handleChange = (event) => {
         const input = event.target.value;
@@ -17,11 +18,10 @@ export default function NewPostForm({ open, handlePostReply, oldContent = '', qu
         setInputText(input);
     };
 
-    function handleSubmit(event) {
-        event.preventDefault()
-        handlePostReply(inputText)
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        props.handlePostReply(inputText);
     }
-
 
     const handleOnClose = () => {
         setInputText('');
@@ -35,24 +35,25 @@ export default function NewPostForm({ open, handlePostReply, oldContent = '', qu
         }
     }, [open]);
 
+
     React.useEffect(() => {
-        setInputText(quote ? ">>".oldContent : oldContent);
-        setCharsLeft(maxChars - oldContent.length);
-        setPercent(oldContent.length);
+        setInputText(oldContent);
         return () => {
-            setInputText('')
+            setInputText('');
         }
     }, [oldContent]);
+
 
     const calcPercent = Math.floor(percent * 100 / maxChars);
 
     return (
         <div className='w-full bg-white dark:bg-black/20 dark:text-white rounded-md flex gap-2 p-2'>
-            <form onSubmit={handleSubmit} className='w-full flex flex-col gap-2'>
+            <form onSubmit={handleSubmit} method="get" className='w-full flex flex-col gap-2'>
                 <div className="validation flex gap-2">
 
                 </div>
                 <textarea
+                    ref={quotedRef}
                     value={inputText}
                     onChange={handleChange}
                     maxLength={maxChars}
@@ -69,8 +70,8 @@ export default function NewPostForm({ open, handlePostReply, oldContent = '', qu
                             <CircularProgressBar text={charsLeft} value={calcPercent} remain={charsLeft} color="text-blue-400" />
                         </div>
 
-                        <Button type='submit' variant="contained" disabled={!inputText} >
-                            {buttonText}
+                        <Button variant="contained" disabled={!inputText} type="submit">
+                            Post a Reply
                         </Button>
                     </div>
                 </div>
