@@ -55,9 +55,7 @@ export default function Thread({ threadId }) {
                 pending: 'Please wait',
                 success: {
                     render({ data }) {
-
                         fetchData();
-                        console.log('handlePostReply-data', data);
                         return 'Post posted'
                     },
                 },
@@ -93,7 +91,7 @@ export default function Thread({ threadId }) {
                     <Typography variant="subtitle1" className="px-4 py-2">
                         Post a new Reply
                     </Typography>
-                    <NewPostForm quotedRef={textAreaRef} handlePostReply={handlePostReply} />
+                    <NewPostForm open={loading} quotedRef={textAreaRef} handlePostReply={handlePostReply} />
                 </div>
             </div>
         </React.Fragment>
