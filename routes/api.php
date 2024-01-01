@@ -67,4 +67,7 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/forums', 'App\Http\Controllers\ForumsController@index')->name('forums.list');
     $router->post('/addLike', 'App\Http\Controllers\ForumsController@addLike')->name('forums.addLike');
     $router->post('/addDislike', 'App\Http\Controllers\ForumsController@addDislike')->name('forums.addDislike');
+    $router->get('/fetchCLubs', 'App\Http\Controllers\FightClubController@index')->name('fightClubs');
+    $router->post('/fetchCLubMembers', 'App\Http\Controllers\FightClubController@getClubPlayerList')->name('fetchCLubMembers');
 });
+// fetchCLubMembers

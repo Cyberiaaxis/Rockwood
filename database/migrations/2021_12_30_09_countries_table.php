@@ -16,8 +16,8 @@ class CountriesTable extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('avatar');
-            $table->longText('description');
+            $table->string('avatar')->nullable();
+            $table->longText('description')->nullable();
         });
     }
 

@@ -196,7 +196,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getUserForumRankName()
     {
-
         $forumRanks =  new ForumRank();
         return $forumRanks->where('id', $this->getUserStatsForumRankId())->value('rankName');
     }
@@ -208,5 +207,16 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getSaccessAttribute()
     {
+    }
+
+    public function getUserIdsByFightClubId(int $fightClubId)
+    {
+        $userStats =  new UserStats();
+        return $userStats->where('fight_club_id', $fightClubId)->get(['user_id']);
+    }
+
+    public function userStats()
+    {
+        return $this->hasOne(UserStats::class);
     }
 }

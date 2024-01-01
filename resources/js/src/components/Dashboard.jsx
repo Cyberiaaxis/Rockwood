@@ -21,6 +21,7 @@ import Event from "./Event";
 import Forums from "./Forums";
 import Mail from "./mail/Mailbox";
 import Thread from "./Thread";
+import FightClubs from "./FightClubs";
 // import Chat from "./Chat";
 
 
@@ -51,7 +52,8 @@ export default function Dashboard() {
             travel: <Travel />,
             mail: <Mail />,
             forums: <Forums />,
-            thread: <Thread threadId={threadId} />
+            thread: <Thread threadId={threadId} />,
+            fightclub: <FightClubs />
         };
 
         return pages[page] || pages.home;

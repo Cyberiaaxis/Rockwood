@@ -16,8 +16,8 @@ class AreasTable extends Migration
         Schema::create('areas', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('avatar');
-            $table->longText('description');
+            $table->string('avatar')->nullable();
+            $table->longText('description')->nullable();
         });
     }
 

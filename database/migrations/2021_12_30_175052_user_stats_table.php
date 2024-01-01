@@ -29,6 +29,8 @@ class UserStatsTable extends Migration
             $table->integer('will');
             $table->integer('max_will');
             $table->integer('forum_rank_id');
+            $table->integer('fight_club_id');
+            $table->integer('area_id');
         });
     }
 

@@ -118,7 +118,7 @@ export default function Header({ setPage }) {
               </Button>
               <StyledMenu anchorEl={anchorEl && anchorEl["three-menu"]} id="three-menu" open={Boolean(anchorEl && anchorEl["three-menu"])} onClose={handleClose} onClick={handleClose}>
                 <MenuItem>
-                  <ListItemText>fight Clubs</ListItemText>
+                  <ListItemText onClick={() => setPage("fightclub")}>fight Clubs</ListItemText>
                 </MenuItem>
                 <MenuItem>
                   <ListItemText onClick={() => setPage("crimes")}>Crimes</ListItemText>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserStats;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -39,6 +40,9 @@ class RegistrationController extends Controller
         ]);
 
         $user->save();
+
+        $userStats = new UserStats();
+        $userStats->addUserStats($user->id);
 
         return response()->json([
             'status' => true,

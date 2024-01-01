@@ -16,8 +16,8 @@ class CreateCitiesTable extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('avatar');
-            $table->longText('description');
+            $table->string('avatar')->nullable();
+            $table->longText('description')->nullable();
         });
     }
 
@@ -29,6 +29,5 @@ class CreateCitiesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('cities');
-
     }
 }

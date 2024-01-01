@@ -17,7 +17,7 @@ class UserStats extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'strength', 'defense', 'agility', 'endurance',  'hp', 'max_hp', 'energy', 'max_energy', 'max_nerve', 'will', 'max_will'
+        'user_id', 'strength', 'defense', 'agility', 'endurance',  'hp', 'max_hp', 'energy', 'max_energy', 'nerve', 'forum_rank_id', 'max_nerve', 'will', 'max_will', 'area_id', 'fight_club_id'
     ];
 
     /**
@@ -43,6 +43,8 @@ class UserStats extends Model
             'will' => 100,
             'max_will' => 100,
             'forum_rank_id' => 1,
+            'area_id' => 1,
+            'fight_club_id' => 0,
         ]);
     }
 
@@ -236,5 +238,29 @@ class UserStats extends Model
     public function incermentStats(int $userId, $field, $totalgain, $newenergy, $will)
     {
         return $this->where(['user_id' => $userId])->increment($field, $totalgain, ['energy' => $newenergy, 'will' => $will]);
+    }
+
+    /**
+     * get endurance of user.
+     * @param  int $userId
+     * @return boolean
+     */
+    public function getFightClubID(int $userId): int
+    {
+        return $this->where('user_id', $userId)->value('fight_club_id');
+    }
+
+    /**
+     * get endurance of user.
+     * @param  int $userId
+     * @return boolean
+     */
+    public function updateFightClubID(int $userId, int $fightClubId): int
+    {
+        return $this->where('user_id', $userId)->update(['fight_club_id' => $fightClubId]);
+    }
+    public function fightClub()
+    {
+        return $this->belongsTo(FightClub::class);
     }
 }

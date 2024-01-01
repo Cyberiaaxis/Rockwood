@@ -3,6 +3,10 @@
 namespace Database\Seeders;
 
 use App\Http\Controllers\ForumsController;
+use App\Models\Area;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\FightClub;
 use App\Models\Forum;
 use App\Models\ForumRank;
 use App\Models\Role;
@@ -33,12 +37,75 @@ class DatabaseSeeder extends Seeder
         $user = new User();
         $userStored = $user->create($data);
 
+
         $role = new Role();
         $roleStored = $role->create(['name' => 'SuperAdministrator']);
         $userStored->assignRole($roleStored);
 
         $userStats = new UserStats();
         $userStats->addUserStats($userStored->id);
+
+        $countryData = [
+            [
+                'name' => 'Demo Country 1',
+                'avatar' => null,
+                'description' => null,
+            ],
+            [
+                'name' => 'Demo Country 2',
+                'avatar' => null,
+                'description' => null,
+            ],
+            [
+                'name' => 'Demo Country 3',
+                'avatar' => null,
+                'description' => null,
+
+            ]
+        ];
+        $country = new Country();
+        $country->insert($countryData);
+
+        $cityData = [
+            [
+                'name' => 'Demo City 1',
+                'avatar' => null,
+                'description' => null,
+            ],
+            [
+                'name' => 'Demo City 2',
+                'avatar' => null,
+                'description' => null,
+            ],
+            [
+                'name' => 'Demo City 3',
+                'avatar' => null,
+                'description' => null,
+            ]
+        ];
+        $city = new City();
+        $city->insert($cityData);
+
+        $areaData = [
+            [
+                'name' => 'Demo Area 1',
+                'avatar' => null,
+                'description' => null,
+            ],
+            [
+                'name' => 'Demo Area 2',
+                'avatar' => null,
+                'description' => null,
+            ],
+            [
+                'name' => 'Demo Area 3',
+                'avatar' => null,
+                'description' => null,
+
+            ]
+        ];
+        $area = new Area();
+        $area->insert($areaData);
 
         $forums = new Forum();
         $forums->insert([
@@ -82,5 +149,28 @@ class DatabaseSeeder extends Seeder
         ];
         $forumRank = new ForumRank();
         $forumRank->create($forumRankData);
+
+        $fightClubData = [
+            [
+                'clubName' => 'Local Fighting Club',
+                'bgimage' => null,
+                'icon' => null,
+                'area_id' => 1
+            ],
+            [
+                'clubName' => 'Indian Fighting Club',
+                'bgimage' => null,
+                'icon' => null,
+                'area_id' => 1
+            ],
+            [
+                'clubName' => 'Paki Fighting Club',
+                'bgimage' => null,
+                'icon' => null,
+                'area_id' => 1
+            ]
+        ];
+        $fightClub = new FightClub();
+        $fightClub->insert($fightClubData);
     }
 }
