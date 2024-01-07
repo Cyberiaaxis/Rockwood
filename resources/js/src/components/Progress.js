@@ -2,10 +2,11 @@ import React from 'react'
 import { Box } from '@mui/material'
 import "../styles/ProgressBar.css";
 
-export default function Progress({ label = '', progress = 100 }) {
+export default function Progress({ label = '', percentComplete = 100 }) {
     return (
         <Box sx={{
             display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
             gap: '0.5rem'
         }}>
@@ -16,8 +17,8 @@ export default function Progress({ label = '', progress = 100 }) {
                 <Box
                     className="fill"
                     style={{
-                        width: `${progress}%`,
-                        borderRadius: `${progress === 100 ? "2px" : "2px 0 0 2px"}`,
+                        width: `${percentComplete}%`,
+                        borderRadius: `${percentComplete === 100 ? "2px" : "2px 0 0 2px"}`,
                     }}
                 />
             </Box>

@@ -15,6 +15,7 @@ import { DialogTitle } from "@mui/material";
 import { useElementSize } from "./useElementSize";
 import axios, { isCancel, AxiosError } from "axios";
 import gameServerApi from "../libraries/gameServerApi";
+import Attack from "./Attack";
 
 // import firstImage from "../images/maps/1.jpg";
 
@@ -248,20 +249,7 @@ export default function FightClubs() {
                             </IconButton>
                         </DialogTitle>
                         <DialogContent>
-                            <IconButton
-                                onClick={handleClose}
-                                sx={{
-                                    m: 0,
-                                    p: 0,
-                                    pt: 1,
-                                    left: "",
-                                }}
-                                aria-label="Do"
-                            >
-                                <Box>
-                                    {"Attack is goingon "}
-                                </Box>
-                            </IconButton>
+                            <Attack />
                         </DialogContent>
                     </React.Fragment>
                 ) : ""

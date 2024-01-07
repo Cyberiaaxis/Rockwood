@@ -43,6 +43,7 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import RestoreIcon from "@mui/icons-material/Restore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import Progress from "./Progress";
 
 function Attack(props) {
     const [shake, setShake] = React.useState(false);
@@ -245,24 +246,15 @@ function Attack(props) {
             <UserAvatar left="1rem">
                 <Avatar alt="WoodenBat" src="/static/images/avatar/1.jpg" />
                 <Grid container direction="column">
-                    <progress id="progress1" max="100" value="70">
-                        60%
-                    </progress>
-                    <progress id="progress1" max="100" value="70">
-                        60%
-                    </progress>
+                    <Progress label="Energy" percentComplete={70} />
+                    <Progress label="HP" percentComplete={30} />
                 </Grid>
             </UserAvatar>
 
             <UserAvatar right="1rem">
                 <Avatar alt="WoodenBat" src="/static/images/avatar/1.jpg" />
                 <Grid container direction="column">
-                    <progress id="progress1" max="100" value="70">
-                        60%
-                    </progress>
-                    <progress id="progress1" max="100" value="70">
-                        60%
-                    </progress>
+                    <Progress label="HP" percentComplete={30} />
                 </Grid>
             </UserAvatar>
             {/* {fire && (

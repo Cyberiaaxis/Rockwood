@@ -1,5 +1,5 @@
 .bar {
-    background: hsl(0, 2%, 78%);
+    background: hsl(0, 1%, 35%);
     height: 7px;
     width: 200px;
     border-radius: 10px;
@@ -11,7 +11,7 @@
     height: 100%;
     max-width: 100%;
     transform: scale(1);
-    /* animation: shilom 2s infinite; */
+    animation: shilom 2s infinite;
 }
 
 
