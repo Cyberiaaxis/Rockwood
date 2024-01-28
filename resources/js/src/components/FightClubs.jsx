@@ -233,8 +233,8 @@ export default function FightClubs() {
                     </React.Fragment>
                 ) : open.openAttack ? (
                     <React.Fragment>
-                        <DialogTitle>
-                            {"Attack"}
+                        {/* <DialogTitle>
+
                             <IconButton
                                 aria-label="close"
                                 onClick={handleClose}
@@ -247,7 +247,7 @@ export default function FightClubs() {
                             >
                                 <CloseIcon />
                             </IconButton>
-                        </DialogTitle>
+                        </DialogTitle> */}
                         <DialogContent>
                             <Attack />
                         </DialogContent>

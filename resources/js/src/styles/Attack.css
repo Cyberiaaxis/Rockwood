@@ -12,15 +12,19 @@
     0% {
         transform: "translate(1px, 1px) rotate(0deg)";
     }
+
     10% {
         transform: "translate(-1px, -2px) rotate(-1deg)";
     }
+
     20% {
         transform: "translate(-3px, 0px) rotate(1deg)";
     }
+
     30% {
         transform: "translate(3px, 2px) rotate(0deg)";
     }
+
     /* /* // '40%': { transform: 'translate(1px, -1px) rotate(1deg)' },
     // '50%': { transform: 'translate(-1px, 2px) rotate(-1deg)' },
     // '60%': { transform: 'translate(-3px, 1px) rotate(0deg)' },
@@ -29,9 +33,11 @@
     // '90%': { transform: 'translate(1px, 2px) rotate(0deg)' },
     // '100%': { transform: 'translate(1px, -2px) rotate(-1deg)' }  ^/ */
 }
+
 .fire {
     animation: "$shake 5s";
 }
+
 /*
 .topbar {
     flex-grow: 1,
@@ -55,19 +61,21 @@
     box-shadow: "2px 3px 100px #8A0303, 0 0 200px inset white" "0 0 250px inset #8A0303";
     animation: "$pulse 5s infinite";
 }
+
 cloudCircle {
     width: "100px";
     height: "180px";
     background: "#8a0303";
     border-radius: "50%";
-    filter:  url("../images/blood.svg");
+    filter: url("../images/blood.svg");
     animation: "$pulse2 5s infinite";
 }
+
 .weapon {
-    position: relative;
+    /* position: relative;
     display: block;
     height: 10rem;
-    width: 10rem;
+    width: 10rem; */
     background-image: url("../images/gunaim.svg");
     background-size: contain;
 }
@@ -95,6 +103,7 @@ cloudCircle {
 .blood.blood2 {
     background-image: url("../images/blood3.svg");
 }
+
 /*
 .primaryHitButton {   
     height: "100%";
@@ -125,15 +134,45 @@ cloudCircle {
 
 */
 @keyframes pulse {
-    0% { box-shadow: "inset 2px 3px 300px #8A0303, 0 0 200px  #8A0303" };
-    50% { box-shadow: "inset 2px 3px 300px #8A0303, 0 0 200px  #8A0303" };
-    100% { box-shadow: "0 0 0 inset transparent" };
-};
+    0% {
+        box-shadow: "inset 2px 3px 300px #8A0303, 0 0 200px  #8A0303"
+    }
+
+    ;
+
+    50% {
+        box-shadow: "inset 2px 3px 300px #8A0303, 0 0 200px  #8A0303"
+    }
+
+    ;
+
+    100% {
+        box-shadow: "0 0 0 inset transparent"
+    }
+
+    ;
+}
+
+;
 
 @keyframes pulse2 {
-    0% { background: "#8a0303" };
-    50% { background: "#d1001c" };
-    100% { background: "transparent" };
+    0% {
+        background: "#8a0303"
+    }
+
+    ;
+
+    50% {
+        background: "#d1001c"
+    }
+
+    ;
+
+    100% {
+        background: "transparent"
+    }
+
+    ;
 }
 
 

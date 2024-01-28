@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import clsx from "clsx";
 import {
@@ -20,15 +20,17 @@ import {
     InputLabel,
     Paper,
     Slider,
-    TextField,
+    Tooltip,
+    Menu,
     List,
     ListItem,
     ListItemIcon,
-    ListItemText,
-    Fab,
+    RadioGroup,
+    Radio,
     SliderRoot,
     styled,
-    ListSubheader,
+    FormControlLabel,
+    FormLabel,
     Input,
     InputBase,
     IconButton,
@@ -43,56 +45,36 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import RestoreIcon from "@mui/icons-material/Restore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import PersonAdd from "@mui/icons-material/PersonAdd";
+import AlarmIcon from '@mui/icons-material/Alarm';
+import Settings from "@mui/icons-material/Settings";
+import Logout from "@mui/icons-material/Logout";
 import Progress from "./Progress";
 
 function Attack(props) {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const [pointPosition, setPointPosition] = useState({ x: 0, y: 0 });
+    const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
     const [shake, setShake] = React.useState(false);
     const [fire, setFire] = React.useState(false);
     const [option, setOption] = React.useState(0);
-    const [state, setState] = React.useState({
-        checkedA: true,
-        checkedB: true,
-    });
 
-    const [weapon, setWeapon] = React.useState({
-        primaryWeapon: 0,
-        secondaryWeapon: 0,
-        armor: 0
-    });
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [open, setOpen] = React.useState(false);
     const [placement, setPlacement] = React.useState();
 
     const [blood, setBlood] = React.useState(null);
 
-    const menuref = React.useRef(null);
 
-    const Video = styled("video")(({ theme }) => ({
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        display: "block",
-        width: "100%",
-    }));
-    // console.log(weapon);
-    // function Gunfire() {
-    //     console.log(gunfire);
-    //     return (
-    //         <Video controls autoPlay width="100%" height="100%">
-    //             <source src={gunfire} type="video/mov"></source>
-    //         </Video>
-    //     );
-    // }
 
     const animate = () => {
         // Button begins to shake
         setShake(true);
         setFire(true);
-
         let randomNumber = Math.floor(Math.random() * 3);
-
         let splashesUsed = [];
         if (splashesUsed.length == 3) {
             splashesUsed.shift();
@@ -103,16 +85,11 @@ function Attack(props) {
         }
 
         splashesUsed.push(randomNumber);
-
         setBlood(randomNumber);
-
         setTimeout(() => {
             setBlood(null);
             setFire(false);
         }, 1500);
-
-        // console.log(splashesUsed);
-
         // Buttons tops to shake after 2 seconds
         setTimeout(() => {
             setShake(false);
@@ -123,22 +100,6 @@ function Attack(props) {
         setOption(newValue);
     };
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setWeapon(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-        // console.log("name", name);
-        // console.log("value", value);
-    };
-
-    const handleOpen = (newPlacement) => (event) => {
-        setAnchorEl(event.currentTarget);
-        setOpen((prev) => placement !== newPlacement || !prev);
-        setPlacement(newPlacement);
-    };
-
     const handleClose = (event) => {
         // console.log(event);
         event.preventDefault();
@@ -146,8 +107,6 @@ function Attack(props) {
         setOpen(null);
         setPlacement(null);
     };
-
-    const colorChange = (event) => { };
 
     const UserAvatar = styled("div")(({ theme, left, right }) => ({
         position: "absolute",
@@ -158,24 +117,6 @@ function Attack(props) {
         left: left || "auto",
         right: right || "auto",
     }));
-
-    const AtkOptions = styled("div")(({ theme, left, right }) => ({
-        position: "absolute",
-        top: "30%",
-        bottom: "30%",
-        left: left || "auto",
-        right: right || "auto",
-    }));
-
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: "center",
-        color: theme.palette.text.secondary,
-    }));
-
-    const iOSBoxShadow = "0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)";
 
     const marks = [
         {
@@ -192,204 +133,231 @@ function Attack(props) {
         },
     ];
 
-    const IOSSlider = styled(Slider)(({ theme }) => ({
-        color: theme.palette.mode === "dark" ? "#3880ff" : "#3880ff",
-        height: 2,
-        padding: "15px 0",
-        "& .MuiSlider-thumb": {
-            height: 28,
-            width: 28,
-            backgroundColor: "#fff",
-            boxShadow: iOSBoxShadow,
-            "&:focus, &:hover, &.Mui-active": {
-                boxShadow: "0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)",
-                // Reset on touch devices, it doesn't add specificity
-                "@media (hover: none)": {
-                    boxShadow: iOSBoxShadow,
-                },
-            },
-        },
-        "& .MuiSlider-valueLabel": {
-            fontSize: 12,
-            fontWeight: "normal",
-            top: -6,
-            backgroundColor: "unset",
-            color: theme.palette.text.primary,
-            "&:before": {
-                display: "none",
-            },
-            "& *": {
-                background: "transparent",
-                color: theme.palette.mode === "dark" ? "#fff" : "#000",
-            },
-        },
-        "& .MuiSlider-track": {
-            border: "none",
-        },
-        "& .MuiSlider-rail": {
-            opacity: 0.5,
-            backgroundColor: "#bfbfbf",
-        },
-        "& .MuiSlider-mark": {
-            backgroundColor: "#bfbfbf",
-            height: 8,
-            width: 1,
-            "&.MuiSlider-markActive": {
-                opacity: 1,
-                backgroundColor: "currentColor",
-            },
-        },
-    }));
+
+
+    const followRef = useRef(null);
+    let moving = false;
+
+    function move(e) {
+        if (followRef.current) {
+            var newX = e.clientX - 70;
+            var newY = e.clientY - 70;
+            followRef.current.style.left = newX + "px";
+            followRef.current.style.top = newY + "px";
+        }
+    }
+
+    function initialClick(e) {
+        console.log('clicked');
+        if (moving) {
+            document.removeEventListener("mousemove", move);
+            moving = !moving;
+            return;
+        }
+
+        moving = !moving;
+        document.addEventListener("mousemove", move, false);
+
+    }
+
+    React.useEffect(() => {
+        // Update the image position whenever the point position changes
+        setImagePosition(pointPosition);
+    }, [pointPosition]);
+
+    const AttckerLeft = '1rem';
+    const AttckerRight = '';
+
+    const OpponentLeft = '';
+    const OpponentRight = '1rem';
 
     return (
-        <Box className={clsx("attack", "main", "shake" && "fire")} position="relative">
-            <UserAvatar left="1rem">
-                <Avatar alt="WoodenBat" src="/static/images/avatar/1.jpg" />
-                <Grid container direction="column">
-                    <Progress label="Energy" percentComplete={70} />
-                    <Progress label="HP" percentComplete={30} />
-                </Grid>
-            </UserAvatar>
+        <Box position="relative">
+            <Box position="relative" sx={{
+                border: '1px solid #000',
+                width: '100%',
+                height: 'calc(95vh - 5rem)',
+                overflow: 'hidden'
+            }}>
 
-            <UserAvatar right="1rem">
-                <Avatar alt="WoodenBat" src="/static/images/avatar/1.jpg" />
-                <Grid container direction="column">
-                    <Progress label="HP" percentComplete={30} />
-                </Grid>
-            </UserAvatar>
-            {/* {fire && (
+                <UserAvatar left="1rem">
+                    <Avatar alt="WoodenBat" src="/static/images/avatar/1.jpg" />
+                    <Grid container direction="column">
+                        <Progress label="Energy" percentComplete={70} />
+                        <Progress label="HP" percentComplete={30} />
+                    </Grid>
+                </UserAvatar>
+
+                <UserAvatar right="1rem">
+                    <Avatar alt="WoodenBat" src="/static/images/avatar/1.jpg" />
+                    <Grid container direction="column">
+                        <Progress label="HP" percentComplete={30} />
+                    </Grid>
+                </UserAvatar>
+                {/* {fire && (
                 <Box>
                      <Gunfire/>
                 </Box>
             )} */}
+                <Box sx={{ width: "50%" }}>
+                    <Box className={`blood blood${blood}`}></Box>
 
-            <Box className={`blood blood${blood}`}></Box>
+                    <Box sx={{
+                        backgroundColor: 'red',
+                        position: "absolute",
+                        width: "70px",
+                        height: "70px",
+                        top: "30%",
+                        bottom: "30%",
+                        left: AttckerLeft ? AttckerLeft : "auto",
+                        right: AttckerRight ? AttckerRight : "auto",
+                        backgroundImage: `url("../images/gunaim.svg")`,
+                        backgroundSize: 'contain',
+                    }}
+                        ref={followRef}
+                        onClick={initialClick}
+                    ></Box>
+                </Box>
+                <Box sx={{ width: "50%" }}>
+                    <Box className={`blood blood${blood}`}></Box>
 
-            <AtkOptions left="1rem" className="weapon" />
+                    <Box sx={{
+                        backgroundColor: 'red',
+                        position: "absolute",
+                        width: "70px",
+                        height: "70px",
+                        top: "30%",
+                        bottom: "30%",
+                        left: OpponentLeft ? OpponentLeft : "auto",
+                        right: OpponentRight ? OpponentRight : "auto",
+                    }}
 
-            {/* <AtkOptions right="1rem">
+                    ></Box>
+                </Box>
 
-            </AtkOptions> */}
-
-            <Box className="action">
-                <Box padding={1}>
-                    <BottomNavigation showLabels value={option} onChange={manageOption}>
-                        <BottomNavigationAction label="Settlement" icon={<RestoreIcon />} />
-                        <BottomNavigationAction label="Run Away" icon={<FavoriteIcon />} />
-                        <BottomNavigationAction label="Surrender" icon={<LocationOnIcon />} />
-                    </BottomNavigation>
+                {/*** Weapon Selection */}
+                <Box className="action">
+                    <Box padding={1}>
+                        <BottomNavigation showLabels value={option} onChange={manageOption}>
+                            <BottomNavigationAction label="Settlement" icon={<RestoreIcon />} />
+                            <BottomNavigationAction label="Run Away" icon={<FavoriteIcon />} />
+                            <BottomNavigationAction label="Surrender" icon={<LocationOnIcon />} />
+                        </BottomNavigation>
+                    </Box>
                 </Box>
             </Box>
 
             <Grid container className="bottom-menu">
                 <Grid item xs className="">
-                    <Box
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
-                            padding: "0.5rem",
-                        }}
-                    >
-                        <FormControl variant="standard" fullWidth>
-                            <InputLabel id="demo-simple-select-filled-label">Primary Weapon</InputLabel>
-                            <Select placeholder="Primary Weapon" fullWidth labelId="demo-simple-select-filled-label" id="demo-simple-select-filled" name={"primaryWeapon"} value={weapon.primaryWeapon} onChange={handleChange} displayEmpty={true} autoWidth={true}>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={60}>
-                                    pm1
+                    <FormControl>
+                        <FormLabel id="demo-row-radio-buttons-group-label">Priority</FormLabel>
+                        <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
+                            <Box>
+                                <Tooltip title="Account settings">
+                                    <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }} aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
+                                        <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                                    </IconButton>
+                                </Tooltip>
+                                <FormControlLabel value="primary" control={<Radio />} label="Primary" />
+                            </Box>
+                            <Box>
+                                <Tooltip title="Account settings">
+                                    <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }} aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
+                                        <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                                    </IconButton>
+                                </Tooltip>
+                                <FormControlLabel value="secondary" control={<Radio />} label="Secondary" />
+                            </Box>
+                            <Box>
+                                <Tooltip title="Account settings">
+                                    <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }} aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
+                                        <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                                    </IconButton>
+                                </Tooltip>
+                                <FormControlLabel value="armor" control={<Radio />} label="Armor" />
+                            </Box>
+                            <IconButton color="secondary" aria-label="add an alarm">
+                                <AlarmIcon />
+                            </IconButton>
+                            <Menu
+                                anchorEl={anchorEl}
+                                id="account-menu"
+                                open={open}
+                                onClose={handleClose}
+                                onClick={handleClose}
+                                PaperProps={{
+                                    elevation: 0,
+                                    sx: {
+                                        overflow: 'visible',
+                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                        mt: 1.5,
+                                        '& .MuiAvatar-root': {
+                                            width: 32,
+                                            height: 32,
+                                            ml: -0.5,
+                                            mr: 1,
+                                        },
+                                        '&::before': {
+                                            content: '""',
+                                            display: 'block',
+                                            position: 'absolute',
+                                            top: 0,
+                                            right: 14,
+                                            width: 10,
+                                            height: 10,
+                                            bgcolor: 'background.paper',
+                                            transform: 'translateY(-50%) rotate(45deg)',
+                                            zIndex: 0,
+                                        },
+                                    },
+                                }}
+                                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                            >
+                                <MenuItem onClick={handleClose}>
+                                    <Avatar /> Profile
                                 </MenuItem>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={70}>
-                                    pm2
+                                <MenuItem onClick={handleClose}>
+                                    <Avatar /> My account
                                 </MenuItem>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={80}>
-                                    pm3
+                                <Divider />
+                                <MenuItem onClick={handleClose}>
+                                    <ListItemIcon>
+                                        <PersonAdd fontSize="small" />
+                                    </ListItemIcon>
+                                    Add another account
                                 </MenuItem>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={90}>
-                                    pm4
+                                <MenuItem onClick={handleClose}>
+                                    <ListItemIcon>
+                                        <Settings fontSize="small" />
+                                    </ListItemIcon>
+                                    Settings
                                 </MenuItem>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={100}>
-                                    pm5
+                                <MenuItem onClick={handleClose}>
+                                    <ListItemIcon>
+                                        <Logout fontSize="small" />
+                                    </ListItemIcon>
+                                    Logout
                                 </MenuItem>
-                            </Select>
-                        </FormControl>
-                        <Button sx={{ flexShrink: 0 }} variant="contained" color="primary" onClick={animate}>
-                            Hit Him
-                        </Button>
-                    </Box>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
-                            padding: "0.5rem",
-                        }}
-                    >
-                        <FormControl variant="standard" fullWidth>
-                            <InputLabel id="demo-simple-select-filled-label">Secondary Weapon</InputLabel>
-                            <Select fullWidth labelId="demo-simple-select-filled-label" id="demo-simple-select-filled" name={"secondaryWeapon"} value={weapon.secondaryWeapon} onChange={handleChange} displayEmpty={true} autoWidth={true}>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={60}>
-                                    sw1
-                                </MenuItem>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={70}>
-                                    sw2
-                                </MenuItem>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={80}>
-                                    sw3
-                                </MenuItem>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={90}>
-                                    sw4
-                                </MenuItem>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={100}>
-                                    sw5
-                                </MenuItem>
-                            </Select>
-                        </FormControl>
-                        <Button sx={{ flexShrink: 0 }} variant="contained" color="primary" onClick={animate}>
-                            Hit Him
-                        </Button>
-                    </Box>
-
-                    <Box
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
-                            padding: "0.5rem",
-                        }}
-                    >
-                        <FormControl variant="standard" fullWidth>
-                            <InputLabel id="demo-simple-select-filled-label">Armor</InputLabel>
-                            <Select fullWidth labelId="demo-simple-select-filled-label" id="demo-simple-select-filled" name={"armor"} value={weapon.armor} onChange={handleChange} displayEmpty={true} autoWidth={true}>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={60}>
-                                    ar1
-                                </MenuItem>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={70}>
-                                    ar2
-                                </MenuItem>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={80}>
-                                    ar3
-                                </MenuItem>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={90}>
-                                    ar4
-                                </MenuItem>
-                                <MenuItem ref={menuref} onMouseEnter={handleOpen("right-start")} onMouseLeave={handleClose} value={100}>
-                                    ar5
-                                </MenuItem>
-                            </Select>
-                        </FormControl>
-                        <Button sx={{ flexShrink: 0 }} variant="contained" color="primary" onClick={animate}>
-                            Hit Him
-                        </Button>
-                    </Box>
+                            </Menu>
+                        </RadioGroup>
+                    </FormControl>
                 </Grid>
                 <Grid item xs className="stats">
-                    <Box sx={{ paddingTop: 6 }}>
-                        <IOSSlider aria-label="ios slider" defaultValue={60} marks={marks} valueLabelDisplay="on" />
-                        <IOSSlider aria-label="ios slider" defaultValue={60} marks={marks} valueLabelDisplay="on" />
-                        <IOSSlider aria-label="ios slider" defaultValue={60} marks={marks} valueLabelDisplay="on" />
+                    <Box sx={{ padding: 1, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Box sx={{ padding: 1, flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <Typography>Damage Efficiency</Typography>
+                            <Slider aria-label="ios slider" defaultValue={60} marks={marks} valueLabelDisplay="on" />
+                        </Box>
+                        <Box sx={{ padding: 1, flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <Typography >Damage Efficiency</Typography>
+                            <Slider aria-label="ios slider" defaultValue={60} marks={marks} valueLabelDisplay="on" />
+                        </Box>
+                        <Box sx={{ padding: 1, flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <Typography >Damage Efficiency</Typography>
+                            <Slider aria-label="ios slider" defaultValue={60} marks={marks} valueLabelDisplay="on" />
+                        </Box>
                     </Box>
-                </Grid>
-                <Grid item xs className="chat">
-                    <Item>xs</Item>
                 </Grid>
             </Grid>
         </Box>

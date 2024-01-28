@@ -64,7 +64,6 @@ const Inventory = () => {
                     disabled={leftDisabled}
                     onClick={handleLeftClick}
                 >
-                    {" "}
                     left
                 </button>
                 <div id="container" ref={myRef}>
