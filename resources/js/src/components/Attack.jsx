@@ -52,8 +52,8 @@ import Logout from "@mui/icons-material/Logout";
 import Progress from "./Progress";
 
 
-const BOX_WIDTH = 200;
-const BOX_HEIGHT = 200;
+const BOX_WIDTH = 70;
+const BOX_HEIGHT = 70;
 
 function Attack(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -162,31 +162,33 @@ function Attack(props) {
     let moving = false;
 
     function move(e) {
-        if (followRef.current) {
-            var newX = e.clientX - BOX_WIDTH / 2;
-            var newY = e.clientY - BOX_HEIGHT / 2;
-            followRef.current.style.left = newX + "px";
-            followRef.current.style.top = newY + "px";
+        const crosshairElement = followRef.current
+        if (crosshairElement) {
+            const container = crosshairElement.parentElement;
+
+            var newX = e.clientX - container.offsetLeft - BOX_WIDTH / 2;
+            var newY = e.clientY - container.offsetTop - BOX_HEIGHT / 2;
+            crosshairElement.style.left = newX + "px";
+            crosshairElement.style.top = newY + "px";
 
         }
-        console.log("oldvalue", "e.clientX", e.clientX, "e.clientY ", e.clientY, "BOX_WIDTH", BOX_WIDTH, "BOX_HEIGHT", BOX_HEIGHT, "newvalues", "newX", newX, "newY", newY,);
     }
 
-    function initialClick(e) {
-        console.log('clicked');
-        console.log('moving', moving);
+    function onCrosshairContainerMouseMove(e) {
+        console.log('mouse move detected', e)
         if (moving) {
-            document.removeEventListener("mousemove", move);
+            move(e)
+        }
+    }
+    function initialClick(e) {
+
+        if (moving) {
             moving = !moving;
             return;
         }
 
         moving = !moving;
-        document.addEventListener("mousemove", move, false);
-
     }
-
-
 
     React.useEffect(() => {
         // Update the image position whenever the point position changes
@@ -201,7 +203,7 @@ function Attack(props) {
     const defaultValue = "primary";
 
     return (
-        <Grid container spacing={2} style={{ height: '100vh' }} >
+        <Grid container spacing={2} style={{ height: '100vh', overflow: 'hidden' }} >
             {/* First Row */}
             <Grid item xs={4} style={{ height: '10vh' }}>
                 <UserAvatar left="1rem">
@@ -229,7 +231,7 @@ function Attack(props) {
             </Grid>
 
             {/* Second Row */}
-            <Grid item xs={6} style={{ position: 'relative', overflow: 'hidden', width: '50%', height: '60vh' }}>
+            <Grid item xs={6} onMouseMove={onCrosshairContainerMouseMove} style={{ position: 'relative', overflow: 'hidden', width: '50%', height: '60vh' }}>
                 {bloodFlash ? <GunFire /> : ''}
                 <Box className={`blood blood${blood}`}></Box>
                 {!bloodFlash &&
