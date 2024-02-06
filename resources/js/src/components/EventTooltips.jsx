@@ -11,7 +11,7 @@ const TOOLTIP_DISAPPEAR_DELAY = 8000
 let idCounter = 1
 
 const HtmlTooltip = ({ sx, title }) => (
-    <div style={{ background: 'black', borderRadius: 20, color: 'white', fontSize: 12, padding: '5px 10px', borderRadius: 4, whiteSpace: 'nowrap' }}>
+    <div style={{ background: 'black', borderRadius: 20, color: 'white', fontSize: 12, padding: '5px 10px', whiteSpace: 'nowrap' }}>
         {title}
     </div>
 )

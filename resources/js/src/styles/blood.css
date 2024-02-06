@@ -1,0 +1,33 @@
+.flash {
+    border-color: rgb(30, 28, 28);
+}
+
+.flash:before,
+.flash:after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.flash:before {
+    background-size: cover;
+    background-position: center;
+    clip-path: circle(70%);
+    background-image: radial-gradient(circle, transparent 50%, #f00 80%), url("https://www.pikpng.com/pngl/b/87-877130_blood-screen-png-cod-blood-splatter-png-clipart.png");
+    animation: flashAnimation 3s linear infinite;
+    opacity: 0;
+}
+
+@keyframes flashAnimation {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

@@ -1,9 +1,10 @@
-import Box from "@mui/material/Box";
+import React from "react";
+import Box from '@mui/material/Box';
 
 
 export default function AnimatedScrollDiv({ className, items, style }) {
   return (
-    <>
+    <React.Fragment>
       <style>
         {`
         @keyframes verticalMarquee {
@@ -44,6 +45,6 @@ export default function AnimatedScrollDiv({ className, items, style }) {
           ))}
         </Box>
       </Box>
-    </>
+    </React.Fragment>
   );
 }

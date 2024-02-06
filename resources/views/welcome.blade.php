@@ -14,7 +14,8 @@
     <!-- React root DOM -->
     <div id="root"></div>
     <!-- React JS -->
-    <script src="{{ asset('js/index.js') }}" defer></script>
+    @viteReactRefresh
+    @vite('resources/js/index.jsx')
 </body>
 
 </html>

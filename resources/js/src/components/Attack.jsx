@@ -37,9 +37,9 @@ import {
 } from "@mui/material";
 
 import "../styles/Attack.css";
+import "../styles/blood.css";
 
-// import gunfire from "../images/gunfire.gif";
-// import gunfire from "../videos/gunfire.mov";
+
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import RestoreIcon from "@mui/icons-material/Restore";
@@ -51,6 +51,10 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import Progress from "./Progress";
 
+
+const BOX_WIDTH = 200;
+const BOX_HEIGHT = 200;
+
 function Attack(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -58,8 +62,10 @@ function Attack(props) {
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
+    const [gunPointer, setGunPointer] = useState({ x: 0, y: 0 });
     const [pointPosition, setPointPosition] = useState({ x: 0, y: 0 });
     const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
+    const [bloodFlash, setBloodFlash] = useState(false);
     const [shake, setShake] = React.useState(false);
     const [fire, setFire] = React.useState(false);
     const [option, setOption] = React.useState(0);
@@ -89,7 +95,7 @@ function Attack(props) {
         setTimeout(() => {
             setBlood(null);
             setFire(false);
-        }, 1500);
+        }, 1000);
         // Buttons tops to shake after 2 seconds
         setTimeout(() => {
             setShake(false);
@@ -97,9 +103,18 @@ function Attack(props) {
     };
 
     const manageOption = (event, newValue) => {
+        console.log('New Option Selected:', newValue);
         setOption(newValue);
     };
 
+    const handleAttackHit = (event) => {
+        setBloodFlash(true);
+        setTimeout(() => {
+            setBloodFlash(false);
+        }, 5000);
+        // animate();
+    };
+    console.log("bloodFlash", bloodFlash);
     const handleClose = (event) => {
         // console.log(event);
         event.preventDefault();
@@ -107,6 +122,14 @@ function Attack(props) {
         setOpen(null);
         setPlacement(null);
     };
+    const GunFire = () => {
+        return (
+            <video width="640" height="360" autoPlay>
+                <source src="../videos/gunfire.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+        );
+    }
 
     const UserAvatar = styled("div")(({ theme, left, right }) => ({
         position: "absolute",
@@ -140,15 +163,18 @@ function Attack(props) {
 
     function move(e) {
         if (followRef.current) {
-            var newX = e.clientX - 70;
-            var newY = e.clientY - 70;
+            var newX = e.clientX - BOX_WIDTH / 2;
+            var newY = e.clientY - BOX_HEIGHT / 2;
             followRef.current.style.left = newX + "px";
             followRef.current.style.top = newY + "px";
+
         }
+        console.log("oldvalue", "e.clientX", e.clientX, "e.clientY ", e.clientY, "BOX_WIDTH", BOX_WIDTH, "BOX_HEIGHT", BOX_HEIGHT, "newvalues", "newX", newX, "newY", newY,);
     }
 
     function initialClick(e) {
         console.log('clicked');
+        console.log('moving', moving);
         if (moving) {
             document.removeEventListener("mousemove", move);
             moving = !moving;
@@ -160,6 +186,8 @@ function Attack(props) {
 
     }
 
+
+
     React.useEffect(() => {
         // Update the image position whenever the point position changes
         setImagePosition(pointPosition);
@@ -170,16 +198,12 @@ function Attack(props) {
 
     const OpponentLeft = '';
     const OpponentRight = '1rem';
+    const defaultValue = "primary";
 
     return (
-        <Box position="relative">
-            <Box position="relative" sx={{
-                border: '1px solid #000',
-                width: '100%',
-                height: 'calc(95vh - 5rem)',
-                overflow: 'hidden'
-            }}>
-
+        <Grid container spacing={2} style={{ height: '100vh' }} >
+            {/* First Row */}
+            <Grid item xs={4} style={{ height: '10vh' }}>
                 <UserAvatar left="1rem">
                     <Avatar alt="WoodenBat" src="/static/images/avatar/1.jpg" />
                     <Grid container direction="column">
@@ -187,180 +211,181 @@ function Attack(props) {
                         <Progress label="HP" percentComplete={30} />
                     </Grid>
                 </UserAvatar>
-
+            </Grid>
+            <Grid item xs={4} style={{ height: '10vh', zIndex: 10 }}>
+                <BottomNavigation showLabels value={option} onChange={manageOption}>
+                    <BottomNavigationAction label="Settlement" icon={<RestoreIcon />} />
+                    <BottomNavigationAction label="Run Away" icon={<FavoriteIcon />} />
+                    <BottomNavigationAction label="Surrender" icon={<LocationOnIcon />} />
+                </BottomNavigation>
+            </Grid>
+            <Grid item xs={4} style={{ height: '10vh' }}>
                 <UserAvatar right="1rem">
                     <Avatar alt="WoodenBat" src="/static/images/avatar/1.jpg" />
                     <Grid container direction="column">
                         <Progress label="HP" percentComplete={30} />
                     </Grid>
                 </UserAvatar>
-                {/* {fire && (
-                <Box>
-                     <Gunfire/>
-                </Box>
-            )} */}
-                <Box sx={{ width: "50%" }}>
-                    <Box className={`blood blood${blood}`}></Box>
+            </Grid>
 
-                    <Box sx={{
-                        backgroundColor: 'red',
-                        position: "absolute",
-                        width: "70px",
-                        height: "70px",
-                        top: "30%",
-                        bottom: "30%",
-                        left: AttckerLeft ? AttckerLeft : "auto",
-                        right: AttckerRight ? AttckerRight : "auto",
-                        backgroundImage: `url("../images/gunaim.svg")`,
-                        backgroundSize: 'contain',
-                    }}
+            {/* Second Row */}
+            <Grid item xs={6} style={{ position: 'relative', overflow: 'hidden', width: '50%', height: '60vh' }}>
+                {bloodFlash ? <GunFire /> : ''}
+                <Box className={`blood blood${blood}`}></Box>
+                {!bloodFlash &&
+                    <Box
+                        sx={{
+                            backgroundColor: 'red',
+                            position: "absolute",
+                            width: BOX_WIDTH,
+                            height: BOX_HEIGHT,
+                            top: "30%",
+                            bottom: "30%",
+                            left: AttckerLeft ? AttckerLeft : "auto",
+                            right: AttckerRight ? AttckerRight : "auto",
+                            backgroundImage: `url("../images/gunaim.svg")`,
+                            backgroundSize: 'contain',
+                        }}
                         ref={followRef}
                         onClick={initialClick}
-                    ></Box>
-                </Box>
-                <Box sx={{ width: "50%" }}>
-                    <Box className={`blood blood${blood}`}></Box>
+                    ></Box>}
+            </Grid>
+            <Grid item xs={6} style={{ height: '60vh' }}>
+                <Box sx={{
+                    backgroundColor: 'red',
+                    position: "absolute",
+                    width: "70px",
+                    height: "70px",
+                    top: "30%",
+                    bottom: "30%",
+                    left: OpponentLeft ? OpponentLeft : "auto",
+                    right: OpponentRight ? OpponentRight : "auto",
+                }}
 
-                    <Box sx={{
-                        backgroundColor: 'red',
-                        position: "absolute",
-                        width: "70px",
-                        height: "70px",
-                        top: "30%",
-                        bottom: "30%",
-                        left: OpponentLeft ? OpponentLeft : "auto",
-                        right: OpponentRight ? OpponentRight : "auto",
-                    }}
+                ></Box>
 
-                    ></Box>
-                </Box>
+            </Grid>
 
-                {/*** Weapon Selection */}
-                <Box className="action">
-                    <Box padding={1}>
-                        <BottomNavigation showLabels value={option} onChange={manageOption}>
-                            <BottomNavigationAction label="Settlement" icon={<RestoreIcon />} />
-                            <BottomNavigationAction label="Run Away" icon={<FavoriteIcon />} />
-                            <BottomNavigationAction label="Surrender" icon={<LocationOnIcon />} />
-                        </BottomNavigation>
-                    </Box>
-                </Box>
-            </Box>
-
-            <Grid container className="bottom-menu">
-                <Grid item xs className="">
-                    <FormControl>
-                        <FormLabel id="demo-row-radio-buttons-group-label">Priority</FormLabel>
-                        <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-                            <Box>
-                                <Tooltip title="Account settings">
-                                    <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }} aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
-                                        <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-                                    </IconButton>
-                                </Tooltip>
-                                <FormControlLabel value="primary" control={<Radio />} label="Primary" />
-                            </Box>
-                            <Box>
-                                <Tooltip title="Account settings">
-                                    <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }} aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
-                                        <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-                                    </IconButton>
-                                </Tooltip>
-                                <FormControlLabel value="secondary" control={<Radio />} label="Secondary" />
-                            </Box>
-                            <Box>
-                                <Tooltip title="Account settings">
-                                    <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }} aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
-                                        <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-                                    </IconButton>
-                                </Tooltip>
-                                <FormControlLabel value="armor" control={<Radio />} label="Armor" />
-                            </Box>
-                            <IconButton color="secondary" aria-label="add an alarm">
+            {/* Third Row */}
+            <Grid item xs={6} style={{ height: '10vh' }}>
+                <FormControl>
+                    <FormLabel id="demo-row-radio-buttons-group-label">Priority</FormLabel>
+                    <RadioGroup
+                        row
+                        defaultValue={defaultValue}
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                    >
+                        <Box>
+                            <Tooltip title="Account settings">
+                                <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }} aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
+                                    <Avatar sx={{ width: 52, height: 32 }} variant="square">M</Avatar>
+                                </IconButton>
+                            </Tooltip>
+                            <FormControlLabel value="primary" control={<Radio />} label="Primary" />
+                        </Box>
+                        <Box>
+                            <Tooltip title="Account settings">
+                                <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }} aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
+                                    <Avatar sx={{ width: 52, height: 32 }} variant="square">M</Avatar>
+                                </IconButton>
+                            </Tooltip>
+                            <FormControlLabel value="secondary" control={<Radio />} label="Secondary" />
+                        </Box>
+                        <Box>
+                            <Tooltip title="Account settings">
+                                <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }} aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
+                                    <Avatar sx={{ width: 52, height: 32 }} variant="square">M</Avatar>
+                                </IconButton>
+                            </Tooltip>
+                            <FormControlLabel value="armor" control={<Radio />} label="Armor" />
+                        </Box>
+                        <Tooltip title="Attack">
+                            <IconButton onClick={handleAttackHit} disabled={bloodFlash} color="secondary" aria-label="add an alarm">
                                 <AlarmIcon />
                             </IconButton>
-                            <Menu
-                                anchorEl={anchorEl}
-                                id="account-menu"
-                                open={open}
-                                onClose={handleClose}
-                                onClick={handleClose}
-                                PaperProps={{
-                                    elevation: 0,
-                                    sx: {
-                                        overflow: 'visible',
-                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                        mt: 1.5,
-                                        '& .MuiAvatar-root': {
-                                            width: 32,
-                                            height: 32,
-                                            ml: -0.5,
-                                            mr: 1,
-                                        },
-                                        '&::before': {
-                                            content: '""',
-                                            display: 'block',
-                                            position: 'absolute',
-                                            top: 0,
-                                            right: 14,
-                                            width: 10,
-                                            height: 10,
-                                            bgcolor: 'background.paper',
-                                            transform: 'translateY(-50%) rotate(45deg)',
-                                            zIndex: 0,
-                                        },
+                        </Tooltip>
+                        <Menu
+                            anchorEl={anchorEl}
+                            id="account-menu"
+                            open={open}
+                            onClose={handleClose}
+                            onClick={handleClose}
+                            PaperProps={{
+                                elevation: 0,
+                                sx: {
+                                    overflow: 'visible',
+                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                    mt: 1.5,
+                                    '& .MuiAvatar-root': {
+                                        width: 32,
+                                        height: 32,
+                                        ml: -0.5,
+                                        mr: 1,
                                     },
-                                }}
-                                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                            >
-                                <MenuItem onClick={handleClose}>
-                                    <Avatar /> Profile
-                                </MenuItem>
-                                <MenuItem onClick={handleClose}>
-                                    <Avatar /> My account
-                                </MenuItem>
-                                <Divider />
-                                <MenuItem onClick={handleClose}>
-                                    <ListItemIcon>
-                                        <PersonAdd fontSize="small" />
-                                    </ListItemIcon>
-                                    Add another account
-                                </MenuItem>
-                                <MenuItem onClick={handleClose}>
-                                    <ListItemIcon>
-                                        <Settings fontSize="small" />
-                                    </ListItemIcon>
-                                    Settings
-                                </MenuItem>
-                                <MenuItem onClick={handleClose}>
-                                    <ListItemIcon>
-                                        <Logout fontSize="small" />
-                                    </ListItemIcon>
-                                    Logout
-                                </MenuItem>
-                            </Menu>
-                        </RadioGroup>
-                    </FormControl>
-                </Grid>
-                <Grid item xs className="stats">
-                    <Box sx={{ padding: 1, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Box sx={{ padding: 1, flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <Typography>Damage Efficiency</Typography>
-                            <Slider aria-label="ios slider" defaultValue={60} marks={marks} valueLabelDisplay="on" />
-                        </Box>
-                        <Box sx={{ padding: 1, flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <Typography >Damage Efficiency</Typography>
-                            <Slider aria-label="ios slider" defaultValue={60} marks={marks} valueLabelDisplay="on" />
-                        </Box>
-                        <Box sx={{ padding: 1, flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <Typography >Damage Efficiency</Typography>
-                            <Slider aria-label="ios slider" defaultValue={60} marks={marks} valueLabelDisplay="on" />
-                        </Box>
-                    </Box>
-                </Grid>
+                                    '&::before': {
+                                        content: '""',
+                                        display: 'block',
+                                        position: 'absolute',
+                                        top: 0,
+                                        right: 14,
+                                        width: 10,
+                                        height: 10,
+                                        bgcolor: 'background.paper',
+                                        transform: 'translateY(-50%) rotate(45deg)',
+                                        zIndex: 0,
+                                    },
+                                },
+                            }}
+                            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                        >
+                            <MenuItem onClick={handleClose}>
+                                <Avatar /> Profile
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <Avatar /> My account
+                            </MenuItem>
+                            <Divider />
+                            <MenuItem onClick={handleClose}>
+                                <ListItemIcon>
+                                    <PersonAdd fontSize="small" />
+                                </ListItemIcon>
+                                Add another account
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <ListItemIcon>
+                                    <Settings fontSize="small" />
+                                </ListItemIcon>
+                                Settings
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                                <ListItemIcon>
+                                    <Logout fontSize="small" />
+                                </ListItemIcon>
+                                Logout
+                            </MenuItem>
+                        </Menu>
+                    </RadioGroup>
+                </FormControl>
             </Grid>
-        </Box>
+            <Grid item xs={6} style={{ height: '10vh' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Box sx={{ paddingInline: 1, flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        <Typography>Damage Efficiency</Typography>
+                        <Slider sx={{ paddingTop: 0 }} aria-label="ios slider" defaultValue={60} marks={marks} valueLabelDisplay="on" />
+                    </Box>
+                    <Box sx={{ paddingInline: 1, flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        <Typography >Damage Efficiency</Typography>
+                        <Slider sx={{ paddingTop: 0 }} aria-label="ios slider" defaultValue={60} marks={marks} valueLabelDisplay="on" />
+                    </Box>
+                    <Box sx={{ paddingInline: 1, flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        <Typography >Damage Efficiency</Typography>
+                        <Slider sx={{ paddingTop: 0 }} aria-label="ios slider" defaultValue={60} marks={marks} valueLabelDisplay="on" />
+                    </Box>
+                </Box>
+            </Grid>
+        </Grid>
     );
 }
 
@@ -369,3 +394,23 @@ export default Attack;
 //shaking effect
 //blood effect
 //smoke effect of weapons like guns
+
+// function generateRandomNumber(splashesUsed) {
+//     let randomNumber = Math.floor(Math.random() * 3);
+
+//     // If the array has reached its size limit, create a new array without the oldest element
+//     let newSplashesUsed = splashesUsed.length === 3 ? splashesUsed.slice(1) : splashesUsed;
+
+//     // Check if the generated number is in the array
+//     if (newSplashesUsed.includes(randomNumber)) {
+//         // Call the function recursively with the current state of the array
+//         return generateRandomNumber(newSplashesUsed);
+//     }
+
+//     // Return a new array with the new number, maintaining immutability
+//     return [...newSplashesUsed, randomNumber];
+// }
+
+// // Initialize the splashesUsed array
+// let randomNumber = generateRandomNumber(let splashesUsed = []);
+// setBlood(randomNumber);
