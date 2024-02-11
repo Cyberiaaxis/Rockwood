@@ -186,7 +186,7 @@ export default function FightClubs() {
                         </Box>
                     ))}
             </Box>
-            <Dialog fullScreen disableEscapeKeyDown open={open.openList || open.openAttack} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+            <Dialog sx={{ overflow: 'hidden' }} fullScreen disableEscapeKeyDown open={open.openList || open.openAttack} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                 {open.openList ? (
                     <React.Fragment>
                         <DialogTitle>
@@ -204,7 +204,7 @@ export default function FightClubs() {
                                 <CloseIcon />
                             </IconButton>
                         </DialogTitle>
-                        <DialogContent>
+                        <DialogContent sx={{ overflow: 'hidden' }}>
                             <IconButton
                                 // onClick={handleClose}
                                 sx={{
@@ -248,9 +248,9 @@ export default function FightClubs() {
                                 <CloseIcon />
                             </IconButton>
                         </DialogTitle> */}
-                        <DialogContent>
-                            <Attack />
-                        </DialogContent>
+
+                        <Attack />
+
                     </React.Fragment>
                 ) : ""
                 }
