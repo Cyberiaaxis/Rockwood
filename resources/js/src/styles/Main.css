@@ -1,6 +1,6 @@
 :root {
   --nav-hover-bg: indigo;
-  --nav-hover-bg-text-color: white;
+  --nav-hover-bg-text-color: rgb(72, 44, 121);
 }
 
 *,
@@ -38,44 +38,51 @@ body {
   overflow: hidden;
 }
 
-/* nav:not(.primary_menu, .quartary_menu)>* {
+.hidden {
+  display: none;
+}
+
+/* nav:not(.top_menu, .bottom_menu)>* {
   opacity: 0;
   visibility: hidden;
   transition: all 1s ease-in-out;
 } */
 
-nav.active>* {
+/* nav.active>* {
   opacity: 1;
   visibility: visible;
   height: auto;
   transition: all 1s ease-in-out;
-}
+} */
 
-nav.primary_menu,
-nav.quartary_menu {
-  /* overflow: hidden; */
+/* for common rules for top and bottom menu */
+nav.top_menu,
+nav.bottom_menu {
+  overflow: hidden;
   min-height: 0.5rem;
   height: auto;
-  /* max-width: 5rem; */
+  max-width: 5rem;
   max-width: 100%;
   min-width: 100%;
   padding: 0;
   transition: all 1s ease-in-out;
 }
 
-
-nav.secondary_menu,
-nav.tertiary_menu {
+/* for menu open */
+nav.left_menu>ul.menu,
+nav.right_menu>ul.menu {
   overflow: hidden;
-  width: 1em;
+  width: 0.3em;
   padding: 0.25rem;
+  height: 70vh;
   transition: all 1s ease-in-out;
+  background-color: transparent;
 }
 
-nav.primary_menu {
+/* this this left menu class inactive condition */
+nav.top_menu {
   position: absolute;
   top: 0;
-  grid-area: left;
   width: 95%;
   top: 0;
   grid-area: top;
@@ -83,66 +90,62 @@ nav.primary_menu {
   /* border: solid 1px black; */
 }
 
-nav.tertiary_menu,
-nav.secondary_menu {
+
+/* left menu svg hover styling */
+nav.left_menu li svg:hover,
+nav.right_menu li svg:hover {
+  cursor: pointer;
+  color: var(--nav-hover-bg-text-color);
+  /* background-color: var(--nav-hover-bg); */
+}
+
+
+/* this this right menu class inactive condition */
+nav.left_menu,
+nav.right_menu {
   position: fixed;
   top: 16%;
-  bottom: 16%;
-  grid-area: left;
-  background: white;
-  border: solid 1px black;
+  height: 70vh;
+  background: transparent;
   padding: 0.25rem;
 }
 
-nav.tertiary_menu li,
-nav.secondary_menu li {
-  border: 1px solid black;
-  padding: 0.5rem 0.35rem;
+/* left menu styling */
+nav.left_menu {
+  grid-area: left;
 }
 
-nav.tertiary_menu li:hover {
-  cursor: pointer;
-  color: var(--nav-hover-bg-text-color);
-  background-color: var(--nav-hover-bg);
-}
-
-nav.secondary_menu li:hover {
-  cursor: pointer;
-  color: var(--nav-hover-bg-text-color);
-  background-color: var(--nav-hover-bg);
-}
-
-nav.tertiary_menu {
-  position: fixed;
-  right: 0;
-  /* height: 68%; */
-  top: 16%;
+/* right menu styling */
+nav.right_menu {
   grid-area: right;
-  background: white;
-  border: solid 1px black;
+  right: 0;
 }
 
-nav.quartary_menu {
+/* Bottom menu styling */
+nav.bottom_menu {
   position: absolute;
   bottom: 0;
   grid-area: bottom;
   width: 95%;
-  background: white;
+  background: transparent;
   /* border: solid 1px black; */
 }
 
-nav.quartary_menu span ol {
+/* bottom menu alignment */
+nav.bottom_menu span ol {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
 
-nav.quartary_menu li:hover {
+/* Bottom menu hover */
+nav.bottom_menu li:hover {
   cursor: pointer;
   color: var(--nav-hover-bg-text-color);
   background-color: var(--nav-hover-bg);
 }
 
+/* Main component calling area */
 .content-area {
   background: transparent;
   margin: 0;
@@ -155,48 +158,62 @@ nav.quartary_menu li:hover {
 }
 
 /* Making menu visible */
-nav.primary_menu.active {
+/* nav.top_menu.active {
   width: 100%;
-  /* height: 6rem; */
+  height: 6rem;
   overflow: visible;
-}
+} */
 
-/* nav.primary_menu.active > span > ul {
+/* nav.top_menu.active > span > ul {
 border: solid 10px black;
 } */
 
-nav.secondary_menu.active {
-  /* height: 60%; */
+
+nav.left_menu .toggle,
+nav.right_menu .toggle {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: transparent;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+nav.right_menu .toggle {
+  left: auto;
+}
+
+nav.left_menu>ul.active,
+nav.right_menu>ul.active {
+  height: 70vh;
   width: 5em;
   overflow: visible;
 }
 
-
-nav.tertiary_menu.active {
-  /* height: 60%; */
-  width: 5em;
-  overflow: visible;
-}
-
-nav.quartary_menu.active {
+nav.bottom_menu.active {
   width: 97%;
   height: 5rem;
   overflow: visible;
 }
 
 /* Defining top menu */
-nav.primary_menu {
+nav.top_menu {
   display: flex;
 }
 
-nav.primary_menu span ul {
+nav.top_menu span ul {
   list-style: none;
   margin: 0;
   padding-left: 0;
   /* border: solid 10px blue; */
 }
 
-nav.primary_menu span ul li {
+nav.top_menu span ul li {
   display: block;
   float: left;
   padding-right: 20px;
@@ -205,16 +222,16 @@ nav.primary_menu span ul li {
   transition-duration: 0.5s;
 }
 
-nav.primary_menu span ul li a {
+nav.top_menu span ul li a {
   color: #fff;
 }
 
-nav.primary_menu span ul li:hover {
+nav.top_menu span ul li:hover {
   background: red;
   cursor: pointer;
 }
 
-nav.primary_menu span ul li ul {
+nav.top_menu span ul li ul {
   /* 	background: orange; */
   visibility: hidden;
   opacity: 0;
@@ -226,30 +243,30 @@ nav.primary_menu span ul li ul {
   display: none;
 }
 
-nav.primary_menu span ul li:hover>ul,
-nav.primary_menu span ul li ul:hover {
+nav.top_menu span ul li:hover>ul,
+nav.top_menu span ul li ul:hover {
   visibility: visible;
   opacity: 1;
   display: block;
 }
 
-nav.primary_menu span ul li ul li {
+nav.top_menu span ul li ul li {
   clear: both;
   width: 100%;
 }
 
-nav.primary_menu> :first-child {
-  /*   backgound-color:yellow; */
-  /*   width: 2em; */
+/* nav.top_menu> :first-child {
+  background-color: yellow;
+  width: 2em;
   flex-grow: 1;
-}
+} */
 
-/* nav.primary_menu :nth-child(2) {
+/* nav.top_menu :nth-child(2) {
   flex-grow: 1;
   text-align: center;
 } */
 
-/* nav.primary_menu :nth-child(3) {
+/* nav.top_menu :nth-child(3) {
   flex-grow: 0;
 } */
 

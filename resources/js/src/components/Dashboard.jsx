@@ -55,17 +55,18 @@ export default function Dashboard() {
             thread: <Thread threadId={threadId} />,
             fightclub: <FightClubs />
         };
-
+        console.log("pages[page] || pages.home", pages[page]);
         return pages[page] || pages.home;
     }
-
-    // console.log("openStates", openStates);
+    activePage
+    console.log("openStates", openStates.left);
+    console.log("activePage", activePage);
     return (
         <React.Fragment>
             <div className="App">
                 <nav
                     className={
-                        openStates['top'] ? 'primary_menu active' : 'primary_menu'
+                        openStates['top'] ? 'top_menu active' : 'top_menu'
 
                     }
                     tabIndex="0"
@@ -75,25 +76,25 @@ export default function Dashboard() {
                 </nav>
                 <nav
                     className={
-                        openStates["left"] ? "secondary_menu active" : "secondary_menu"
+                        openStates["left"] ? "left_menu active" : "left_menu"
                     }
                     tabIndex="0"
                     onClick={() => toggleOpen("left")}
                 >
-                    <LeftSidebar setPage={setActivePage} />
+                    <LeftSidebar setPage={setActivePage} opener={openStates.left} />
                 </nav>
                 <nav
                     className={
-                        openStates["right"] ? "tertiary_menu active" : "tertiary_menu"
+                        openStates["right"] ? "right_menu active" : "right_menu"
                     }
                     tabIndex="0"
                     onClick={() => toggleOpen("right")}
                 >
-                    <RightSidebar setPage={setActivePage} />
+                    <RightSidebar setPage={setActivePage} opener={openStates.right} />
                 </nav>
                 <nav
                     className={
-                        openStates["bottom"] ? "quartary_menu active" : "quartary_menu"
+                        openStates["bottom"] ? "bottom_menu active" : "bottom_menu"
                     }
                     tabIndex="0"
                 // onClick={() => toggleOpen("bottom")}

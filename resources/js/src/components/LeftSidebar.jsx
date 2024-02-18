@@ -1,66 +1,92 @@
-import React from "react";
-import { Chat, Home } from "@mui/icons-material";
-import { Box } from "@mui/material";
+import React from 'react'
+import { FaSteamSquare } from "react-icons/fa"
+import { SiYourtraveldottv } from "react-icons/si";
+import { CgGym } from "react-icons/cg";
 
-export default function LeftSidebar({ setPage }) {
+import { Box, ListItemButton, Tooltip } from '@mui/material'
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+
+
+export default function LeftSideBar({ setPage, opener }) {
   function selectPage(event) {
     setPage(event.target.innerText);
   }
 
   const menuItems = [
     {
-      text: 'Home',
-      url: 'home',
-      icon: <Home />
+      title: "Travel",
+      icon: <SiYourtraveldottv style={{ height: 80, width: 40 }} />,
+      url: "travel",
     },
+
     {
-      text: 'Profile',
-      url: 'profile',
-      icon: <Home />
+      title: "Forums",
+      icon: <FaSteamSquare style={{ height: 80, width: 40 }} />,
+      url: "forums",
     },
+
     {
-      text: 'Chat',
-      url: 'chat',
-      icon: <Chat />
+      title: "Gym",
+      icon: <CgGym style={{ height: 100, width: 60 }} />,
+      url: "gym",
+      // divider: true,
     },
-    {
-      text: 'Crimes',
-      url: 'crime',
-      icon: <Home />
-    },
-    {
-      text: 'Home',
-      url: 'home',
-      icon: <Home />
-    },
-    {
-      text: 'Profile',
-      url: 'profile',
-      icon: <Home />
-    },
-    {
-      text: 'Chat',
-      url: 'chat',
-      icon: <Chat />
-    },
-    {
-      text: 'Crimes',
-      url: 'crime',
-      icon: <Home />
-    },
-  ]
+
+  ];
 
   return (
     <React.Fragment>
-      <Box component='ul' sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        rowGap: '0.5rem',
-      }}>
-        {menuItems.map((x, i) => <li key={i} onClick={() => setPage(x.url)}>
-          {x.text}
-        </li>)}
+      <Box
+        component='ul'
+        sx={{
+          textAlign: 'center',
+          height: '100%',
+          display: 'flex',   // Making the <ul> a flex container
+          flexDirection: 'column',
+        }}
+        className={`${opener ? 'active' : ''} menu`}
+      >
+        {
+          menuItems.map((item, i) =>
+            <li
+              key={i}
+              style={{
+                flex: '1 1 auto',
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'pointer',
+                listStyle: 'none',
+                border: 'none',
+              }}
+            >
+              <Tooltip title={item.title} placement="right">
+                <ListItemButton onClick={() => setPage(item.url)} sx={{
+                  fontSize: '1.5rem',
+                }}>
+                  {item.icon}
+                </ListItemButton>
+              </Tooltip>
+            </li>
+          )}
+
       </Box>
-    </React.Fragment>
-  );
+
+      <Box
+        className='toggle'
+        component='ul'
+        sx={{
+          textAlign: 'center',
+          height: '100%',
+          display: 'flex',   // Making the <ul> a flex container
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
+      >
+        <li>
+          <Tooltip title={opener ? 'opened' : 'closed'} placement="top"> {opener ? <IoIosArrowBack style={{ color: 'red' }} /> : <IoIosArrowForward style={{ color: 'green' }} />}</Tooltip>
+        </li>
+      </Box>
+    </React.Fragment >
+
+  )
 }

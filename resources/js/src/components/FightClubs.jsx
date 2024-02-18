@@ -217,13 +217,15 @@ export default function FightClubs() {
                             >
                                 <ul>
                                     {clubPlayers.length ? clubPlayers.map((player) =>
-                                        <li key={player.id} onClick={() => handlePlayerChanllenge(player.id)}>
-                                            <Typography id="modal-modal-description">
-                                                <Tooltip title="Do">
-                                                    <DoneIcon sx={{ color: "green" }} />
-                                                </Tooltip>
-                                                {player.name}
-                                            </Typography>
+                                        <li key={player.id} style={{ paddingBottom: '10px' }}>
+                                            <div onClick={() => handlePlayerChanllenge(player.id)}>
+                                                <Typography id="modal-modal-description">
+                                                    <Tooltip title="Do">
+                                                        <DoneIcon sx={{ color: "green" }} />
+                                                    </Tooltip>
+                                                    {player.name}
+                                                </Typography>
+                                            </div>
                                         </li>
                                     ) : ''}
                                 </ul>

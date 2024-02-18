@@ -119,7 +119,7 @@ function Medal() {
                   }
                 }}
               >
-                <Avatar alt={item.title} src={item.imgPath} />
+                <Avatar alt={item.title} src={item.imgPath} variant="square" />
               </Tooltip>
             }
             key={key}
