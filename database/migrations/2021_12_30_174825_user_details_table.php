@@ -16,20 +16,21 @@ class UserDetailsTable extends Migration
         Schema::create('user_details', function (Blueprint $table) {
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->timestamp('jail');
-            $table->timestamp('hospital');
-            $table->bigInteger('money');
-            $table->bigInteger('points');
-            $table->bigInteger('rates');
-            $table->integer('forum_rank_id');
-            $table->bigInteger('rank_id');
-            $table->integer('level_id');
-            $table->integer('location_id');
-            $table->bigInteger('gang_id');
-            $table->integer('active_course');
-            $table->timestamp('course_started');
-            $table->integer('current_job');
-            $table->timestamp('job_started');
+            $table->timestamp('jail')->nullable();
+            $table->timestamp('hospital')->nullable();
+            $table->bigInteger('money')->default(0);
+            $table->bigInteger('points')->default(0);
+            $table->bigInteger('rates')->default(0);
+            $table->integer('forum_rank_id')->nullable();
+            $table->bigInteger('rank_id')->default(1);
+            $table->integer('realestate_id')->default(1);
+            $table->integer('level_id')->default(1);
+            $table->integer('location_id')->default(1);
+            $table->bigInteger('gang_id')->nullable();
+            $table->integer('active_course')->nullable();
+            $table->timestamp('course_started')->nullable();
+            $table->integer('current_job')->nullable();
+            $table->timestamp('job_started')->nullable();
         });
     }
 

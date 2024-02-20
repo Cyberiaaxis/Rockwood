@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UserCrimesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class UserCrimesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_crimes', function (Blueprint $table) {
+        Schema::create('user_rewards', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id');
-            $table->integer('crime_id')->default(0);
-            $table->integer('success')->default(0);
-            $table->integer('fail')->default(0);
+            $table->foreignId('reward_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->primary(['user_id', 'crime_id']);
+            $table->foreign('reward_id')->references('id')->on('rewards');
+            $table->timestamps();
         });
     }
 
@@ -30,6 +30,6 @@ class UserCrimesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_crimes');
+        Schema::dropIfExists('user_rewards');
     }
-}
+};

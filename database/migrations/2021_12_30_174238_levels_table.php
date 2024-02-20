@@ -16,8 +16,8 @@ class LevelsTable extends Migration
         Schema::create('levels', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('image');
-            $table->longText('description');
+            $table->string('image')->nullable();
+            $table->longText('description')->nullable();
             $table->timestamps();
         });
     }

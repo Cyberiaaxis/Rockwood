@@ -16,13 +16,14 @@ class Attacks extends Migration
         Schema::create('attacks', function (Blueprint $table) {
             $table->foreignId('user_id')->unique();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->bigInteger('attacks');
-            $table->bigInteger('attacks_success');
-            $table->bigInteger('defenses_success');
-            $table->bigInteger('settlement_attacker');
-            $table->bigInteger('settlement_defender');
-            $table->bigInteger('escaped_attacker');
-            $table->bigInteger('escaped_defender');
+            $table->bigInteger('attacks')->default(0);
+            $table->bigInteger('attacks_success')->default(0);
+            $table->bigInteger('defenses')->default(0);
+            $table->bigInteger('defenses_success')->default(0);
+            $table->bigInteger('settlement_attacker')->default(0);
+            $table->bigInteger('settlement_defender')->default(0);
+            $table->bigInteger('escaped_attacker')->default(0);
+            $table->bigInteger('escaped_defender')->default(0);
         });
     }
 

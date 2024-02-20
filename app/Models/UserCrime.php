@@ -34,7 +34,7 @@ class UserCrime extends Model
                 'user_id' => $userId,
                 'crime_id' => 0,
                 'fail' => 0,
-                'sucess' => 0,
+                'success' => 0,
             ]
         );
     }
@@ -44,7 +44,8 @@ class UserCrime extends Model
      * @param  INT $userId
      * @return int
      */
-    public function addCrime(int $user, int $statusKey){
+    public function addCrime(int $user, int $statusKey)
+    {
         return $this->updateOrCreate($user)->increment($statusKey);
     }
 

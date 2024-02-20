@@ -7,6 +7,14 @@ use Throwable;
 
 class Attack extends Model
 {
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
     /**
      * add or update player's crime count in storage.
      * @param  INT $userId

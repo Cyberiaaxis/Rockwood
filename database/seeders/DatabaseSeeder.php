@@ -4,13 +4,22 @@ namespace Database\Seeders;
 
 use App\Http\Controllers\ForumsController;
 use App\Models\Area;
+use App\Models\Attack;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Crime;
 use App\Models\FightClub;
 use App\Models\Forum;
 use App\Models\ForumRank;
+use App\Models\Honor;
+use App\Models\Level;
+use App\Models\Rank;
+use App\Models\RealEstate;
+use App\Models\Reward;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserCrime;
+use App\Models\UserDetail;
 use App\Models\UserStats;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -44,6 +53,9 @@ class DatabaseSeeder extends Seeder
 
         $userStats = new UserStats();
         $userStats->addUserStats($userStored->id);
+
+        $userDetails = new UserDetail();
+        $userDetails->addUserDetails($userStored->id);
 
         $countryData = [
             [
@@ -172,5 +184,46 @@ class DatabaseSeeder extends Seeder
         ];
         $fightClub = new FightClub();
         $fightClub->insert($fightClubData);
+
+        $rankData = [
+            'name' => 'demoRank',
+        ];
+        $rank = new Rank();
+        $rank->create($rankData);
+
+        $realEstateData = [
+            'name' => 'demoHouse',
+        ];
+        $realEstate = new RealEstate();
+        $realEstate->create($realEstateData);
+        $honorData = [
+            'name' => 'demoHonor',
+        ];
+        $honor =  new Honor();
+        $honorStored = $honor->create($honorData);
+        $userStored->honors()->attach($honorStored->id);
+        $rewardData = [
+            'name' => 'demoReward',
+        ];
+        $reward = new Reward();
+        $rewardStored = $reward->create($rewardData);
+        $userStored->rewards()->attach($rewardStored->id);
+
+        $levelData = [
+            'name' => 'demoLevel',
+        ];
+
+        $level = new Level();
+        $rewardStored = $level->create($levelData);
+
+        $crimeData = [
+            'name' => 'demoCrime',
+        ];
+
+        $userCrime = new UserCrime();
+        $userCrimeStored = $userCrime->addCrimeRecords($userStored->id);
+
+        $attacks = new Attack();
+        $attacks->addAttackRecords($userStored->id);
     }
 }

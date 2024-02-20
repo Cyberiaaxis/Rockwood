@@ -20,7 +20,7 @@ class UserDetail extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'jail', 'money',  'hospital',  'points', 'rates', 'rank_id', 'level_id', 'location_id', 'gang_id',  'active_course', 'course_started', 'job'
+        'user_id', 'realestate_id',  'jail', 'money',  'hospital',  'points', 'rates', 'rank_id', 'level_id', 'location_id', 'gang_id',  'active_course', 'course_started', 'job'
     ];
 
 
@@ -79,7 +79,7 @@ class UserDetail extends Model
             'points' => 10,
             'rank_id' => 1,
             'level_id' => 1,
-            'realestate' => 1,
+            'realestate_id' => 1,
             'location_id'  => 1,
         ]);
     }
@@ -161,7 +161,7 @@ class UserDetail extends Model
      */
     public function getActiveEstate(int $userId): int
     {
-        return  $this->where(['user_id' => $userId])->value('realestate');
+        return  $this->where(['user_id' => $userId])->value('realestate_id');
     }
 
     /**
@@ -171,7 +171,7 @@ class UserDetail extends Model
      */
     public function setActiveEstate(int $userId, int $realEstateId)
     {
-        return  $this->where(['user_id' => $userId])->update(['realestate' => $realEstateId]);
+        return  $this->where(['user_id' => $userId])->update(['realestate_id' => $realEstateId]);
     }
 
     /**

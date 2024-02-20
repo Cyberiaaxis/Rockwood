@@ -219,4 +219,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(UserStats::class);
     }
+
+    public function honors()
+    {
+        return $this->belongsToMany(Honor::class, 'user_honors');
+    }
+
+    public function rewards()
+    {
+        return $this->belongsToMany(Reward::class, 'user_rewards');
+    }
 }
