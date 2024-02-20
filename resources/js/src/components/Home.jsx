@@ -160,7 +160,7 @@ const Home = () => {
                         Last Award
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.rank} Name of Award
+                        {playerHomeData.totalAwards}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Age
