@@ -119,6 +119,7 @@ class HomeController extends Controller
             "age" => $age,
             "money" => $money,
             "points" => $points,
+            // 'stats' => $this->userStats->getUserStats($this->loginUser->id),
         ];
         return response()->json($details);
     }
@@ -396,7 +397,22 @@ class HomeController extends Controller
      */
     public function age()
     {
-        return $this->carbon->parse($this->user->getAge($this->loginUser->id))->diffForHumans($this->carbon->now());
+        $start = $this->carbon->parse($this->loginUser->created_at);
+        $end = $this->carbon->parse($this->carbon->now());
+
+        // Calculate the difference in hours and days
+        $diffInHours = $end->diffInHours($start);
+        $diffInDays = $end->diffInDays($start);
+        $diffInMonths = $end->diffInMonths($start);
+
+        // Determine the appropriate format based on the difference
+        if ($diffInHours < 24) {
+            return $diffInHours . ' hours';
+        } elseif ($diffInDays < 30) {
+            return $diffInDays . ' days';
+        } else {
+            return $diffInMonths . ' months';
+        }
     }
 
     /**
@@ -418,4 +434,14 @@ class HomeController extends Controller
     {
         return $this->userDetails->getUserPoints($this->loginUser->id);
     }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    // public function totalAwards()
+    // {
+    //     return $this->userDetails->getUserPoints($this->loginUser->id);
+    // }
 }

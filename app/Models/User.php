@@ -18,6 +18,20 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasRoles, HasApiTokens, Notifiable;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'id';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -46,14 +60,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    /**  
-     *Forum Posts
-     */
-    public function posts()
-    {
-        return $this->hasMany(Post::class);
-    }
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -61,13 +67,23 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $dates = ['created_at', 'updated_at', 'last_seen'];
 
-    /**
-     * get total posts
-     */
-    public function getTotalPostsAttribute()
-    {
-        return $this->posts()->count();
-    }
+
+    // /**  
+    //  *Forum Posts
+    //  */
+    // public function getuserPosts()
+    // {
+    //     $post = new Post();
+    //     return $post->all();
+    // }
+
+    // /**
+    //  * get total posts
+    //  */
+    // public function getTotalPostsAttribute()
+    // {
+    //     // return $this->posts()->count();
+    // }
 
     public function course()
     {
@@ -89,29 +105,10 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param  int $course_id
      * @return boolean
      */
-    public function addUser($request)
+    public function addUser(array $data): int
     {
-        return $this->create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password' => FacadesHash::make($request['password']),
-        ]);
+        return $this->insertGetId($data);
     }
-
-    /**
-     * regiration of new player's in storage.
-     * @param  int $course_id
-     * @return boolean
-     */
-    public function saveUser($request)
-    {
-        return $this->create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password' => FacadesHash::make($request['password']),
-        ]);
-    }
-
 
     /**
      * get player's name by id from storage.

@@ -166,37 +166,37 @@ const Home = () => {
                         Age
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        5000 Days
+                        {playerHomeData.age}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Property
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        Small Home.
+                        {playerHomeData.activeHouse}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Gang
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        Rocky Street boyz
+                        Pending
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Last Traning
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        Making weapons
+                        Pending
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Travels
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        1000
+                        Pending
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Partner
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        No Name
+                        Pendin
                       </Grid>
 
                     </Grid>
@@ -212,31 +212,31 @@ const Home = () => {
                         Strength
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        301,711,171 +35%
+                        {playerHomeData.strength}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Defense
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        312,229,464 +41%
+                        {playerHomeData.defense}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        Aglity
+                        Agility
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        303,274,528 +41%
+                        {playerHomeData.agility}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        Dexterity
+                        Endurance
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        301,874,884 +34%
+                        {playerHomeData.endurance}
                       </Grid>
                       <Grid item xs={9} style={{ border: "1px solid black" }}>
                         Total
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        1,219,090,047
+                        {playerHomeData.strength + playerHomeData.defense + playerHomeData.agility + playerHomeData.endurance}
                       </Grid>
                       <Grid item xs={12} style={{ border: "1px solid black" }}>
                         Traning Stats
@@ -245,19 +245,19 @@ const Home = () => {
                         Manual labor
                       </Grid>
                       <Grid item xs={6} style={{ border: "1px solid black" }}>
-                        1,219,090,047
+                        Pending
                       </Grid>
                       <Grid item xs={6} style={{ border: "1px solid black" }}>
                         Intelligence
                       </Grid>
                       <Grid item xs={6} style={{ border: "1px solid black" }}>
-                        1,219,090,047
+                        Pending
                       </Grid>
                       <Grid item xs={6} style={{ border: "1px solid black" }}>
                         Endurance
                       </Grid>
                       <Grid item xs={6} style={{ border: "1px solid black" }}>
-                        1,219,090,047
+                        Pending
                       </Grid>
                       <Grid item xs={6} style={{ border: "1px solid black" }}>
                         Total
@@ -279,39 +279,39 @@ const Home = () => {
                         Attack Won
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        100
+                        {playerHomeData.asAttackerWon}
                       </Grid>
 
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Defence Won
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        100
+                        {playerHomeData.asDefenderWon}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Attack Lost
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        1000
+                        {playerHomeData.asAttackerLost}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Defence Lost
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        500
+                        {playerHomeData.asDefenderLost}
                       </Grid>
 
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Attacks stalemated
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        100
+                        {playerHomeData.asAttackerSettlement}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Defends stalemated
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        100
+                        {playerHomeData.asDefenderSettlement}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Total Attacks
@@ -332,7 +332,7 @@ const Home = () => {
                         10000
                       </Grid>
                       <Grid item xs={12} style={{ border: "1px solid black" }}>
-                        Crimes
+                        Crimes This is pending area
                       </Grid>
                       <Grid item xs={6} style={{ border: "1px solid black" }}>
                         Crime Success

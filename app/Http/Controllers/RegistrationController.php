@@ -33,16 +33,17 @@ class RegistrationController extends Controller
             'password' => 'required|string|confirmed'
         ]);
 
-        $user = new User([
+        $data = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password)
-        ]);
+        ];
 
-        $user->save();
+        $user = new User();
+        $userStored = $user->addUser($data);
 
         $userStats = new UserStats();
-        $userStats->addUserStats($user->id);
+        $userStats->addUserStats($userStored);
 
         return response()->json([
             'status' => true,

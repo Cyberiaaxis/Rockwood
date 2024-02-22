@@ -40,7 +40,7 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->post('/saveRealEstate', 'App\Http\Controllers\RealEstateController@feed');
     $router->post('/saveJob', 'App\Http\Controllers\JobController@feed');
     // $router->post('/saveRank', 'App\Http\Controllers\RankController@update');`
-    $router->post('/saveUsers', 'App\Http\Controllers\UsersController@Feed');
+    // $router->post('/saveUsers', 'App\Http\Controllers\UsersController@Feed');
     $router->post('/saveRole', 'App\Http\Controllers\RolesController@Feed');
     $router->get('/shops', 'App\Http\Controllers\ShopsController@index');
     $router->post('/saveShop', 'App\Http\Controllers\ShopsController@feed');
