@@ -70,6 +70,26 @@ export default function Header({ setPage }) {
         color: white;
         height: 4.6rem;
     `;
+  const handleLogout = async () => {
+    await toast.promise(
+      gameServerApi('/auth/logout'),
+      {
+        pending: 'Please wait, We are logging you out!',
+        success: {
+          render({ data }) {
+            navigate('/')
+            return 'Your has been logged out successfully!';
+          }
+        },
+        error: {
+          theme: 'colored',
+          render({ data }) {
+            return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message;
+          },
+        },
+        // error: 'An error occurred while creating your account',
+      });
+  };
   return (
     <React.Fragment>
       <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
@@ -226,7 +246,7 @@ export default function Header({ setPage }) {
                 </ListItemIcon>
                 Settings
               </MenuItem>
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
                   <Logout fontSize="small" />
                 </ListItemIcon>

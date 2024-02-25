@@ -66,9 +66,9 @@ export default async function gameServerApi(endpoint, method = 'get', data = {},
         response = await gameApi(endpoint, defaultOptions);
 
     } catch (error) {
-        toast.error(error.message, {
-            theme: 'colored'
-        });
+        // toast.error(error.message, {
+        //     theme: 'colored'
+        // });
 
         return Promise.reject(error);
     }
