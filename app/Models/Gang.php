@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Gang extends Model
+class Gang extends GameBaseModel
 {
     /**
      * The attributes that are mass assignable.
@@ -20,6 +18,6 @@ class Gang extends Model
      */
     public function getGangNames()
     {
-        return  $this->take(5)->orderBy('name')->pluck('name');
+        return  $this->take(10)->orderBy('name')->pluck('name');
     }
 }

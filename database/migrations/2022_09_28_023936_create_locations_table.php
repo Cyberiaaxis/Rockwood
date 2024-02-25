@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer('country_id');
             $table->integer('city_id');
             $table->integer('area_id');
-            $table->boolean('status');
             $table->timestamps();
         });
     }

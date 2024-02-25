@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AreasTable extends Migration
+class RegionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class AreasTable extends Migration
      */
     public function up()
     {
-        Schema::create('areas', function (Blueprint $table) {
+        Schema::create('regions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('avatar')->nullable();
             $table->longText('description')->nullable();
+            $table->foreignId('country_id')->nullable();
+            $table->foreign('country_id')->references('id')->on('countries');
         });
     }
 

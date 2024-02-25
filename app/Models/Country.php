@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Support\Facades\DB;
+use Illuminate\Database\DatabaseManager;
 
-class Country extends Model
+class Country extends GameBaseModel
 {
-
     /**
      * The attributes that are mass assignable.
      *
@@ -16,13 +17,24 @@ class Country extends Model
         'id', 'name', 'avatar', 'description'
     ];
 
+    // /**
+    //  * get country name by this method.
+    //  * @param  INT  $id
+    //  * @return string country name
+    //  */
+    // public function getCountryById(int $id): string
+    // {
+    //     return $this->find($id)->value('name');
+    // }
+
     /**
      * get country name by this method.
      * @param  INT  $id
      * @return string country name
      */
-    public function getCountryById(int $id): string
+    public function getAllCountries()
     {
-        return $this->find($id)->value('name');
+        return $this->db->where(['name'=> "Demo Country 2"])->get('id');
     }
+
 }

@@ -20,7 +20,7 @@ class UserDetail extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'realestate_id',  'jail', 'money',  'hospital',  'points', 'rates', 'rank_id', 'level_id', 'location_id', 'gang_id',  'active_course', 'course_started', 'job'
+        'user_id', 'realestate_id',  'jail', 'travel_route_id',  'money',  'hospital',  'points', 'rates', 'rank_id', 'level_id', 'location_id', 'gang_id',  'active_course', 'course_started', 'job'
     ];
 
 
@@ -30,10 +30,10 @@ class UserDetail extends Model
     }
 
 
-    public function location()
-    {
-        return $this->belongsTo(City::class, 'location_id');
-    }
+    // public function location()
+    // {
+    //     return $this->belongsTo(City::class, 'location_id');
+    // }
 
     /**
      * get Location Name
@@ -73,14 +73,16 @@ class UserDetail extends Model
      */
     public function addUserDetails(int $userId)
     {
-        return $this->create([
+        return $this->insert([
             'user_id' => $userId,
             'money' => 100,
             'points' => 10,
             'rank_id' => 1,
             'level_id' => 1,
+            'location_id' => 1,
             'realestate_id' => 1,
-            'location_id'  => 1,
+            'travel_route_id'  => 1,
+            'is_travel'  => 0,
         ]);
     }
 

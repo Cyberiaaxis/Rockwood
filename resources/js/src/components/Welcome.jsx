@@ -247,6 +247,7 @@ export default function Welcome() {
                                     className="topplayers"
                                     style={{ height: 200 }}
                                     items={welcomeData.players}
+                                    delayTime={0}
                                 />
                             </Box>
                         </Item>
@@ -273,6 +274,7 @@ export default function Welcome() {
                                     className="topplayers"
                                     style={{ height: 200 }}
                                     items={welcomeData.gangs}
+                                    delayTime={1}
                                 />
                             </Box>
                         </Item>

@@ -2,140 +2,114 @@ import React from "react";
 import Typography from '@mui/material/Typography';
 import { Box, Button, Container, Grid, TextField } from "@mui/material";
 import { AccountCircle, Email, Lock } from "@mui/icons-material";
-import { toast } from "react-toastify";
-import gameServerApi from "../libraries/gameServerApi";
-import ValidationErrors from "../libraries/ValidationErrors";
-import { Form } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
-export default function Registration() {
+// Validation schema using Yup
+const schema = yup.object().shape({
+    name: yup.string().required("Username is required"),
+    email: yup.string().email("Invalid email").required("Email is required"),
+    password: yup.string().required("Password is required"),
+    confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match')
+});
 
-    const {
-        register,
-        setError,
-        formState: { errors },
-        handleSubmit,
-        clearErrors,
-    } = useForm();
-
+const Registration = () => {
+    const { register, handleSubmit, formState: { errors }, setError } = useForm({
+        resolver: yupResolver(schema)
+    });
 
     const onSubmit = async (data) => {
-
-        const response = await toast.promise(
-            gameServerApi('/register', 'post', data),
-            {
-                pending: 'Please wait, We are creating your account',
-                success: 'Your account has been created!',
-                error: {
-                    theme: 'colored',
-                    render({ data }) {
-                        return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message;
-                    },
-                },
-                // error: 'An error occurred while creating your account',
-            }
-        );
-
+        try {
+            // Perform registration logic here
+        } catch (error) {
+            console.error("Registration failed:", error);
+            setError("submit", {
+                type: "manual",
+                message: "Registration failed. Please try again later."
+            });
+        }
     };
 
-
-
     return (
-        <React.Fragment>
-            <Container component="main" maxWidth="xs">
-                <Form noValidate sx={{ mt: 1 }} method="post" onSubmit={handleSubmit(onSubmit)}>
+        <Container component="main" maxWidth="xs">
+            <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Typography component="h1" variant="h5">
+                    Join Us
+                </Typography>
+                <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography variant="h3">Join Us</Typography>
-                        </Grid>
-                        <Grid item xs={12}>
                             <TextField
-                                required
                                 fullWidth
                                 label="Username"
-                                placeholder="User Name"
-                                name="name"
-                                autoComplete="none"
-                                autoFocus
-                                color="success"
-                                {...register("name", { required: true })}
+                                {...register("name")}
+                                error={!!errors.name}
+                                helperText={errors.name?.message}
                                 InputProps={{
                                     startAdornment: (
-                                        <AccountCircle color="secondary" />
+                                        <AccountCircle color="action" />
                                     ),
                                 }}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                required
                                 fullWidth
-                                label="Email"
-                                placeholder="Enter your E-Mail Address"
-                                name="email"
-                                type="email"
-                                color="success"
-                                {...register("email", { required: true })}
+                                label="Email Address"
+                                {...register("email")}
+                                error={!!errors.email}
+                                helperText={errors.email?.message}
                                 InputProps={{
                                     startAdornment: (
-                                        <Email color="secondary" />
+                                        <Email color="action" />
                                     ),
                                 }}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                fullWidth
                                 type="password"
                                 label="Password"
-                                placeholder="Password"
-                                color="success"
-
-                                name="password"
-                                margin="normal"
-                                fullWidth
-                                required
-                                {...register("password", { required: true })}
+                                {...register("password")}
+                                error={!!errors.password}
+                                helperText={errors.password?.message}
                                 InputProps={{
                                     startAdornment: (
-                                        <Lock color="secondary" />
+                                        <Lock color="action" />
                                     ),
                                 }}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                name="confirmPassword"
+                                fullWidth
                                 type="password"
                                 label="Confirm Password"
-                                placeholder="Repeat your Password"
-                                color="success"
-
-                                {...register("password_confirmation", { required: true })}
-                                margin="normal"
-                                fullWidth
-                                required
+                                {...register("confirmPassword")}
+                                error={!!errors.confirmPassword}
+                                helperText={errors.confirmPassword?.message}
                                 InputProps={{
                                     startAdornment: (
-                                        <Lock color="secondary" />
+                                        <Lock color="action" />
                                     ),
                                 }}
                             />
                         </Grid>
-                        <Grid item xs={12}>
-
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                fullWidth
-                                type="submit"
-                            >
-                                Join
-                            </Button>
-                        </Grid>
                     </Grid>
-                </Form>
-            </Container>
-
-        </React.Fragment >
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                    >
+                        Join
+                    </Button>
+                </Box>
+            </Box>
+        </Container>
     );
 }
+
+export default Registration;

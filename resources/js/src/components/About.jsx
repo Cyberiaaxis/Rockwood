@@ -1,17 +1,47 @@
 import React from "react";
-import { Box } from "@mui/system";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import { styled } from "@mui/material/styles";
 
-export default function About({ setPage }) {
+// Styled component for decorative line
+const Line = styled("hr")({
+    width: "100px",
+    border: "1px solid #ccc",
+    margin: "20px 0",
+});
 
+const AboutUs = () => {
     return (
-        <React.Fragment>
-            <Box sx={{ paddingTop: 0 }} marginTop={0}>
-                <Typography variant="h5" align="justify">
-                    Cyberia Axis is a text-based online RPG set in Cyberia Axis, a dark, murky underworld where only the sharpest survive. In Cyberia Axis you can be anyone and do anything. Build your character to infinite strengths and play it your way.
-                    Cyberia Axis is a massively multiplayer game with thousands of active players around the world. Join them, fight them, befriend them, marry them, gamble against them, trade with them, compete with them, war alongside them. Whatever you do - do it now!
-                </Typography>;
-            </Box>
-        </React.Fragment>
+        <Box textAlign="center" py={5}>
+            <Typography variant="h4" gutterBottom>
+                About Our RPG Game
+            </Typography>
+            <Line />
+            <Typography variant="body1" paragraph>
+                Welcome to our RPG world! Immerse yourself in a fantastical realm where
+                adventures await at every turn. Our RPG game brings together the
+                excitement of storytelling, the thrill of exploration, and the
+                strategic depth of tactical combat.
+            </Typography>
+
+            <Typography variant="body1" paragraph>
+                Embark on epic quests, encounter mythical creatures, and uncover ancient
+                mysteries. Whether you prefer to wield a sword as a valiant knight,
+                cast powerful spells as a wise wizard, or sneak through the shadows as
+                a cunning rogue, our RPG game offers endless possibilities for
+                adventure.
+            </Typography>
+            <Typography variant="body1" paragraph>
+                Join a community of fellow adventurers, form alliances, and forge
+                unforgettable memories together. The journey awaits – will you answer
+                the call to adventure?
+            </Typography>
+            <Typography variant="body1" paragraph>
+                Start your epic quest today and become a legend in our RPG world!
+            </Typography>
+        </Box>
     );
-}
+};
+
+export default AboutUs;

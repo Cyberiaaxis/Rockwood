@@ -57,9 +57,9 @@ class TravelRoutesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function travelableRoutes(int $travelRouteId)
     {
-        //
+        return $this->find($travelRouteId, ['to_country_id', 'to_city_id', 'to_area_id']);
     }
 
     /**

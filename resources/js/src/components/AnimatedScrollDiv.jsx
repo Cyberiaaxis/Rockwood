@@ -2,7 +2,7 @@ import React from "react";
 import Box from '@mui/material/Box';
 
 
-export default function AnimatedScrollDiv({ className, items, style }) {
+export default function AnimatedScrollDiv({ className, items, style, delayTime }) {
   return (
     <React.Fragment>
       <style>
@@ -37,7 +37,7 @@ export default function AnimatedScrollDiv({ className, items, style }) {
           style={{
             width: "100%",
             position: "absolute",
-            animation: "verticalMarquee 20s linear infinite"
+            animation: `verticalMarquee 20s linear infinite ${delayTime || 0}s`
           }}
         >
           {items.map((i, idx) => (

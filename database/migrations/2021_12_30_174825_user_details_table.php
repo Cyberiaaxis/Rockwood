@@ -25,11 +25,13 @@ class UserDetailsTable extends Migration
             $table->bigInteger('rank_id')->default(1);
             $table->integer('realestate_id')->default(1);
             $table->integer('level_id')->default(1);
-            $table->integer('location_id')->default(1);
+            $table->integer('travel_route_id')->default(1);
             $table->bigInteger('gang_id')->nullable();
             $table->integer('active_course')->nullable();
             $table->timestamp('course_started')->nullable();
             $table->integer('current_job')->nullable();
+            $table->integer('location_id')->nullable();
+            $table->integer('is_travel')->nullable();
             $table->timestamp('job_started')->nullable();
         });
     }

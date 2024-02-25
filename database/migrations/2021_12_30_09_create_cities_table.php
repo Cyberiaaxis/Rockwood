@@ -18,6 +18,8 @@ class CreateCitiesTable extends Migration
             $table->string('name');
             $table->string('avatar')->nullable();
             $table->longText('description')->nullable();
+            $table->foreignId('region_id')->nullable();
+            $table->foreign('region_id')->references('id')->on('regions');
         });
     }
 

@@ -16,8 +16,8 @@ class UserTravelsTable extends Migration
         Schema::create('user_travels', function (Blueprint $table) {
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')->unique();
-            $table->integer('location_id');       
-            $table->integer('times');       
+            $table->integer('travel_route_id');
+            $table->timestamps();
         });
     }
 

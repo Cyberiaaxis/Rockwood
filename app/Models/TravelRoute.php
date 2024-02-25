@@ -7,6 +7,19 @@ use Throwable;
 
 class TravelRoute extends Model
 {
+    public $timestamps = true;
+    protected $fillable = [
+        'from_country_id', 
+        'from_city_id', 
+        'from_area_id', 
+        'to_country_id', 
+        'to_city_id', 
+        'to_area_id',
+        'cost',
+        'status',
+        'duration' 
+    ];
+
     /**
      * get travelling lists from storage.
      * @param
@@ -17,20 +30,13 @@ class TravelRoute extends Model
         return $this->all();
     }
 
-    // /**
-    //  * Create a new userDetails instance after a valid registration.
-    //  *
-    //  * @param  array  $userIda
-    //  * @return \App\User
-    //  */
-    // public function getTravelRoute($origin, $destination)
-    // {
-    //     try {
-    //         return $this->where(['origin' => $origin, 'destination'=> $destination])->get('id');
-    //     } catch (Throwable $e) {
-    //         $e->getMessage();
-    //         report($e);
-    //     }
-    // }
+    public function routeCreate(array $data) 
+    {
+        $this->insert($data);
+    }
 
+    public function getUserCurrentRuote()
+    {
+        $this->insert($data);
+    }
 }

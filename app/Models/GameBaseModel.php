@@ -67,6 +67,11 @@ class GameBaseModel
         return $this;
     }
 
+    public function orderBy($data)
+    {
+        return $this->db->orderBy($data);
+    }
+
     /**
      * Get the table associated with the model.
      *
@@ -122,6 +127,11 @@ class GameBaseModel
         $this->db->where($column, $operator, $value);
 
         return $this;
+    }
+
+    public function insert(array $data)
+    {
+      return $this->db->insert($data);
     }
 
     /**
