@@ -1,16 +1,20 @@
+/* Base styles for the entire application */
 .App {
   font-family: sans-serif;
   text-align: center;
 }
 
+/* Styles for the background carousel */
 .background-carousel {
   display: block;
   position: relative;
   height: 100vh;
   overflow: hidden;
   background-color: transparent;
+  /* Set background color to transparent */
 }
 
+/* Pseudo-element for creating gradient background with blend mode */
 .background-carousel::after {
   display: block;
   content: "";
@@ -29,41 +33,50 @@
   --blend-mode: custom-mode;
   /* Custom blend mode */
 
+  /* Background image with linear gradient and mix blend mode */
   background-image: linear-gradient(to bottom, var(--blend-color-1), var(--blend-color-2)), var(--bg-img);
   mix-blend-mode: var(--blend-mode);
-  /* opacity: var(--blend-opacity); */
+  /* Set mix blend mode */
   background-size: cover;
   background-position: center;
-  /* background-image: linear-gradient(to right, rgba(109, 179, 242, .6), rgba(109, 179, 242, .6)), url('images/checked.png'); */
   animation-name: animName;
+  /* Apply animation */
   animation-duration: 35s;
   animation-timing-function: ease-in-out;
+  /* Animation timing function */
   animation-iteration-count: infinite;
+  /* Animation iteration count */
 }
 
+/* Keyframes for the animation */
 @keyframes animName {
   0% {
     transform: rotate(0deg) scale(1);
     opacity: 0.5;
+    /* Initial opacity */
   }
 
   45% {
     transform: rotate(10deg) scale(1.05);
     opacity: 0.6;
+    /* Increase opacity */
   }
 
   50% {
     opacity: 0.6;
+    /* Maintain opacity */
   }
 
   75% {
     opacity: 0.3;
-    /* Reverse rotation starts */
+    /* Reduce opacity */
     transform: rotate(-10deg) scale(1.05);
+    /* Reverse rotation starts */
   }
 
   100% {
     transform: rotate(-20deg) scale(1.1);
     opacity: 0.2;
+    /* Final opacity */
   }
 }

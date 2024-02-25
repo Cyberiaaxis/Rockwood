@@ -128,7 +128,7 @@ export default function Welcome() {
             help: <Help />,
             discussion: <Discussions />,
             upcoming: <Upcomings />,
-            "join-us": <Registration />,
+            "join-us": <Registration onClose={() => setPage(null)} />,
         };
         return pages[page]
     }
@@ -190,7 +190,7 @@ export default function Welcome() {
                                 href="/"
                                 sx={{ mr: 2 }}
                             >
-                                <Avatar sx={{ width: 60, height: 60 }} alt="Cyberia" src="/images/logo.jpg" />
+                                <Avatar sx={{ width: 60, height: 60 }} alt="Cyberia" src="/images/logo.png" />
                             </IconButton>
 
                             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -290,11 +290,12 @@ export default function Welcome() {
                     </Grid>
                     <Grid item xs={12} md={12}>
                         <Item sx={{ backgroundColor: "transparent", position: "fixed", bottom: 0 }}>
-                            <Typography variant="h5" color="common.white" gutterBottom>
+                            <Typography variant="h5" color="common.white" gutterBottom sx={{ fontFamily: 'cursive', fontSize: '1.5rem', textShadow: '1px 1px 2px #000000', letterSpacing: '1px', fontWeight: 'bold' }}>
                                 Cyberia &copy; 2023
                             </Typography>
                         </Item>
                     </Grid>
+
                 </Grid>
             </Box>
         </React.Fragment>
