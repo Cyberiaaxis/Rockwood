@@ -8,7 +8,7 @@
   position: relative;
   height: 100vh;
   overflow: hidden;
-  /* background-color: brown; */
+  background-color: transparent;
 }
 
 .background-carousel::after {
@@ -20,7 +20,7 @@
   right: -50%;
   bottom: -50%;
   z-index: -1;
-  --blend-opacity: 0.2;
+  --blend-opacity: 0.3;
   /* Custom opacity */
   --blend-color-1: rgba(0, 128, 0, var(--blend-opacity));
   /* Custom blend color 1 */
@@ -41,36 +41,29 @@
   animation-iteration-count: infinite;
 }
 
-/* .background-carousel::before {
-
-  display: block;
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10;
-  background-color: rgb(237, 226, 226);
-} */
-
 @keyframes animName {
   0% {
-    transform: rotate(0deg);
-
-    opacity: 0.2;
-    /* background-color: black; */
+    transform: rotate(0deg) scale(1);
+    opacity: 0.5;
   }
 
-  20% {
-    transform: rotate(10deg) scale(1);
-    opacity: 0.4;
-    /* background-color: black; */
+  45% {
+    transform: rotate(10deg) scale(1.05);
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+
+  75% {
+    opacity: 0.3;
+    /* Reverse rotation starts */
+    transform: rotate(-10deg) scale(1.05);
   }
 
   100% {
-    transform: rotate(20deg) scale(1);
-    opacity: 0;
-    /* background-color: black; */
+    transform: rotate(-20deg) scale(1.1);
+    opacity: 0.2;
   }
 }

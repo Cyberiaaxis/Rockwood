@@ -1,3 +1,4 @@
+// Import necessary libraries and components
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import "../styles/Welcome.css";
@@ -25,6 +26,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Navigate } from "react-router-dom";
 // import axios, { isCancel, AxiosError } from "axios";
 
+// Define custom styled component
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -33,9 +35,9 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary
 }));
 
-
-
+// Define the Welcome component
 export default function Welcome() {
+    // Define state variables
     const [showPassword, setShowPassword] = React.useState(false);
     const [currentBackgroundImage, setCurrentBackgroundImage] = React.useState(0);
     const { setUser } = React.useContext(AuthContext);
@@ -47,16 +49,16 @@ export default function Welcome() {
         gangs: []
     });
 
-    // console.log('*** Welcome: render: authCtx = ', authCtx)
-
+    // Define hook for navigation
     const navigate = useNavigate();
 
+    // Define event handlers
     const handleClickShowPassword = () => setShowPassword((show) => !show);
-
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
 
+    // Define form handling using useForm hook
     const {
         register,
         reset,
@@ -66,11 +68,13 @@ export default function Welcome() {
         clearErrors,
     } = useForm();
 
+    // Fetch welcome data from API
     const getWelcomeData = async () => {
         const { gangs, events, players, images } = await gameServerApi("welcomelist");
         setWelcomeData({ ...welcomeData, gangs, events, players, images });
     };
-    // console.log("**gangs name**", welcomeData.gangs);
+
+    // Define menu items
     const menuItems = [
         {
             id: 'about',
@@ -104,6 +108,12 @@ export default function Welcome() {
         },
     ];
 
+    // Fetch welcome data on component mount
+    React.useEffect(() => {
+        getWelcomeData();
+    }, []);
+
+    // Change background image at regular intervals
     React.useEffect(() => {
         const interval = setInterval(() => {
             setCurrentBackgroundImage((prevImage) => (prevImage + 1) % welcomeData.images.length);
@@ -111,10 +121,7 @@ export default function Welcome() {
         return () => clearInterval(interval);
     }, [welcomeData.images.length, currentBackgroundImage]);
 
-    React.useEffect(() => {
-        getWelcomeData();
-    }, [])
-
+    // Render active page based on selected page
     function ActivePage() {
         const pages = {
             about: <About />,
@@ -126,10 +133,12 @@ export default function Welcome() {
         return pages[page]
     }
 
+    // Handle click event to open component
     const handleClickOpenComponent = (e) => {
-        // console.log("***page name string***", e.target.value);
         setPage(e.target.value);
     }
+
+    // Form submission handler
     const onSubmit = async (data) => {
         await toast.promise(
             gameServerApi("auth/login", 'POST', data),
@@ -139,7 +148,6 @@ export default function Welcome() {
                     theme: 'colored',
                     position: 'top-center',
                     render({ data }) {
-                        console.log("data.userId render", data);
                         setUser(data.userId)
                         navigate('/dashboard')
                     },
@@ -162,6 +170,8 @@ export default function Welcome() {
 
         );
     };
+
+    // Return the JSX for the Welcome component
     return (
         <React.Fragment>
             <Box
@@ -169,7 +179,6 @@ export default function Welcome() {
                 sx={{
                     "--bg-img": `url(${welcomeData.images[currentBackgroundImage]})`
                 }}
-
             >
                 <AppBar position="static" elevation={0} color='transparent'>
                     <Container maxWidth="xl">
