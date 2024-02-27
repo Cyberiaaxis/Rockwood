@@ -11,10 +11,17 @@ import { GiCrystalBars, GiMedal, GiSatelliteCommunication, GiCrimeSceneTape } fr
 import { SiMarketo } from "react-icons/si";
 import { AiFillHome } from "react-icons/ai";
 import { CgEventbrite } from "react-icons/cg";
+import gameServerApi from "../libraries/gameServerApi";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function Header({ setPage }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [header, setHeader] = React.useState(null);
+
   const open = Boolean(anchorEl);
+
+  const navigate = useNavigate();
 
   const handleClick = (index, event) => {
     setAnchorEl({ [index]: event.currentTarget });
@@ -77,7 +84,7 @@ export default function Header({ setPage }) {
         pending: 'Please wait, We are logging you out!',
         success: {
           render({ data }) {
-            navigate('/')
+            navigate("/");
             return 'Your has been logged out successfully!';
           }
         },
@@ -90,24 +97,62 @@ export default function Header({ setPage }) {
         // error: 'An error occurred while creating your account',
       });
   };
+
+  React.useEffect(() => {
+    // Function to load data
+    const getHeaderData = async (data) => {
+      const response = await toast.promise(
+        gameServerApi('/header'),
+        {
+          pending: 'Please wait, We are creating your account',
+          success: {
+            render({ data }) {
+              // console.log("data render", data);
+              setHeader(data)
+            },
+          },
+          error: {
+            theme: 'colored',
+            render({ data }) {
+              return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message;
+            },
+          },
+          // error: 'An error occurred while creating your account',
+        }
+      );
+    };
+
+    // Call the fetchData function when the component mounts
+    getHeaderData();
+
+    // Cleanup function (optional)
+    return () => {
+      // Perform any cleanup if necessary
+      setHeader(null);
+    };
+  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+
+  // console.log("header", header ? header.countries.country[0].name : "notprint");
   return (
     <React.Fragment>
       <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
         <Box gridColumn="span 2">
-          <GradientButton fullWidth onClick={() => setPage("explore")} size="large">
-            Explore, Pakistan
-          </GradientButton>
+          <Tooltip title="Explore" arrow>
+            <GradientButton fullWidth onClick={() => setPage("explore")} size="large">
+              {header?.countries.country[0].name}, {header?.countries.region[0].name}
+            </GradientButton>
+          </Tooltip>
         </Box>
         <Box gridColumn="span 7">
           <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
             <Box gridColumn="span 4">
-              <Progress label="Energy" percentComplete={70} />
+              <Progress label="HP" percentComplete={header?.barStats?.hp} color="green" />
             </Box>
             <Box gridColumn="span 4">
-              <Progress label="Nerve" percentComplete={70} />
+              <Progress label="Energy" percentComplete={header?.barStats?.energy} color="blue" />
             </Box>
             <Box gridColumn="span 4">
-              <Progress label="Agility" percentComplete={70} />
+              <Progress label="Nerve" percentComplete={header?.barStats?.nerve} />
             </Box>
           </Box>
           <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
@@ -163,7 +208,7 @@ export default function Header({ setPage }) {
                 <MdOutlineAttachMoney style={{ color: "red" }} />
               </Box>
               <Box>
-                Money : 156,0000,000
+                Money : {header?.money}
               </Box>
 
             </Box>
@@ -172,7 +217,7 @@ export default function Header({ setPage }) {
                 <GiCrystalBars style={{ color: "gold" }} />
               </Box>
               <Box>
-                Points : 2,00,000
+                Points :{header?.points}
               </Box>
             </Box>
             <Box sx={{ textAlign: "left", display: "flex" }}>
@@ -180,7 +225,7 @@ export default function Header({ setPage }) {
                 <GiMedal style={{ color: "green" }} />
               </Box>
               <Box>
-                Merits : 156
+                Merits : {header?.awards}
               </Box>
             </Box>
           </Item>
@@ -227,25 +272,18 @@ export default function Header({ setPage }) {
               transformOrigin={{ horizontal: "right", vertical: "top" }}
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={() => setPage("profile")}>
                 <Avatar /> Profile
               </MenuItem>
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={() => setPage("myaccount")}>
                 <Avatar /> My account
               </MenuItem>
-
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <PersonAdd fontSize="small" />
-                </ListItemIcon>
-                Add another account
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
+              {/* <MenuItem onClick={handleClose}>
                 <ListItemIcon>
                   <Settings fontSize="small" />
                 </ListItemIcon>
                 Settings
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
                   <Logout fontSize="small" />

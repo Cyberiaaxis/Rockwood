@@ -116,7 +116,7 @@ function Attack(props) {
     };
 
     const manageOption = (event, newValue) => {
-        console.log('New Option Selected:', newValue);
+        // console.log('New Option Selected:', newValue);
         setOption(newValue);
     };
 
@@ -195,7 +195,7 @@ function Attack(props) {
     }
 
     function onCrosshairContainerMouseMove(e) {
-        console.log('mouse move detected', e)
+        // console.log('mouse move detected', e)
         if (moving) {
             move(e)
         }

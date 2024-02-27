@@ -32,14 +32,14 @@ const Home = () => {
           pending: 'Please wait, We are creating your account',
           success: {
             render({ data }) {
-              console.log("data render", data);
+              // console.log("data render", data);
               setPlayerHomeData(data)
             },
           },
           error: {
             theme: 'colored',
             render({ data }) {
-              return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message;
+              return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message || 'An error occurred while fetching home data';
             },
           },
           // error: 'An error occurred while creating your account',
@@ -56,7 +56,7 @@ const Home = () => {
     };
   }, []); // Empty dependency array ensures the effect runs only once when the component mounts
 
-  console.log("playerHomeData", playerHomeData);
+  // console.log("playerHomeData", playerHomeData);
   return (
     <React.Fragment>
 
@@ -142,43 +142,43 @@ const Home = () => {
                         Name
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.name}
+                        {playerHomeData.playerInfo.name}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Level
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.level}
+                        {playerHomeData.playerInfo.level}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Rank
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.rank}
+                        {playerHomeData.playerInfo.rank}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Last Award
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.totalAwards}
+                        {playerHomeData.playerInfo.totalAwards}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Age
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.age}
+                        {playerHomeData.playerInfo.age}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Property
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.activeHouse}
+                        {playerHomeData.playerInfo.activeHouse}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Gang
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        Pending
+                        {playerHomeData.playerInfo.gang[0].name}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Last Traning

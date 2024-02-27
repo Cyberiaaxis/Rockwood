@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Region extends Model
+class Region extends GameBaseModel
 {
 
     /**
@@ -20,8 +20,9 @@ class Region extends Model
      * @param  $id INT
      * @return name string
      */
-    public function getAreaById(int $id): string
+    public function getRegionNameById(int $id)
     {
-        return  $this->find($id)->value('name');
+        // return "getRegionNameById===". $id;
+        return $this->db->where(['id' => $id])->get('name');   
     }
 }

@@ -80,3 +80,8 @@
     /* Final opacity */
   }
 }
+
+.hovered-text {
+  /* Define hover styles here */
+  text-decoration: underline;
+}

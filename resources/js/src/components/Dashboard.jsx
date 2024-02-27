@@ -1,5 +1,4 @@
-import React from "react";
-// import { clsx } from "clsx";
+import React, { useState } from "react";
 import "../styles/Main.css";
 import Header from "./Header";
 import LeftSidebar from "./LeftSidebar";
@@ -22,87 +21,69 @@ import Forums from "./Forums";
 import Mail from "./mail/Mailbox";
 import Thread from "./Thread";
 import FightClubs from "./FightClubs";
-// import Chat from "./Chat";
-
+import MyAccount from "./MyAccount";
 
 export default function Dashboard() {
     const [openStates, setOpenStates] = React.useState({});
     const [activePage, setActivePage] = React.useState(<Home />);
     const [threadId, setThreadId] = React.useState(<Home />);
-    // console.log("**Dashboard**");
 
     function toggleOpen(menuName) {
         setOpenStates((os) => ({ ...os, [menuName]: !os[menuName] }));
     }
 
-    function Page({ page = "home" }) {
-        const pages = {
-            home: <Home />,
-            explore: <Explore setPage={setActivePage} />,
-            profile: <Profile />,
-            event: <Event />,
-            halloffame: <HallOfFame />,
-            recovery: <Recovery />,
-            lockup: <Lockup />,
-            savings: <Savings />,
-            gym: <Gym />,
-            gang: <Gang />,
-            attack: <Attack />,
-            crimes: <Crimes />,
-            travel: <Travel />,
-            mail: <Mail />,
-            forums: <Forums />,
-            thread: <Thread threadId={threadId} />,
-            fightclub: <FightClubs />
-        };
-        console.log("pages[page] || pages.home", pages[page]);
-        return pages[page] || pages.home;
-    }
-    activePage
-    console.log("openStates", openStates.left);
-    console.log("activePage", activePage);
+    const pages = React.useMemo(() => ({
+        home: <Home />,
+        explore: <Explore setPage={setActivePage} />,
+        profile: <Profile />,
+        event: <Event />,
+        halloffame: <HallOfFame />,
+        recovery: <Recovery />,
+        lockup: <Lockup />,
+        savings: <Savings />,
+        gym: <Gym />,
+        gang: <Gang />,
+        attack: <Attack />,
+        crimes: <Crimes />,
+        travel: <Travel />,
+        mail: <Mail />,
+        forums: <Forums />,
+        thread: <Thread threadId={threadId} />,
+        fightclub: <FightClubs />,
+        myaccount: <MyAccount />
+    }), [threadId]);
+
     return (
         <React.Fragment>
             <div className="App">
                 <nav
-                    className={
-                        openStates['top'] ? 'top_menu active' : 'top_menu'
-
-                    }
+                    className={openStates['top'] ? 'top_menu active' : 'top_menu'}
                     tabIndex="0"
-                // onClick={() => toggleOpen("top")}
                 >
                     <Header setPage={setActivePage} />
                 </nav>
                 <nav
-                    className={
-                        openStates["left"] ? "left_menu active" : "left_menu"
-                    }
+                    className={openStates["left"] ? "left_menu active" : "left_menu"}
                     tabIndex="0"
                     onClick={() => toggleOpen("left")}
                 >
                     <LeftSidebar setPage={setActivePage} opener={openStates.left} />
                 </nav>
                 <nav
-                    className={
-                        openStates["right"] ? "right_menu active" : "right_menu"
-                    }
+                    className={openStates["right"] ? "right_menu active" : "right_menu"}
                     tabIndex="0"
                     onClick={() => toggleOpen("right")}
                 >
                     <RightSidebar setPage={setActivePage} opener={openStates.right} />
                 </nav>
                 <nav
-                    className={
-                        openStates["bottom"] ? "bottom_menu active" : "bottom_menu"
-                    }
+                    className={openStates["bottom"] ? "bottom_menu active" : "bottom_menu"}
                     tabIndex="0"
-                // onClick={() => toggleOpen("bottom")}
                 >
                     <Footer setPage={setActivePage} />
                 </nav>
                 <main className="content-area">
-                    <Page page={activePage} />
+                    {pages[activePage] || pages.home}
                 </main>
             </div>
         </React.Fragment>

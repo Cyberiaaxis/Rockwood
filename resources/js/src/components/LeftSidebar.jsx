@@ -83,7 +83,11 @@ export default function LeftSideBar({ setPage, opener }) {
         }}
       >
         <li>
-          <Tooltip title={opener ? 'opened' : 'closed'} placement="top"> {opener ? <IoIosArrowBack style={{ color: 'red' }} /> : <IoIosArrowForward style={{ color: 'green' }} />}</Tooltip>
+          <Tooltip title={opener ? 'opened' : 'closed'} placement="top">
+            <div>
+              {opener ? <IoIosArrowBack style={{ color: 'red' }} /> : <IoIosArrowForward style={{ color: 'green' }} />}
+            </div>
+          </Tooltip>
         </li>
       </Box>
     </React.Fragment >

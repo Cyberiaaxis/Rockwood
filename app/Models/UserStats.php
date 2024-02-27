@@ -59,6 +59,17 @@ class UserStats extends Model
     }
 
     /**
+     * doing decrement of nerve of a user.
+     * @param  int $userId, int $userNerve
+     * @return query result in boolean
+     */
+    public function getMultipleStats(int $userId)
+    {
+        return $this->where('user_id', $userId)->first(['hp', 'energy', 'nerve', 'max_energy', 'max_hp', 'max_nerve']);
+    }
+    
+
+    /**
      * Decrement of bustExperince.
      * @param  int $userId, $bustExperience
      * @return query result in boolean
@@ -94,7 +105,7 @@ class UserStats extends Model
      * @param  int  $userId
      * @return int nerve
      */
-    public function haveNerve(int $userId): int
+    public function getNerve(int $userId): int
     {
         return $this->where('user_id', $userId)->value('nerve');
     }
@@ -104,7 +115,7 @@ class UserStats extends Model
      * @param  int $userId
      * @return int max_nerve
      */
-    public function maxNerve(int $userId): int
+    public function getMaxNerve(int $userId): int
     {
         return $this->where('user_id', $userId)->value('max_nerve');
     }

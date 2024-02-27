@@ -11,11 +11,11 @@ export default function RightSideBar({ setPage, opener }) {
 
   const menuItems = [
     {
-      title: "Travel",
-      icon: <SiYourtraveldottv style={{ height: 80, width: 40 }} />,
-      url: "travel",
+      title: "Hall of Fame",
+      icon: <img src="/images/hof.png" alt="Description of the image" style={{ height: 50, width: 40 }} />,
+      url: "halloffame",
     },
-
+    // c:\Users\cyber\Downloads\Hall-Of-Fame-PNG-Download-Image.png
     {
       title: "Forums",
       icon: <FaSteamSquare style={{ height: 80, width: 40 }} />,

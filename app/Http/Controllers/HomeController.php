@@ -13,7 +13,9 @@ use App\Models\{
     Level,
     RealEstate,
     UserStats, 
-    Country
+    Country,
+    City,
+    Gang
 };
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -52,7 +54,10 @@ class HomeController extends Controller
      * @var Level         $level              The instance of the Level model.
      * @var Carbon        $carbon             The Carbon instance for date/time handling.
      * @var int           $authenticatedUserId    The ID of the authenticated user.
-     * @var Country       $country            The instance of the Country model.
+     * @var Country       $country            The instance of the Country model.     
+     * @var Region        $region             The instance of the Region model.
+     * @var City          $country            The instance of the City model.
+     * @var Gang          $gang               The instance of the gang model.
      */
     protected $region,
         $attack,
@@ -64,9 +69,11 @@ class HomeController extends Controller
         $userReward,
         $rank,
         $country,
+        $city,
         $user,
         $level,
         $carbon,
+        $gang,
         $authenticatedUserId;
 
     /**
@@ -86,6 +93,9 @@ class HomeController extends Controller
      * @param RealEstate $realEstate The real estate model instance.
      * @param UserReward $userReward The user reward model instance.
      * @param Country $country The country model instance.
+     * @param City $country The city model instance.
+     * @param Region $country The region model instance.
+     * @param Gang $country The gang model instance.
      * @return void
      */
     public function __construct(
@@ -100,7 +110,9 @@ class HomeController extends Controller
         Carbon $carbon,
         RealEstate $realEstate,
         UserReward $userReward, 
-        Country $country
+        Country $country,
+        City $city,
+        Gang $gang
     ) {
         $this->authenticatedUserId = auth()->user(); // Set the authenticated user ID
         $this->region = $region; // Set the area model instance
@@ -115,6 +127,8 @@ class HomeController extends Controller
         $this->userReward = $userReward; // Set the user reward model instance
         $this->attack = $attack; // Set the attack model instance
         $this->country = $country; // Set the attack model instance
+        $this->city = $city; //set the city model instance
+        $this->gang = $gang; //set the gang model instance
         $this->authenticatedUserId = $this->getAuthenticatedUserId(); // Retrieve and set the authenticated user ID
     }
 
@@ -130,7 +144,7 @@ class HomeController extends Controller
     public function index()
     {
         $details = [
-            "countries" => $this->countries(),
+            // "countries" => $this->countries(),
             "playerInfo" => $this->getPlayerInfo(),
             "attackStats" => $this->getAttackStats(),
             "battleStats" => $this->getBattleStats(),
@@ -182,6 +196,20 @@ class HomeController extends Controller
     }
 
     /**
+     * Retrieve the level information for the authenticated user.
+     *
+     * This method fetches the level ID of the authenticated user and then
+     * retrieves the corresponding level information using the Level model.
+     *
+     * @return mixed The level information of the authenticated user.
+     */
+    public function currentGang()
+    {
+        // dd($this->userDetails->getGangId($this->authenticatedUserId));
+        return  $this->gang->getGangNameById($this->userDetails->getGangId($this->authenticatedUserId));
+    }
+   
+    /**
      * Retrieve the active house information for the authenticated user.
      *
      * This method fetches the ID of the active house of the authenticated user
@@ -218,10 +246,43 @@ class HomeController extends Controller
      *
      * @return mixed The area information of the authenticated user.
      */
-    public function area()
+    public function currentLocation()
     {
-        $areaId = $this->userDetails->getLocation($this->authenticatedUserId);
-        return $this->region->getAreaById($areaId);
+        // return $this->countries();
+      $hereThePlayer = [];
+      $currentLocation =  $this->userDetails->getLocation($this->authenticatedUserId);
+      if($currentLocation[0]["location_country"]){
+         $hereThePlayer['country']  = $this->country->getCountryNameById($currentLocation[0]["location_country"]);
+       };
+
+        if ($currentLocation[0]["location_region"]) {
+            $hereThePlayer['region'] = $this->region->getRegionNameById($currentLocation[0]["location_region"]);
+        };
+
+        if ($currentLocation[0]["location_city"]) {
+            $hereThePlayer['city'] = $this->city->getCityNameById($currentLocation[0]["location_city"]);
+        };
+        return $hereThePlayer;
+    }
+
+    /**
+     * Retrieve the area information for the authenticated user.
+     *
+     * This method fetches the ID of the area where the authenticated user is located
+     * using the UserDetail model and then retrieves the corresponding area information
+     * using the Area model.
+     *
+     * @return mixed The area information of the authenticated user.
+     */
+    public function headerStats()
+    {        
+        return response()->json([
+            "countries" => $this->currentLocation(),
+            "barStats" => $this->userStats->getMultipleStats($this->authenticatedUserId),
+            "money" => $this->money(),
+            "points" => $this->points(),
+            "awards" => $this->totalAwards(),
+        ]);
     }
 
     /**
@@ -561,19 +622,6 @@ class HomeController extends Controller
      *
      * @return int The points accumulated by the authenticated user.
      */
-    public function countries()
-    {
-       return $this->country->getAllCountries();
-        
-    }
-
-    /**
-     * Get the points accumulated by the authenticated user.
-     *
-     * This method retrieves and returns the points accumulated by the authenticated user.
-     *
-     * @return int The points accumulated by the authenticated user.
-     */
     public function points()
     {
         return $this->userDetails->getUserPoints($this->authenticatedUserId);
@@ -643,12 +691,13 @@ class HomeController extends Controller
             "rank" => $this->rank(), // Get player's rank using the rank() method
             "level" => $this->level(), // Get player's level using the level() method
             "activeHouse" => $this->activeHouse(), // Get player's active house using the activeHouse() method
-            "area" => $this->area(), // Get player's area using the area() method
+            "location" => $this->currentLocation(), // Get player's area using the area() method
             "totalAwards" => $this->totalAwards(), // Get player's total awards using the totalAwards() method
             "totalCrimes" => $this->totalCrimes(), // Get player's total crimes using the totalCrimes() method
             "age" => $this->age(), // Get player's age using the age() method
             "money" => $this->money(), // Get player's money using the money() method
             "points" => $this->points(), // Get player's points using the points() method
+            "gang" => $this->currentGang() // Get player's gang using the points() method
         ];
     }
 }

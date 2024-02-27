@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Throwable;
 
-class City extends Model
+class City extends GameBaseModel
 {
     /**
      * get city name by id from storage.
@@ -14,6 +14,17 @@ class City extends Model
      */
     public function getCityById(int $id): string
     {
-        return $this->find($id)->value('name');
+        return $this->db->where('id', $id)->pluck('name')->first();
     }
+
+    /**
+     * get country name by this method.
+     * @param  INT  $id
+     * @return string country name
+     */
+    public function getCityNameById(int $id)
+    {
+        return $this->db->where(['id' => $id])->get('name');
+    }
+
 }

@@ -20,4 +20,12 @@ class Gang extends GameBaseModel
     {
         return  $this->take(10)->orderBy('name')->pluck('name');
     }
+
+    /**
+     * get total posts
+     */
+    public function getGangNameById(int $id)
+    {
+        return $this->db->where(['id' => $id])->get('name');   
+    }
 }

@@ -34,6 +34,7 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/users', 'App\Http\Controllers\UsersController@index');
     $router->post('/saveRank', 'App\Http\Controllers\RanksController@feed');
     $router->get('/ranks', 'App\Http\Controllers\RanksController@index');
+    $router->get('/header', 'App\Http\Controllers\HomeController@headerStats');
     $router->get('/roles', 'App\Http\Controllers\RolesController@index');
     $router->get('/jobs', 'App\Http\Controllers\JobController@index');
     $router->get('/real_estates', 'App\Http\Controllers\RealEstateController@index');

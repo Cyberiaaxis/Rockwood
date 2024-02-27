@@ -79,10 +79,12 @@ class UserDetail extends Model
             'points' => 10,
             'rank_id' => 1,
             'level_id' => 1,
-            'location_id' => 1,
+            'gang_id' => 1,
             'realestate_id' => 1,
+            'location_country' => 0,
+            'location_region' => 0,
+            'location_city' => 0,
             'travel_route_id'  => 1,
-            'is_travel'  => 0,
         ]);
     }
 
@@ -94,6 +96,16 @@ class UserDetail extends Model
     public function getUserMoney(int $userId): int
     {
         return  $this->where(['user_id' => $userId])->value('money');
+    }
+
+    /**
+     * get player's money from storage.
+     * @param  INT $userId
+     * @return int
+     */
+    public function getGangId(int $userId)
+    {
+        return  $this->where(['user_id' => $userId])->value('gang_id');
     }
 
     /**
@@ -131,9 +143,9 @@ class UserDetail extends Model
      * @param  int $userId
      * @return int
      */
-    public function getLocation(int $userId): int
+    public function getLocation(int $userId)
     {
-        return  $this->where(['user_id' => $userId])->value('location_id');
+        return  $this->where(['user_id' => $userId])->get(["location_country", "location_region","location_city"]);
     }
 
     /**

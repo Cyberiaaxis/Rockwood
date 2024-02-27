@@ -28,7 +28,7 @@ export default function ForumList({ forumId, handleClick }) {
         fetchForums();
     }, []);
 
-    console.log("forumsList", forumsList)
+    // console.log("forumsList", forumsList)
 
     return (
         <React.Fragment>

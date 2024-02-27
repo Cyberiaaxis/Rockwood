@@ -37,4 +37,14 @@ class Country extends GameBaseModel
         return $this->db->where(['name'=> "Demo Country 2"])->get('id');
     }
 
+    /**
+     * get country name by this method.
+     * @param  INT  $id
+     * @return string country name
+     */
+    public function getCountryNameById(int $id) 
+    {
+        return $this->db->where(['id' => $id])->get('name');        
+    }
+
 }
