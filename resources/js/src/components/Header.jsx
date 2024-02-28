@@ -15,7 +15,7 @@ import gameServerApi from "../libraries/gameServerApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-export default function Header({ setPage }) {
+function Header({ setPage }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [header, setHeader] = React.useState(null);
 
@@ -139,7 +139,7 @@ export default function Header({ setPage }) {
         <Box gridColumn="span 2">
           <Tooltip title="Explore" arrow>
             <GradientButton fullWidth onClick={() => setPage("explore")} size="large">
-              {header?.countries.country[0].name}, {header?.countries.region[0].name}
+              {header?.countries.country.name}, {header?.countries.region.name}
             </GradientButton>
           </Tooltip>
         </Box>
@@ -297,3 +297,4 @@ export default function Header({ setPage }) {
     </React.Fragment>
   );
 }
+export default Header;

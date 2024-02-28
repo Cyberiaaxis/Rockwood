@@ -26,6 +26,6 @@ class Gang extends GameBaseModel
      */
     public function getGangNameById(int $id)
     {
-        return $this->db->where(['id' => $id])->get('name');   
+        return $this->db->where(['id' => $id])->value('name');   
     }
 }

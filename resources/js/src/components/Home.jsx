@@ -178,13 +178,13 @@ const Home = () => {
                         Gang
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.playerInfo.gang[0].name}
+                        {playerHomeData.playerInfo.gang}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Last Traning
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        Pending
+                        {playerHomeData.playerInfo.course}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Travels
@@ -212,31 +212,31 @@ const Home = () => {
                         Strength
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.strength}
+                        {playerHomeData.battleStats.strength}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Defense
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.defense}
+                        {playerHomeData.battleStats.defense}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Agility
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.agility}
+                        {playerHomeData.battleStats.agility}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Endurance
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.endurance}
+                        {playerHomeData.battleStats.endurance}
                       </Grid>
                       <Grid item xs={9} style={{ border: "1px solid black" }}>
                         Total
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.strength + playerHomeData.defense + playerHomeData.agility + playerHomeData.endurance}
+                        {playerHomeData.battleStats.strength + playerHomeData.battleStats.defense + playerHomeData.battleStats.agility + playerHomeData.battleStats.endurance}
                       </Grid>
                       <Grid item xs={12} style={{ border: "1px solid black" }}>
                         Traning Stats
@@ -279,39 +279,39 @@ const Home = () => {
                         Attack Won
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.asAttackerWon}
+                        {playerHomeData.attackStats.asAttackerWon}
                       </Grid>
 
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Defence Won
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.asDefenderWon}
+                        {playerHomeData.attackStats.asDefenderWon}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Attack Lost
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.asAttackerLost}
+                        {playerHomeData.attackStats.asAttackerLost}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Defence Lost
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.asDefenderLost}
+                        {playerHomeData.attackStats.asDefenderLost}
                       </Grid>
 
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Attacks stalemated
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.asAttackerSettlement}
+                        {playerHomeData.attackStats.asAttackerSettlement}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Defends stalemated
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
-                        {playerHomeData.asDefenderSettlement}
+                        {playerHomeData.attackStats.asDefenderSettlement}
                       </Grid>
                       <Grid item xs={3} style={{ border: "1px solid black" }}>
                         Total Attacks

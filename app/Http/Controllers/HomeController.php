@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\{
+    Course,
+    UserCourseHistory,
     UserReward,
     UserDetail,
     UserCrime,
@@ -12,7 +14,7 @@ use App\Models\{
     Region,
     Level,
     RealEstate,
-    UserStats, 
+    UserStats,
     Country,
     City,
     Gang
@@ -74,7 +76,9 @@ class HomeController extends Controller
         $level,
         $carbon,
         $gang,
-        $authenticatedUserId;
+        $authenticatedUserId,
+        $course,
+        $userCourseHistory;
 
     /**
      * Create a new controller instance.
@@ -93,10 +97,12 @@ class HomeController extends Controller
      * @param RealEstate $realEstate The real estate model instance.
      * @param UserReward $userReward The user reward model instance.
      * @param Country $country The country model instance.
-     * @param City $country The city model instance.
-     * @param Region $country The region model instance.
-     * @param Gang $country The gang model instance.
-     * @return void
+     * @param City $city The city model instance.
+     * @param Region $region The region model instance.
+     * @param Gang $gang The gang model instance.
+     * @param Course $course The gang model instance. 
+     * @param UserCourseHistory $userCourseHHistory The gang model instance. 
+     * @return void 
      */
     public function __construct(
         Region $region,
@@ -112,23 +118,27 @@ class HomeController extends Controller
         UserReward $userReward, 
         Country $country,
         City $city,
-        Gang $gang
+        Gang $gang,
+        Course $course,
+        UserCourseHistory $userCourseHistory
     ) {
         $this->authenticatedUserId = auth()->user(); // Set the authenticated user ID
-        $this->region = $region; // Set the area model instance
-        $this->level = $level; // Set the level model instance
-        $this->rank = $rank; // Set the rank model instance
-        $this->user = $user; // Set the user model instance
-        $this->userDetails = $userDetail; // Set the user detail model instance
-        $this->userCrime = $userCrime; // Set the user crime model instance
-        $this->userStats = $userStats; // Set the user stats model instance
-        $this->carbon = $carbon; // Set the Carbon instance
-        $this->realEstate = $realEstate; // Set the real estate model instance
-        $this->userReward = $userReward; // Set the user reward model instance
-        $this->attack = $attack; // Set the attack model instance
-        $this->country = $country; // Set the attack model instance
-        $this->city = $city; //set the city model instance
-        $this->gang = $gang; //set the gang model instance
+        $this->region = $region;
+        $this->level = $level;
+        $this->rank = $rank;
+        $this->user = $user;
+        $this->userDetails = $userDetail;
+        $this->userCrime = $userCrime;
+        $this->userStats = $userStats;
+        $this->carbon = $carbon;
+        $this->realEstate = $realEstate;
+        $this->userReward = $userReward;
+        $this->attack = $attack;
+        $this->country = $country;
+        $this->city = $city;
+        $this->gang = $gang;
+        $this->course = $course;
+        $this->userCourseHistory = $userCourseHistory;
         $this->authenticatedUserId = $this->getAuthenticatedUserId(); // Retrieve and set the authenticated user ID
     }
 
@@ -191,8 +201,27 @@ class HomeController extends Controller
      */
     public function level()
     {
-        $levelId = $this->userDetails->getLevelId($this->authenticatedUserId);
-        return $this->level->getLevelById($levelId);
+        return $this->level->getLevelById(
+            $this->userDetails->getLevelId($this->authenticatedUserId)
+        );
+    }
+
+    /**
+     * Retrieve the level information for the authenticated user.
+     *
+     * This method fetches the level ID of the authenticated user and then
+     * retrieves the corresponding level information using the Level model.
+     *
+     * @return mixed The level information of the authenticated user.
+     */
+    public function currentCourse()
+    {
+       return $this->course->getCourseNameById(
+            $this->userCourseHistory->getUserCourseById(
+                $this->authenticatedUserId,
+                $this->carbon->now()->toDateString()
+            )
+        );
     }
 
     /**
@@ -697,7 +726,8 @@ class HomeController extends Controller
             "age" => $this->age(), // Get player's age using the age() method
             "money" => $this->money(), // Get player's money using the money() method
             "points" => $this->points(), // Get player's points using the points() method
-            "gang" => $this->currentGang() // Get player's gang using the points() method
+            "gang" => $this->currentGang(), // 
+            "course" => $this->currentCourse() // 
         ];
     }
 }

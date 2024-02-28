@@ -13,9 +13,11 @@ class UserCoursesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_courses', function (Blueprint $table) {
+        Schema::create('user_course_history', function (Blueprint $table) {
             $table->foreignId('user_id');
             $table->foreignId('course_id');
+            $table->date('completion_date')->nullable();
+            $table->unsignedInteger('grade')->nullable(); // Change the data type to unsigned integer
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('course_id')->references('id')->on('courses');
             $table->primary(['user_id','course_id']);
@@ -29,6 +31,6 @@ class UserCoursesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_courses');
+        Schema::dropIfExists('user_course_history');
     }
 }
