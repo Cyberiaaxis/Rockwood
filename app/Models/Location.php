@@ -74,6 +74,12 @@ class Location extends GameBaseModel
         return $this->db->where('parent_id', $parentId)->get();
     }
 
+    public function getLocations()
+    {
+        // Retrieve locations by their parent ID
+        return $this->db->get();
+    }
+
     /**
      * Get locations by their ID and type.
      *

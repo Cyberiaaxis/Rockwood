@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Validation\Rule;
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class LocationController extends Controller
 {
@@ -17,15 +18,25 @@ class LocationController extends Controller
     public function makeLocation(Request $request)
     {
         // Validate incoming request data and perform unique validation
-        $validatedData = $this->verifyData($request);
-        // dd($validatedData);
+        $validatedData = $this->validateAndVerifyRequestData($request);
+
+        // Upload avatar if present and store path in database
+        $avatarPath = $this->uploadAvatar($validatedData);
+
+        // Add avatar path to validated data
+        if ($avatarPath) {
+            $validatedData['avatar'] = $avatarPath;
+        }
 
         // Create a new location record
         $location = new Location();
         $location->addLocation($validatedData);
 
         // Return a response indicating success
-        return response()->json(['message' => $validatedData['type'] . ' with name ' . $validatedData['name'] . ' created successfully', 'location' => $validatedData], 201);
+        return response()->json([
+            'message' => $validatedData['type'] . ' with name ' . $validatedData['name'] . ' created successfully',
+            'location' => $validatedData
+        ], 201);
     }
 
     /**
@@ -34,28 +45,97 @@ class LocationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    private function verifyData(Request $request): array
+    private function validateAndVerifyRequestData(Request $request): array
     {
-        // Validate incoming request data
-        $finalValidatedData = $request->validate([
+        // Define validation rules
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'type' => ['required', 'string', 'max:255'],
+            'avatar' => ['nullable', 'image|mimes:jpeg,png,jpg,gif', 'max:2048'],
             'parent_id' => ['nullable', 'exists:locations,id'], // Ensure parent_id exists in locations table
             'coordinateX' => ['required', 'integer'],
             'coordinateY' => ['required', 'integer']
-        ]);
+        ];
+
+        // Check if the request has 'id' field, add validation rule if present
+        if ($request->has('id')) {
+            $rules['id'] = ['nullable', 'integer', 'exists:locations'];
+        }
+
+        // Validate incoming request data
+        $validatedData = $request->validate($rules);
 
         // Perform additional unique validation for name, type, and parent_id
-        $uniqueRule = Rule::unique('locations')->where(function ($query) use ($finalValidatedData) {
-            return $query->where('name', $finalValidatedData['name'])
-                        ->where('type', $finalValidatedData['type'])
-                        ->where('parent_id', $finalValidatedData['parent_id']);
+        $uniqueRule = Rule::unique('locations')->where(function ($query) use ($validatedData) {
+            return $query->where('name', $validatedData['name'])
+                ->where('type', $validatedData['type'])
+                ->where('parent_id', $validatedData['parent_id']);
         });
 
-        // Return the validated data including the result of unique validation
+        // Apply unique validation rule for the 'name' field
         $request->validate([
             'name' => $uniqueRule,
         ]);
-        return $finalValidatedData;
+
+        // Return the validated data
+        return $validatedData;
+    }
+
+    /**
+     * Retrieve all locations.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function locations(Request $request)
+    {
+        $location = new Location();
+        return $location->getLocations();
+    }
+
+    /**
+     * Amend a location.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function amendLocation(Request $request)
+    {
+        // Validate incoming request data and perform unique validation
+        $validatedData = $this->validateAndVerifyRequestData($request);
+
+        // Upload avatar if present and store path in database
+        $avatarPath = $this->uploadAvatar($validatedData);
+
+        // Separate 'id' from other validated data
+        $id = ['id' => $validatedData['id']];
+        $remainingData = array_diff_key($validatedData, $id);
+
+        // If an avatar was uploaded, include its path in the data to be stored or updated
+        if ($avatarPath) {
+            $remainingData['avatar'] = $avatarPath;
+        }
+
+        // Modify the location using 'id' and other data
+        $location = new Location();
+        return $location->modifyLocation($id['id'], $remainingData);
+    }
+
+    /**
+     * Upload and store the avatar.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string|null
+     */
+    private function uploadAvatar($validatedData): ?string
+    {
+        if ($validatedData->hasFile('avatar')) {
+            $avatar = $validatedData->file('avatar');
+            $filename = time() . '.' . $avatar->getClientOriginalExtension();
+            $path = $avatar->storeAs('locationImage', $filename); // Store in storage/app/avatars
+            return $path;
+        }
+
+        return null;
     }
 }
