@@ -134,6 +134,11 @@ class GameBaseModel
       return $this->db->insert($data);
     }
 
+    public function insertGetId(array $data)
+    {
+      return $this->db->insertGetId($data);
+    }
+
     /**
      * Add a basic where clause to the query, and return the first result.
      *

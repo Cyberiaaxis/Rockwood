@@ -292,20 +292,21 @@ class HomeController extends Controller
     public function currentLocation()
     {
         // return $this->countries();
-      $hereThePlayer = [];
-      $currentLocation =  $this->userDetails->getLocation($this->authenticatedUserId);
-      if($currentLocation[0]["location_country"]){
-         $hereThePlayer['country']  = $this->country->getCountryNameById($currentLocation[0]["location_country"]);
-       };
+    //   $hereThePlayer = [];
+    //   $currentLocation =  $this->userDetails->getLocation($this->authenticatedUserId);
+    //   if($currentLocation[0]["location_country"]){
+    //      $hereThePlayer['country']  = $this->country->getCountryNameById($currentLocation[0]["location_country"]);
+    //    };
 
-        if ($currentLocation[0]["location_region"]) {
-            $hereThePlayer['region'] = $this->region->getRegionNameById($currentLocation[0]["location_region"]);
-        };
+    //     if ($currentLocation[0]["location_region"]) {
+    //         $hereThePlayer['region'] = $this->region->getRegionNameById($currentLocation[0]["location_region"]);
+    //     };
 
-        if ($currentLocation[0]["location_city"]) {
-            $hereThePlayer['city'] = $this->city->getCityNameById($currentLocation[0]["location_city"]);
-        };
-        return $hereThePlayer;
+        // if ($currentLocation[0]["location_city"]) {
+        //     $hereThePlayer['city'] = $this->city->getCityNameById($currentLocation[0]["location_city"]);
+        // };
+        // return $hereThePlayer;
+        return "true";
     }
 
     /**

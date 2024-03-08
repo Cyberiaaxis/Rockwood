@@ -27,6 +27,7 @@ $router->post('/register', 'App\Http\Controllers\RegistrationController@signup')
 $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/auth/logout', 'App\Http\Controllers\LoginController@logout');
     $router->get('/home', 'App\Http\Controllers\HomeController@index');
+    $router->post('/addLocation', 'App\Http\Controllers\LocationController@makeLocation');
     // i think the 'ping' should go here? so it only works when authenticated
     $router->get('/ping', 'App\Http\Controllers\LoginController@ping');
     $router->get('/saccess', 'App\Http\Controllers\UsersController@AddSaccessStatus');
