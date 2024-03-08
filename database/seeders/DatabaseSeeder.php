@@ -74,9 +74,10 @@ class DatabaseSeeder extends Seeder
         $userDetails = new UserDetail();
         $userDetails->addUserDetails($userStored->id);
 
-        $countryData = [
+        $LocationData = [
             [
-                'name' => 'Demo Country 1',
+                'name' => 'Demo Country Name',
+                'type' => 'country',
                 'avatar' => null,
                 'description' => null,
             ],
@@ -252,12 +253,8 @@ class DatabaseSeeder extends Seeder
         $userCrimeStored = $userCrime->addCrimeRecords($userStored->id);
 
         $routeData = [
-            'from_country_id' => '1',
-            'from_city_id' => '1',
-            'from_region_id' => '1',
-            'to_country_id' => '2',
-            'to_city_id' => '2',
-            'to_region_id' => '2',
+            'from_location_id' => '1',
+            'to_location_id' => '2',
             'cost' => '2',
             'status' => '1',
             'duration' => '30',
@@ -266,7 +263,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         $travelRoutes = new TravelRoute();
-        $travelRoutes->routeCreate($routeData);
+        $travelRoutes->addTravelRoute($routeData);
         // $userTravel = new UserTravel();
 
         $attacks = new Attack();

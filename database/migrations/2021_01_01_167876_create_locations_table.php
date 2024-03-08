@@ -14,12 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('locations', function (Blueprint $table) {
-            $table->id(); // Primary key
+            $table->id(); // Unique identifier for each location (primary key)
             $table->string('name'); // Name of the location (country, region, or city)
-            $table->enum('type', ['country', 'region', 'city']); // Type of the location
-            $table->integer('parent_id')->nullable(); // Reference to the parent location's ID
-            $table->integer('coordinateX'); // X coordinate
-            $table->integer('coordinateY'); // Y coordinate
+            $table->enum('type', ['country', 'region', 'city']); // Type of the location (country, region, or city)
+            $table->integer('parent_id')->nullable(); // Reference to the parent location's ID (nullable if it's a top-level location)
+            $table->string('avatar')->nullable(); // Path to the avatar image (optional)
+            $table->string('description')->nullable(); // Description of the location (optional)
+            $table->integer('coordinateX'); // X coordinate (numeric value)
+            $table->integer('coordinateY'); // Y coordinate (numeric value)
             $table->timestamps(); // Timestamps for record creation and modification
         });
     }
