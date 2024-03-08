@@ -88,20 +88,20 @@ class RouteRequirementsMapping extends GameBaseModel
      * @param string $type The type of the location (country, city, region).
      * @return array An array of travel routes.
      */
-    public function getTravelRoutesByType(string $type): array
-    {
-        return $this->db->join('locations as from_locations', 'travel_routes.from_location_id', '=', 'from_locations.id')
-            ->join('locations as to_locations', 'travel_routes.to_location_id', '=', 'to_locations.id')
-            ->where('from_locations.type', $type)
-            ->where('to_locations.type', $type)
-            ->select(
-                'travel_routes.*',
-                'from_locations.name as from_location_name',
-                'to_locations.name as to_location_name'
-            )
-            ->get()
-            ->toArray();
-    }
+    // public function getTravelRoutesByType(string $type): array
+    // {
+    //     return $this->db->join('locations as from_locations', 'travel_routes.from_location_id', '=', 'from_locations.id')
+    //         ->join('locations as to_locations', 'travel_routes.to_location_id', '=', 'to_locations.id')
+    //         ->where('from_locations.type', $type)
+    //         ->where('to_locations.type', $type)
+    //         ->select(
+    //             'travel_routes.*',
+    //             'from_locations.name as from_location_name',
+    //             'to_locations.name as to_location_name'
+    //         )
+    //         ->get()
+    //         ->toArray();
+    // }
 
     /**
      * Get travel routes between specific locations.
