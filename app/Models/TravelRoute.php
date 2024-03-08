@@ -70,40 +70,6 @@ class TravelRoute extends GameBaseModel
     }
 
     /**
-     * Get route requirements by joining with travel routes.
-     *
-     * @param int $routeId The ID of the route.
-     * @return array An array of route requirements.
-     */
-    public function getRouteRequirements(int $routeId): array
-    {
-        return $this->db->join('route_requirements_mappings', 'route_requirements_mappings.route_id', '=', 'travel_routes.id')
-            ->where('route_requirements_mappings.route_id', $routeId)
-            ->get(['route_requirements_mappings.*'])->toArray();
-    }
-
-    /**
-     * Get travel routes from one type of location to the same type.
-     *
-     * @param string $type The type of the location (country, city, region).
-     * @return array An array of travel routes.
-     */
-    public function getTravelRoutesByType(string $type): array
-    {
-        return $this->db->join('locations as from_locations', 'travel_routes.from_location_id', '=', 'from_locations.id')
-            ->join('locations as to_locations', 'travel_routes.to_location_id', '=', 'to_locations.id')
-            ->where('from_locations.type', $type)
-            ->where('to_locations.type', $type)
-            ->select(
-                'travel_routes.*',
-                'from_locations.name as from_location_name',
-                'to_locations.name as to_location_name'
-            )
-            ->get()
-            ->toArray();
-    }
-
-    /**
      * Get travel routes between specific locations.
      *
      * @param int $originId The ID of the origin location.
