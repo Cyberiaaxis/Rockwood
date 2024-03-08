@@ -4,10 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\DatabaseManager;
 use App\Http\Controllers\ForumsController;
-use App\Models\Region;
 use App\Models\Attack;
-use App\Models\City;
-use App\Models\Country;
+use App\Models\Location;
 use App\Models\Crime;
 use App\Models\FightClub;
 use App\Models\Forum;
@@ -78,72 +76,64 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Demo Country Name',
                 'type' => 'country',
-                'avatar' => null,
-                'description' => null,
+                 'coordinateX' => 10,
+                 'coordinateY' => 20
             ],
             [
-                'name' => 'Demo Country 2',
-                'avatar' => null,
-                'description' => null,
-            ],
-            [
-                'name' => 'Demo Country 3',
-                'avatar' => null,
-                'description' => null,
+                'name' => 'Demo Region Name',
+                 'type' => 'region',
+                 'coordinateX' => 30,
+                 'coordinateY' => 40
 
+            ],
+            [
+                'name' => 'Demo City Name',
+                 'type' => 'city',
+                 'coordinateX' => 50,
+                 'coordinateY' => 60
+            ],
+            [
+                'name' => 'Demo New Country Name',
+                'type' => 'country',
+                'coordinateX' => 70,
+                 'coordinateY' => 80
+            ],
+            [
+                'name' => 'Demo New Region Name',
+                 'type' => 'region',
+                'coordinateX' => 90,
+                 'coordinateY' => 100
+
+            ],
+            [
+                'name' => 'Demo New City Name',
+                 'type' => 'city',
+                'coordinateX' => 110,
+                 'coordinateY' => 120
+            ],
+            [
+                'name' => 'Demo New Another Country Name',
+                'type' => 'country',
+                'coordinateX' => 130,
+                 'coordinateY' => 140
+            ],
+            [
+                'name' => 'Demo New Another Region Name',
+                 'type' => 'region',
+                 'coordinateX' => 150,
+                 'coordinateY' => 160
+
+            ],
+            [
+                'name' => 'Demo New Another City Name',
+                 'type' => 'city',
+                 'coordinateX' => 170,
+                 'coordinateY' => 180
             ]
         ];
 
-        $country = new Country();
-        $country->insert($countryData);
-        $regionData = [
-            [
-                'name' => 'Demo Region 1',
-                'avatar' => null,
-                'description' => null,
-                'country_id' => 1,
-            ],
-            [
-                'name' => 'Demo Region 2',
-                'avatar' => null,
-                'description' => null,
-                'country_id' => 2,
-            ],
-            [
-                'name' => 'Demo Region 3',
-                'avatar' => null,
-                'description' => null,
-                'country_id' => 3,
-
-            ]
-        ];
-        $region = new Region();
-        $region->insert($regionData);
-
-        $cityData = [
-            [
-                'name' => 'Demo City 1',
-                'avatar' => null,
-                'description' => null,
-                'region_id' => 1
-            ],
-            [
-                'name' => 'Demo City 2',
-                'avatar' => null,
-                'description' => null,
-                'region_id' => 2
-            ],
-            [
-                'name' => 'Demo City 3',
-                'avatar' => null,
-                'description' => null,
-                'region_id' => 3
-            ]
-        ];
-        $city = new City();
-        $city->insert($cityData);
-
-
+        $locations = new Location();
+        $locations->insert($LocationData);
 
         $forums = new Forum();
         $forums->insert([

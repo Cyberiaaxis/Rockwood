@@ -11,7 +11,13 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */    public function up()
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id(); // Unique identifier for each location (primary key)
@@ -25,12 +31,6 @@ return new class extends Migration
             $table->timestamps(); // Timestamps for record creation and modification
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('locations');

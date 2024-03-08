@@ -95,7 +95,7 @@ class Location extends GameBaseModel
      * @param array $locationData The attributes of the new location.
      * @return int The ID of the newly created location.
      */
-    public function addLocation(array $locationData): int 
+    public function addLocation(array $locationData): array 
     {
         // Insert the location data into the database and get the ID of the newly inserted record
         return $this->db->insertGetId($locationData);
