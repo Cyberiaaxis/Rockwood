@@ -21,9 +21,9 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id(); // Unique identifier for each location (primary key)
-            $table->string('name'); // Name of the location (country, region, or city)
-            $table->enum('type', ['country', 'region', 'city']); // Type of the location (country, region, or city)
-            $table->integer('parent_id')->nullable(); // Reference to the parent location's ID (nullable if it's a top-level location)
+            $table->string('name')->unique(); // Name of the location (country, region, or city)
+            $table->enum('type', ['country', 'region', 'city'])->unique(); // Type of the location (country, region, or city)
+            $table->integer('parent_id')->unique()->nullable(); // Reference to the parent location's ID (nullable if it's a top-level location)
             $table->string('avatar')->nullable(); // Path to the avatar image (optional)
             $table->string('description')->nullable(); // Description of the location (optional)
             $table->integer('coordinateX'); // X coordinate (numeric value)
