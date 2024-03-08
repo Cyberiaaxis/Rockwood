@@ -21,7 +21,7 @@ class LocationController extends Controller
         $validatedData = $this->validateAndVerifyRequestData($request);
 
         // Upload avatar if present and store path in database
-        $avatarPath = $this->uploadAvatar($validatedData);
+        $avatarPath = $this->uploadAvatar($request);
 
         // Add avatar path to validated data
         if ($avatarPath) {
@@ -51,15 +51,21 @@ class LocationController extends Controller
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'type' => ['required', 'string', 'max:255'],
-            'avatar' => ['nullable', 'image|mimes:jpeg,png,jpg,gif', 'max:2048'],
+           
             'parent_id' => ['nullable', 'exists:locations,id'], // Ensure parent_id exists in locations table
             'coordinateX' => ['required', 'integer'],
             'coordinateY' => ['required', 'integer']
         ];
 
         // Check if the request has 'id' field, add validation rule if present
-        if ($request->has('id')) {
+        if ($request->has('id')) 
+        {
             $rules['id'] = ['nullable', 'integer', 'exists:locations'];
+        }
+
+        if ($request->hasFile('avatar')) 
+        {
+            $rules['avatar'] = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'];
         }
 
         // Validate incoming request data
@@ -105,7 +111,7 @@ class LocationController extends Controller
         $validatedData = $this->validateAndVerifyRequestData($request);
 
         // Upload avatar if present and store path in database
-        $avatarPath = $this->uploadAvatar($validatedData);
+        $avatarPath = $this->uploadAvatar($request);
 
         // Separate 'id' from other validated data
         $id = ['id' => $validatedData['id']];
@@ -133,7 +139,7 @@ class LocationController extends Controller
             $avatar = $validatedData->file('avatar');
             $filename = time() . '.' . $avatar->getClientOriginalExtension();
             $path = $avatar->storeAs('locationImage', $filename); // Store in storage/app/avatars
-            return $path;
+            return "locationImage" . DIRECTORY_SEPARATOR . $filename;
         }
 
         return null;
