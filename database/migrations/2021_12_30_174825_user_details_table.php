@@ -30,10 +30,7 @@ class UserDetailsTable extends Migration
             $table->integer('active_course')->nullable();
             $table->timestamp('course_started')->nullable();
             $table->integer('current_job')->nullable();
-            $table->integer('location_country')->nullable();
-            $table->integer('location_region')->nullable();
-            $table->integer('location_city')->nullable();
-            $table->integer('is_travel')->nullable();
+            $table->integer('location_id')->default(1);
             $table->timestamp('job_started')->nullable();
         });
     }

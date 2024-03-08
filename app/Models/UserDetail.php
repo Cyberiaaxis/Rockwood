@@ -81,10 +81,7 @@ class UserDetail extends Model
             'level_id' => 1,
             'gang_id' => 1,
             'realestate_id' => 1,
-            'location_country' => 1,
-            'location_region' =>1,
-            'location_city' => 1,
-            'travel_route_id'  => 1,
+            'location_id' => 1,
         ]);
     }
 

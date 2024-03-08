@@ -1,16 +1,16 @@
 {
   "resources/js/index.jsx": {
     "assets": [
-      "assets/blood-v3mb6aqI.svg",
-      "assets/gunaim-_LI9WkVh.svg",
-      "assets/blood2-K-jwxRwJ.svg",
-      "assets/blood3-aabcmZWD.svg",
+      "assets/blood-LfIyJlpA.svg",
+      "assets/gunaim-RD4yfkBw.svg",
+      "assets/blood2-SDLvWvw3.svg",
+      "assets/blood3-iuDTPKWY.svg",
       "assets/KnightsQuestCallig-Qi-k91FH.ttf"
     ],
     "css": [
-      "assets/index-ELkc_UZf.css"
+      "assets/index-wSNyJ0F9.css"
     ],
-    "file": "assets/index-CEiaKNJo.js",
+    "file": "assets/index-gyww4e-w.js",
     "isEntry": true,
     "src": "resources/js/index.jsx"
   },
@@ -19,19 +19,19 @@
     "src": "resources/js/src/fonts/KnightsQuestCallig.ttf"
   },
   "resources/js/src/images/blood.svg": {
-    "file": "assets/blood-v3mb6aqI.svg",
+    "file": "assets/blood-LfIyJlpA.svg",
     "src": "resources/js/src/images/blood.svg"
   },
   "resources/js/src/images/blood2.svg": {
-    "file": "assets/blood2-K-jwxRwJ.svg",
+    "file": "assets/blood2-SDLvWvw3.svg",
     "src": "resources/js/src/images/blood2.svg"
   },
   "resources/js/src/images/blood3.svg": {
-    "file": "assets/blood3-aabcmZWD.svg",
+    "file": "assets/blood3-iuDTPKWY.svg",
     "src": "resources/js/src/images/blood3.svg"
   },
   "resources/js/src/images/gunaim.svg": {
-    "file": "assets/gunaim-_LI9WkVh.svg",
+    "file": "assets/gunaim-RD4yfkBw.svg",
     "src": "resources/js/src/images/gunaim.svg"
   }
 }

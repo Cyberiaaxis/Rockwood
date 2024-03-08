@@ -207,24 +207,38 @@ class HomeController extends Controller
     }
 
     /**
-     * Retrieve the level information for the authenticated user.
+     * Get the current course for the authenticated user.
      *
-     * This method fetches the level ID of the authenticated user and then
-     * retrieves the corresponding level information using the Level model.
+     * This method retrieves the current course for the authenticated user.
+     * It first fetches the course ID from the user's course history for today's date.
+     * If the user has a current course, it retrieves and returns the name of the course.
+     * If the user doesn't have a current course, it returns "none".
      *
-     * @return mixed The level information of the authenticated user.
+     * @return string The name of the current course or "none" if no course is found.
      */
     public function currentCourse()
     {
-       return $this->course->getCourseNameById(
-            $this->userCourseHistory->getUserCourseById(
-                $this->authenticatedUserId,
-                $this->carbon->now()->toDateString()
-            )
+         // Get the user's current course for today's date
+       $userCurrentCourse = $this->userCourseHistory->getLastCourseById(
+            $this->authenticatedUserId
         );
+        // Get the user's course history for today's date
+        // $userCourseHistory = $this->userCourseHistory->getUserCurrentCourseById(
+        //     $this->authenticatedUserId,
+        //     $this->carbon->now()->toDateString()
+        // );
+
+        // Check if the user has a current course
+        if ($userCurrentCourse === null) {
+            // If the user doesn't have a current course, return "none"
+            return "none";
+        }
+
+        // Retrieve and return the name of the current course
+        return $this->course->getCourseNameById($userCourseHistory);
     }
 
-    /**
+   /**
      * Retrieve the level information for the authenticated user.
      *
      * This method fetches the level ID of the authenticated user and then

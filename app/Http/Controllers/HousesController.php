@@ -70,7 +70,7 @@ class HousesController extends Controller
      */
     public function update(Request $request, Houses $houses)
     {
-        new House()
+        // new House()
     }
 
     /**
