@@ -82,9 +82,13 @@ class RouteRequirementsMapping extends GameBaseModel
             ->get(['route_requirements_mappings.*'])->toArray();
     }
 
+
+
+
+    
     /**
      * Get travel routes from one type of location to the same type.
-     *
+     *clear
      * @param string $type The type of the location (country, city, region).
      * @return array An array of travel routes.
      */
