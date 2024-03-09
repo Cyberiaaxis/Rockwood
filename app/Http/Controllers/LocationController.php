@@ -51,7 +51,6 @@ class LocationController extends Controller
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'type' => ['required', 'string', 'max:255'],
-           
             'parent_id' => ['nullable', 'exists:locations,id'], // Ensure parent_id exists in locations table
             'coordinateX' => ['required', 'integer'],
             'coordinateY' => ['required', 'integer']
@@ -61,6 +60,11 @@ class LocationController extends Controller
         if ($request->has('id')) 
         {
             $rules['id'] = ['nullable', 'integer', 'exists:locations'];
+        }
+
+        if ($request->has('description')) 
+        {
+            $rules['description'] = ['nullable', 'string'];
         }
 
         if ($request->hasFile('avatar')) 
