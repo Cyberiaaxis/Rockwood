@@ -37,3 +37,4 @@ return new class extends Migration
     }
 };
 
+/// https://dbfiddle.uk/ZIj5Z1RG

@@ -57,7 +57,7 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/roleWithPermissions', 'RolesController@getAllPermissionOfRole');
     $router->post('/saveRolePermissions', 'RolesController@permissionsToRole');
     $router->get('/rolesPermissions', 'RolesController@permissionsAndRoles');
-    $router->get('/cities', 'CitiesController@index');
+    $router->get('/cities', 'CityController@index');
     $router->post('/saveCity', 'ShopsController@feed');
     $router->get('/countries', 'CountryController@index');
     $router->post('/saveCountry', 'ShopsController@feed');

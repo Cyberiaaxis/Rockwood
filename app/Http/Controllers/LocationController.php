@@ -99,9 +99,47 @@ class LocationController extends Controller
      */
     public function locations(Request $request)
     {
-        $location = new Location();
-        return $location->getLocations();
+        $locationObject = new Location();
+        $locations = $locationObject->getLocations();
+
+        // Initialize an array to hold the organized locations
+        $organizedLocations = [];
+
+        // Iterate through each location
+        foreach ($locations as $location) {
+         
+            $countryName = $location->name;
+            $type = $location->type;
+            $parentId = $location->parent_id;
+
+            switch ($type) {
+                case 'country':
+                    $organizedLocations[$countryName] = $location;
+                    break;
+
+                case 'region':
+                    $organizedLocations[$countryName]["region"][] = $location;
+                    break;
+
+
+                case 'city':
+
+                    $organizedLocations[$countryName][''][] = $location;
+                    break;
+
+                default:
+
+                    break;
+            }
+        }
+        // Convert the associative array to a sequential array (if needed)
+        $organizedLocations = array_values($organizedLocations);
+
+        // Return the organized locations
+        return response()->json($organizedLocations);
     }
+
+    
 
     /**
      * Amend a location.

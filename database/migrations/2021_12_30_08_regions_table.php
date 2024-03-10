@@ -20,6 +20,9 @@ class RegionsTable extends Migration
             $table->longText('description')->nullable();
             $table->foreignId('country_id')->nullable();
             $table->foreign('country_id')->references('id')->on('countries');
+            $table->integer('coordinateX')->nullable(); // X coordinate (numeric value)
+            $table->integer('coordinateY')->nullable(); // Y coordinate (numeric value)
+            $table->timestamps(); // Timestamps for record creation and modification
         });
     }
 

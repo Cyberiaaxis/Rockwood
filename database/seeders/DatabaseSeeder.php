@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use Illuminate\Database\DatabaseManager;
 use App\Http\Controllers\ForumsController;
 use App\Models\Attack;
-use App\Models\Location;
+use App\Models\Country;
 use App\Models\Crime;
+use App\Models\Region;
+use App\Models\City;
 use App\Models\FightClub;
 use App\Models\Forum;
 use App\Models\ForumRank;
@@ -71,69 +73,95 @@ class DatabaseSeeder extends Seeder
 
         $userDetails = new UserDetail();
         $userDetails->addUserDetails($userStored->id);
+               $country = new Country();
 
-        $LocationData = [
-            [
-                'name' => 'Demo Country Name',
-                'type' => 'country',
-                 'coordinateX' => 10,
-                 'coordinateY' => 20
-            ],
-            [
-                'name' => 'Demo Region Name',
-                 'type' => 'region',
-                 'coordinateX' => 30,
-                 'coordinateY' => 40
+        $country->insert([
+            ['name' => 'India'],
+            ['name' => 'Pakistan'],
+            ['name' => 'China'],
+            ['name' => 'USA'],
+        ]);
 
-            ],
-            [
-                'name' => 'Demo City Name',
-                 'type' => 'city',
-                 'coordinateX' => 50,
-                 'coordinateY' => 60
-            ],
-            [
-                'name' => 'Demo New Country Name',
-                'type' => 'country',
-                'coordinateX' => 70,
-                 'coordinateY' => 80
-            ],
-            [
-                'name' => 'Demo New Region Name',
-                 'type' => 'region',
-                'coordinateX' => 90,
-                 'coordinateY' => 100
+        $region = new Region();
+        
+        $region->insert([
+            ['name' => 'New Delhi', 'country_id' => 1],
+            ['name' => 'Punjab', 'country_id' => 1],
+            ['name' => 'UP', 'country_id' => 1],
+            ['name' => 'UK', 'country_id' => 1],
+        ]);
 
-            ],
-            [
-                'name' => 'Demo New City Name',
-                 'type' => 'city',
-                'coordinateX' => 110,
-                 'coordinateY' => 120
-            ],
-            [
-                'name' => 'Demo New Another Country Name',
-                'type' => 'country',
-                'coordinateX' => 130,
-                 'coordinateY' => 140
-            ],
-            [
-                'name' => 'Demo New Another Region Name',
-                 'type' => 'region',
-                 'coordinateX' => 150,
-                 'coordinateY' => 160
+        $city = new City();
+        
+        $city->insert([
+            ['name' => 'Uttam Nagar', 'region_id' => 1],
+            ['name' => 'Najafgarh', 'region_id' => 1],
+            ['name' => 'KarolBagh', 'region_id' => 1],
+            ['name' => 'Janakpuri', 'region_id' => 1],
+        ]);
 
-            ],
-            [
-                'name' => 'Demo New Another City Name',
-                 'type' => 'city',
-                 'coordinateX' => 170,
-                 'coordinateY' => 180
-            ]
-        ];
+        // $LocationData = [
+        //     [
+        //         'name' => 'Demo Country Name',
+        //         'type' => 'country',
+        //          'coordinateX' => 10,
+        //          'coordinateY' => 20
+        //     ],
+        //     [
+        //         'name' => 'Demo Region Name',
+        //          'type' => 'region',
+        //          'coordinateX' => 30,
+        //          'coordinateY' => 40
 
-        $locations = new Location();
-        $locations->insert($LocationData);
+        //     ],
+        //     [
+        //         'name' => 'Demo City Name',
+        //          'type' => 'city',
+        //          'coordinateX' => 50,
+        //          'coordinateY' => 60
+        //     ],
+        //     [
+        //         'name' => 'Demo New Country Name',
+        //         'type' => 'country',
+        //         'coordinateX' => 70,
+        //          'coordinateY' => 80
+        //     ],
+        //     [
+        //         'name' => 'Demo New Region Name',
+        //          'type' => 'region',
+        //         'coordinateX' => 90,
+        //          'coordinateY' => 100
+
+        //     ],
+        //     [
+        //         'name' => 'Demo New City Name',
+        //          'type' => 'city',
+        //         'coordinateX' => 110,
+        //          'coordinateY' => 120
+        //     ],
+        //     [
+        //         'name' => 'Demo New Another Country Name',
+        //         'type' => 'country',
+        //         'coordinateX' => 130,
+        //          'coordinateY' => 140
+        //     ],
+        //     [
+        //         'name' => 'Demo New Another Region Name',
+        //          'type' => 'region',
+        //          'coordinateX' => 150,
+        //          'coordinateY' => 160
+
+        //     ],
+        //     [
+        //         'name' => 'Demo New Another City Name',
+        //          'type' => 'city',
+        //          'coordinateX' => 170,
+        //          'coordinateY' => 180
+        //     ]
+        // ];
+
+        // $locations = new Location();
+        // $locations->insert($LocationData);
 
         $forums = new Forum();
         $forums->insert([
@@ -243,8 +271,8 @@ class DatabaseSeeder extends Seeder
         $userCrimeStored = $userCrime->addCrimeRecords($userStored->id);
 
         $routeData = [
-            'from_location_id' => '1',
-            'to_location_id' => '2',
+            'from_city_id' => '1',
+            'to_city_id' => '2',
             'cost' => '2',
             'status' => '1',
             'duration' => '30',

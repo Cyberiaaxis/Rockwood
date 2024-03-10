@@ -15,10 +15,10 @@ class CreateTravelRoutesTable extends Migration
     {
         Schema::create('travel_routes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('from_location_id');
-            $table->foreign('from_location_id')->references('id')->on('locations');
-            $table->foreignId('to_location_id');
-            $table->foreign('to_location_id')->references('id')->on('locations');
+            $table->foreignId('from_city_id');
+            $table->foreign('from_city_id')->references('id')->on('cities');
+            $table->foreignId('to_city_id');
+            $table->foreign('to_city_id')->references('id')->on('cities');
             $table->integer('duration');
             $table->integer('cost');
             $table->boolean('status');

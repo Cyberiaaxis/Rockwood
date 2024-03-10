@@ -20,8 +20,8 @@ class TravelRoute extends GameBaseModel
      * @var array
      */
     protected $fillable = [
-        'from_location_id',
-        'to_location_id',
+        'from_city_id',
+        'to_city_id',
         'duration',
         'cost',
         'status',
@@ -55,7 +55,7 @@ class TravelRoute extends GameBaseModel
      */
     public function getTravelRoutesFromCurrentLocation(int $currentLocationId): array
     {
-        return $this->db->where('from_location_id', $currentLocationId)->get()->toArray();
+        return $this->db->where('from_city_id', $currentLocationId)->get();
     }
 
     /**
@@ -78,8 +78,8 @@ class TravelRoute extends GameBaseModel
      */
     public function getTravelRoutesBetweenLocations(int $originId, int $destinationId): array
     {
-        return $this->db->where('from_location_id', $originId)
-            ->where('to_location_id', $destinationId)
+        return $this->db->where('from_city_id', $originId)
+            ->where('to_city_id', $destinationId)
             ->get()->toArray();
     }
 

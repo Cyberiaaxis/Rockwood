@@ -2,78 +2,147 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Country};
-use App\Http\Requests\StorePostRequest;
-use Illuminate\Support\Arr;
-use App\Services\StoreService;
-use PHPUnit\Framework\Constraint\Count;
+use Illuminate\Validation\Rule;
+use App\Models\Country;
+use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
+    protected $country;
+
     /**
-     * Display a listing of the resource.
+     * Create a new instance of CountryController.
      *
-     * @return \Illuminate\Http\Response
+     * @param  \App\Models\Country  $country
+     * @return void
      */
-    public function index()
+    public function __construct(Country $country)
     {
-        $countries = new Country();
-        return response()->json(['countries' => $countries->all()]);
+        $this->country = $country;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Create a new country.
+     *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function Feed(StorePostRequest $request)
+    public function makeCountry(Request $request)
     {
-        $data = $this->handleData($request);
-        $country = (new StoreService($request))->store(new Country(), $data);
+        // Validate incoming request data and perform unique validation
+        $validatedData = $this->validateAndVerifyRequestData($request);
+
+        // Upload avatar if present and store path in database
+        $avatarPath = $this->uploadAvatar($request);
+
+        // Add avatar path to validated data
+        if ($avatarPath) {
+            $validatedData['avatar'] = $avatarPath;
+        }
+
+        // Create a new country record
+        $this->country->addCountry($validatedData);
+
+        // Return a response indicating success
         return response()->json([
-            'status' => (($country->status === "1") ? true : false),
-            'data' => $country,
+            'message' => 'Country with name ' . $validatedData['name'] . ' created successfully',
+            'country' => $validatedData
         ], 201);
     }
 
     /**
-     * validattion of inputs.
+     * Validate incoming request data and perform additional unique validation.
+     *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Rank  $rank
-     * @return validation result
+     * @return array
      */
-    public function handleData($request)
+    private function validateAndVerifyRequestData(Request $request): array
     {
-        // $imageName = $this->imageUpload($request);
-        $data =  [
-            'name' => $request->name,
-            'description' => $request->description,
-            'status' => $request->status,
+        // Define validation rules
+        $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'coordinateX' => ['required', 'integer'],
+            'coordinateY' => ['required', 'integer']
         ];
 
-        // if ($imageName) {
-        //     $data['avatar'] =  $imageName;
-        // }
-        return $data;
+        // Check if the request has 'id' field, add validation rule if present
+        if ($request->has('id')) 
+        {
+            $rules['id'] = ['nullable', 'integer', 'exists:locations'];
+        }
+
+        if ($request->has('description')) 
+        {
+            $rules['description'] = ['nullable', 'string'];
+        }
+
+        if ($request->hasFile('avatar')) 
+        {
+            $rules['avatar'] = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'];
+        }
+
+        // Validate incoming request data
+        $validatedData = $request->validate($rules);
+
+        // Return the validated data
+        return $validatedData;
     }
 
     /**
-     * upload the file.
+     * Retrieve all countries.
+     *
      * @param  \Illuminate\Http\Request  $request
-     * @return string as images name
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function imageUpload($request)
+    public function getCountries(Request $request)
     {
-        $fileExists = $request->hasFile('image');
+        $countries = $this->country->getAllCountries();
+        // Return the organized countries
+        return response()->json($countries);
+    }
 
-        if ($fileExists) {
-            $file = $request->file('image');
-            $fileName = $file->getClientOriginalName();
-            $ext = $file->extension();
-            $path =  $file->storeAs('images', $request->id . '.' . $ext);
-            return $path;
+    /**
+     * Amend a country.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function amendCountry(Request $request)
+    {
+        // Validate incoming request data and perform unique validation
+        $validatedData = $this->validateAndVerifyRequestData($request);
+
+        // Upload avatar if present and store path in database
+        $avatarPath = $this->uploadAvatar($request);
+
+        // Separate 'id' from other validated data
+        $id = ['id' => $validatedData['id']];
+        $remainingData = array_diff_key($validatedData, $id);
+
+        // If an avatar was uploaded, include its path in the data to be stored or updated
+        if ($avatarPath) {
+            $remainingData['avatar'] = $avatarPath;
         }
 
-        return false;
+        // Modify the country using 'id' and other data
+        return $this->country->modifyCountry($id['id'], $remainingData);
+    }
+
+    /**
+     * Upload and store the avatar.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string|null
+     */
+    private function uploadAvatar($validatedData): ?string
+    {
+        if ($validatedData->hasFile('avatar')) {
+            $avatar = $validatedData->file('avatar');
+            $filename = time() . '.' . $avatar->getClientOriginalExtension();
+            $path = $avatar->storeAs('locationImage', $filename); // Store in storage/app/avatars
+            return "locationImage" . DIRECTORY_SEPARATOR . $filename;
+        }
+
+        return null;
     }
 }

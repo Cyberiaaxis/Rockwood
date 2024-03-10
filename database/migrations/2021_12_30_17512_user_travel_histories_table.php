@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UserTravelsTable extends Migration
+class UserTravelHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class UserTravelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_travels', function (Blueprint $table) {
+        Schema::create('user_travel_histories', function (Blueprint $table) {
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')->unique();
-            $table->integer('travel_route_id');
+            $table->unsignedBigInteger('city_id');
+            $table->foreign('city_id')->references('id')->on('cities')->unique();
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

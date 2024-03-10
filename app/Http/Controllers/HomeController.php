@@ -17,7 +17,8 @@ use App\Models\{
     UserStats,
     Country,
     City,
-    Gang
+    Gang,
+    UserTravelHistory
 };
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -60,6 +61,7 @@ class HomeController extends Controller
      * @var Region        $region             The instance of the Region model.
      * @var City          $country            The instance of the City model.
      * @var Gang          $gang               The instance of the gang model.
+     * @var UserTravelHistory          $userTravelHistory               The instance of the UserTravelHistory model.
      */
     protected $region,
         $attack,
@@ -78,7 +80,8 @@ class HomeController extends Controller
         $gang,
         $authenticatedUserId,
         $course,
-        $userCourseHistory;
+        $userCourseHistory,
+        $userTravelHistory;
 
     /**
      * Create a new controller instance.
@@ -120,7 +123,8 @@ class HomeController extends Controller
         City $city,
         Gang $gang,
         Course $course,
-        UserCourseHistory $userCourseHistory
+        UserCourseHistory $userCourseHistory,
+        UserTravelHistory $userTravelHistory
     ) {
         $this->authenticatedUserId = auth()->user(); // Set the authenticated user ID
         $this->region = $region;
@@ -140,6 +144,7 @@ class HomeController extends Controller
         $this->course = $course;
         $this->userCourseHistory = $userCourseHistory;
         $this->authenticatedUserId = $this->getAuthenticatedUserId(); // Retrieve and set the authenticated user ID
+        $this->userTravelHistory = $userTravelHistory;
     }
 
     /**
@@ -291,22 +296,12 @@ class HomeController extends Controller
      */
     public function currentLocation()
     {
-        // return $this->countries();
-    //   $hereThePlayer = [];
-    //   $currentLocation =  $this->userDetails->getLocation($this->authenticatedUserId);
-    //   if($currentLocation[0]["location_country"]){
-    //      $hereThePlayer['country']  = $this->country->getCountryNameById($currentLocation[0]["location_country"]);
-    //    };
-
-    //     if ($currentLocation[0]["location_region"]) {
-    //         $hereThePlayer['region'] = $this->region->getRegionNameById($currentLocation[0]["location_region"]);
-    //     };
-
-        // if ($currentLocation[0]["location_city"]) {
-        //     $hereThePlayer['city'] = $this->city->getCityNameById($currentLocation[0]["location_city"]);
-        // };
-        // return $hereThePlayer;
-        return "true";
+        $userTravelHistoryId = $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus($this->authenticatedUserId);
+        
+        if($userTravelHistory === null){
+            return "Untracable Location";
+        }
+        return $this->city->getCityRegionCountryById($userTravelHistoryId); 
     }
 
     /**

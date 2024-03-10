@@ -3,30 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Validation\Rule;
-use App\Models\Region;
+use App\Models\City;
 use Illuminate\Http\Request;
 
-class RegionController extends Controller
-{
-    protected $region;
 
-    /**
-     * Constructor for RegionController.
-     *
-     * @param Region $region The Region model instance
-     */
-    public function __construct(Region $region)
+class CityController extends Controller
+{
+    protected $city;
+
+    public function __construct(City $city)
     {
-        $this->region = $region;
+        $this->city = $city;
     }
 
     /**
-     * Create a new region.
+     * Create a new city.
      *
-     * @param  \Illuminate\Http\Request  $request The HTTP request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function makeRegion(Request $request)
+    public function makeCity(Request $request)
     {
         // Validate incoming request data and perform unique validation
         $validatedData = $this->validateAndVerifyRequestData($request);
@@ -39,20 +35,20 @@ class RegionController extends Controller
             $validatedData['avatar'] = $avatarPath;
         }
 
-        // Create a new region record
-        $this->region->addRegion($validatedData);
+        // Create a new city record
+        $this->city->addCity($validatedData);
 
         // Return a response indicating success
         return response()->json([
-            'message' => 'Region with name ' . $validatedData['name'] . ' created successfully',
-            'region' => $validatedData
+            'message' => 'City with name ' . $validatedData['name'] . ' created successfully',
+            'city' => $validatedData
         ], 201);
     }
 
     /**
      * Validate incoming request data and perform additional unique validation.
      *
-     * @param  \Illuminate\Http\Request  $request The HTTP request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     private function validateAndVerifyRequestData(Request $request): array
@@ -60,7 +56,7 @@ class RegionController extends Controller
         // Define validation rules
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'country_id' => ['required', 'integer'],
+            'region_id' => ['required', 'integer'],
             'coordinateX' => ['required', 'integer'],
             'coordinateY' => ['required', 'integer']
         ];
@@ -89,25 +85,25 @@ class RegionController extends Controller
     }
 
     /**
-     * Retrieve all regions.
+     * Retrieve all cities.
      *
-     * @param  \Illuminate\Http\Request  $request The HTTP request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function regions(Request $request)
+    public function cities(Request $request)
     {
-        $regions = $this->region->getAllRegions();
+        $cities = $this->city->getAllCities();
         // Return the organized locations
-        return response()->json($regions);
+        return response()->json($cities);
     }
 
     /**
-     * Amend a region.
+     * Amend a city.
      *
-     * @param  \Illuminate\Http\Request  $request The HTTP request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function amendRegion(Request $request)
+    public function amendCity(Request $request)
     {
         // Validate incoming request data and perform unique validation
         $validatedData = $this->validateAndVerifyRequestData($request);
@@ -124,14 +120,14 @@ class RegionController extends Controller
             $remainingData['avatar'] = $avatarPath;
         }
 
-        // Modify the region using 'id' and other data
-        return $this->region->modifyRegion($id['id'], $remainingData);
+        // Modify the city using 'id' and other data
+        return $this->city->modifyCity($id['id'], $remainingData);
     }
 
     /**
      * Upload and store the avatar.
      *
-     * @param  \Illuminate\Http\Request  $request The HTTP request
+     * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
     private function uploadAvatar($validatedData): ?string
