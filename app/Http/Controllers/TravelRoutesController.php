@@ -2,21 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Area, City, Country, TravelRoute};
+use App\Models\City;
+use App\Models\Country;
+use App\Models\TravelRoute;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class TravelRoutesController extends Controller
 {
+    protected $city;
+    protected $country;
+    protected $travelRoute;
+
+    public function __construct(City $city, Country $country, TravelRoute $travelRoute)
+    {
+        $this->city = $city;
+        $this->country = $country;
+        $this->travelRoute = $travelRoute;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function travelRoutes()
+    public function routes()
     {
-        $travel = new TravelRoute();
-        $travelRoutesLists = $travel->getTravelList();
-    return $this->routeDetails($travelRoutesLists);
+        return $this->country->getCountriesRegionsCities();
     }
 
     /**
@@ -24,97 +36,42 @@ class TravelRoutesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function routeDetails($travelRoutesList)
+    public function configureRoute(Request $request)
     {
-        $area = new Area();
-        $city = new City();
-        $country = new Country();
-        $travelRouteList =  [];
-
-        foreach ($travelRoutesList as $travelList)
-        {
-            $originAreaDetails = $area->getAreaById($travelList->origin);
-            $originCityDetails = $city->getCityById($originAreaDetails['city_id']);
-            $originCountryDetails = $country->getCountryById($originCityDetails['country_id']);
-            $destinationAreaDetails = $area->getAreaById($travelList->destination);
-            $destinationCityDetails = $city->getCityById($destinationAreaDetails['city_id']);
-            $destinationCountryDetails = $country->getCountryById($destinationCityDetails['country_id']);
-            $travelRouteList[] = [
-                'originArea' => $originAreaDetails,
-                'originCity' => $originCityDetails->name,
-                'originCountry' => $originCountryDetails->name,
-                'destinationArea'=> $destinationAreaDetails,
-                'destinationCity' => $destinationCityDetails->name,
-                'destinationCountry' => $destinationCountryDetails->name
-            ];
-        }
-
-    return $travelRouteList;
+        $validated = $this->validateTravelRoute($request);
+       return $this->travelRoute->addTravelRoute($validated);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function travelableRoutes(int $travelRouteId)
-    {
-        return $this->find($travelRouteId, ['to_country_id', 'to_city_id', 'to_area_id']);
-    }
-
-    /**
-     * Store a newly created resource in storage.
+        /**
+     * Validate the request data for creating or updating a travel route.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function store(Request $request)
+    protected function validateTravelRoute($request)
     {
-        //
+        return $request->validate([
+                'from_city_id' => 'required|numeric|unique:travel_routes,from_city_id,NULL,id,to_city_id,' . $request->to_city_id,
+                'to_city_id' => 'required|numeric|unique:travel_routes,to_city_id,NULL,id,from_city_id,' . $request->from_city_id,
+                'duration' => 'required|numeric', // Example validation rules for 'duration'
+                'cost' => 'required|numeric', // Example validation rules for 'cost'
+                'status' => 'required|boolean', // Example validation rules for 'status'
+            ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\TravelRoutes  $travelRoutes
+     * @param  int  $travelRouteId
      * @return \Illuminate\Http\Response
      */
-    public function show(TravelRoute $travelRoutes)
+    public function travelableRoutes(int $travelRouteId)
     {
-        //
-    }
+        // Fetch travel route details
+        $travelRoute = $this->travelRoute->findOrFail($travelRouteId);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\TravelRoutes  $travelRoutes
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(TravelRoute $travelRoutes)
-    {
-        //
-    }
+        // Implement logic to find travelable routes based on the given travel route
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\TravelRoutes  $travelRoutes
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, TravelRoute $travelRoutes)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\TravelRoutes  $travelRoutes
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(TravelRoute $travelRoutes)
-    {
-        //
+        return response()->json($travelableRoutes);
     }
 }

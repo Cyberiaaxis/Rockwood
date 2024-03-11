@@ -105,6 +105,7 @@ class HomeController extends Controller
      * @param Gang $gang The gang model instance.
      * @param Course $course The gang model instance. 
      * @param UserCourseHistory $userCourseHHistory The gang model instance. 
+     * @param UserTravelHistory $userTravelHistory The UserTravelHistory model instance. 
      * @return void 
      */
     public function __construct(
@@ -298,7 +299,7 @@ class HomeController extends Controller
     {
         $userTravelHistoryId = $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus($this->authenticatedUserId);
         
-        if($userTravelHistory === null){
+        if($userTravelHistoryId === null){
             return "Untracable Location";
         }
         return $this->city->getCityRegionCountryById($userTravelHistoryId); 

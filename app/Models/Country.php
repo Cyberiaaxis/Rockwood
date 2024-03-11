@@ -67,6 +67,22 @@ class Country extends GameBaseModel
     }
 
     /**
+     * Retrieves city, region, and country information based on the city ID.
+     *
+     * @param int $cityId The ID of the city.
+     * @return mixed Returns an object containing city, region, and country information.
+     */
+    public function getCountriesRegionsCities()
+    {
+        return $this->db->select('countries.name as country_name', 'regions.name as region_name', 'cities.name as city_name', 'cities.id as city_id')
+            ->join('regions', 'countries.id', '=', 'regions.country_id')
+            ->join('cities', 'regions.id', '=', 'cities.region_id')
+            ->get();
+    }
+
+
+
+    /**
      * Add a new country.
      *
      * @param array $attributes
