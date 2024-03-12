@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ItemEffects extends Migration
+class CreateItemCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,11 @@ class ItemEffects extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('item_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('category_name', 255);
+            $table->timestamps(); // Adds created_at and updated_at columns
+        });
     }
 
     /**
@@ -23,6 +27,6 @@ class ItemEffects extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('item_categories');
     }
 }

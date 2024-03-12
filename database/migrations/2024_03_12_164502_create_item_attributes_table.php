@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ItemsTable extends Migration
+class CreateItemAttributesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class ItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('item_attributes', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->integer('price');
-            $table->longText('description');
-            $table->foreignId('item_type_id');
-            $table->foreign('item_type_id')->references('id')->on('item_types');
+            $table->string('attribute_name', 255);
+            // Additional columns for attribute details can be added here
+            $table->timestamps(); // Adds created_at and updated_at columns
         });
     }
 
@@ -30,6 +28,6 @@ class ItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('item_attributes');
     }
 }

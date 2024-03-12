@@ -2,74 +2,75 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Item extends Model
+/**
+ * Represents the Item model.
+ */
+class Item extends GameBaseModel
 {
+    /**
+     * The table associated with the Item model.
+     *
+     * @var string
+     */
+    protected $table = 'items';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'description','item_type_id',  'buyPrice',  'sellPrice',  'locationId',  'expiry',  'updated_at',  'created_at'
+        'name',
+        'description',
+        'weight',
+        'value',
+        'image_url',
     ];
 
-    protected $appends = ['item_type_name'];
-
-    public function itemeffects()
+    /**
+     * Retrieve an item by its ID.
+     *
+     * @param int $id The ID of the item.
+     * @return Item|null The item if found, or null otherwise.
+     */
+    public function getItems()
     {
-        return $this->HasOne(ItemEffect::class);
-    }
-
-    public function itemTypes()
-    {
-         return $this->belongsTo(ItemType::class);
-    }
-
-    public function user()
-    {
-         return $this->belongsToMany(User::class,'userItems','user_id');
+        return $this->db->get();
     }
 
     /**
-     * get Item Category Name
+     * Retrieve an item by its ID.
+     *
+     * @param int $id The ID of the item.
+     * @return Item|null The item if found, or null otherwise.
      */
-    public function getItemCategoryNameAttribute()
+    public function getItemNameById(int $id): ?int
     {
-        return $this->itemCategories()->value('name');
-    }
-
-        /**
-     * get Item Type Name
-     */
-    public function getItemTypeNameAttribute()
-    {
-        return $this->itemTypes()->value('name');
+        return $this->db->where('id', $id)->value('name');
     }
 
     /**
-     * get Item Type Name
+     * Add a new item with the specified attributes.
+     *
+     * @param array $attributes The attributes of the new item.
+     * @return int The ID of the newly created item.
      */
-    public function typeAttribute()
+    public function addItem(array $attributes): int 
     {
-        return $this->belongsTo(TypeAttribute::class);
+        // Insert the item data into the database and get the ID of the newly inserted record
+        return $this->db->insertGetId($attributes);
     }
 
     /**
-     * get Item Type Name
+     * Modify an existing item with the specified attributes.
+     *
+     * @param int $id The ID of the item to modify.
+     * @param array $attributes The updated attributes of the item.
+     * @return bool True if the item was successfully modified, false otherwise.
      */
-    public function getWeaponNameById(int $itemId)
+    public function modifyItem(int $id, array $attributes): bool
     {
-        return $this->find($itemId)->value('name');
+        // Update the item with the provided data
+        return $this->db->where('id', $id)->update($attributes);
     }
-    /**
-     * get Item Type Name
-     */
-    public function getItemAttributeById(int $itemId)
-    {
-        return $this->find($itemId)->value('type_attribute_id');
-    }
-
 }
-
