@@ -22,7 +22,7 @@ $router->post('/register', 'RegistrationController@signup');
 // $router->prefix('staff')->namespace('Staff')->middleware(['auth:sanctum', 'role:admin|editor'])->group(function ($router) {
 //     // $router->get('/', 'DashboardController');
 //     // $router->post('/login', 'LoginController@login');
-//     });
+//     });  php artisan make:model ItemCategory
 
 $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/auth/logout', 'LoginController@logout');
@@ -30,7 +30,7 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->post('/addLocation', 'LocationController@makeLocation');
     $router->get('/getItems', 'ItemController@getItemLists');
     $router->post('/addItem', 'ItemController@createItem');
-     $router->post('/modifyItem', 'ItemController@updateItem');
+    $router->post('/modifyItem', 'ItemController@updateItem');
     $router->get('/routes', 'TravelRoutesController@routes');
     $router->post('/addRoute', 'TravelRoutesController@configureRoute'); 
     $router->post('/amendLocation', 'LocationController@amendLocation');
