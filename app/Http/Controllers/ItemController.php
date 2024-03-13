@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Resources\ItemResource;
 use App\Models\Item;
 use App\Models\ItemCategory; 
-use App\Models\ItemSubcategorie;
+use App\Models\ItemSubcategorie; 
+use App\Models\ItemAttribute;
+use App\Models\ItemEffect;
 /**
  * Class ItemController
  * @package App\Http\Controllers
@@ -28,7 +30,16 @@ class ItemController extends Controller
     */
     protected $itemSubcategorie;
 
+    /**
+    * @var ItemAttribute The Item model instance
+    */
+    protected $itemAttribute;
 
+    /**
+    * @var ItemEffect The Item model instance
+    */
+    protected $itemEffect;
+    
     
 
     /**
@@ -36,11 +47,19 @@ class ItemController extends Controller
      *
      * @param Item $item The Item model instance
      */
-    public function __construct(Item $item, ItemCategory $itemCategory, ItemSubcategorie $itemSubcategorie)
+    public function __construct(
+            Item $item, 
+            ItemCategory $itemCategory, 
+            ItemSubcategorie $itemSubcategorie,
+            ItemAttribute $itemAttribute,
+            ItemEffect $itemEffect
+        )
     {
         $this->item = $item;
         $this->itemCategory = $itemCategory;
         $this->itemSubcategorie = $itemSubcategorie;
+        $this->itemAttribute = $itemAttribute;
+        $this->itemEffect = $itemEffect;
     }
 
     public function getItemLists()
@@ -69,7 +88,10 @@ class ItemController extends Controller
             // Keys to remove
             $keysToRemove = [
                 'category_name' => $validatedData['category_name'], 
-                'subcategory_name' => $validatedData['subcategory_name'] 
+                'subcategory_name' => $validatedData['subcategory_name'],
+                'attribute_name'  => $validatedData['attribute_name'],
+                'effect_name' => $validatedData['effect_name'],
+                'effect_value' => $validatedData['effect_value']
             ];
 
         //  $categoryName = ['category_name' => $validatedData['category_name']];
@@ -89,6 +111,19 @@ class ItemController extends Controller
             [
                  'subcategory_name' => $keysToRemove['subcategory_name'],
                  'category_id' => $itemCategoryInsertedId
+            ]
+        );
+
+        $itemAttributeInsertedId = $this->itemAttribute->addItemAttribute(
+            [
+                 'attribute_name' => $keysToRemove['attribute_name'],
+            ]
+        );
+
+        $ItemEffectInsertedId = $this->itemEffect->addItemEffect(
+            [
+                 'effect_name' => $keysToRemove['effect_name'],
+                 'effect_value' => $keysToRemove['effect_value']
             ]
         );
         // Return a response indicating success
@@ -113,6 +148,9 @@ class ItemController extends Controller
             'image_url' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'category_name' => ['required', 'string', 'max:255'],
             'subcategory_name' => ['required', 'string', 'max:255'],
+            'attribute_name' => ['required', 'string', 'max:255'],
+            'effect_name' => ['required', 'string', 'max:255'],
+            'effect_value' => ['required', 'string', 'max:255']
         ];
                 // Check if the request has 'id' field, add validation rule if present
         if ($request->has('id')) 

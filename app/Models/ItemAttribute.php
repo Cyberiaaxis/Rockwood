@@ -5,14 +5,14 @@ namespace App\Models;
 /**
  * Represents the Item model.
  */
-class ItemEffect extends GameBaseModel
+class ItemAttribute extends GameBaseModel
 {
     /**
      * The table associated with the Item model.
      *
      * @var string
      */
-    protected $table = 'item_effects';
+    protected $table = 'item_attributes';
 
     /**
      * The attributes that are mass assignable.
@@ -21,8 +21,7 @@ class ItemEffect extends GameBaseModel
      */
     protected $fillable = [
         'id',
-        'effect_name',
-        'effect_value'
+        'attribute_name',
     ];
 
     /**
@@ -31,7 +30,7 @@ class ItemEffect extends GameBaseModel
      * @param int $id The ID of the item.
      * @return Item|null The item if found, or null otherwise.
      */
-    public function getItemEffects()
+    public function getItemAttributes()
     {
         return $this->db->get();
     }
@@ -42,7 +41,7 @@ class ItemEffect extends GameBaseModel
      * @param int $id The ID of the item.
      * @return Item|null The item if found, or null otherwise.
      */
-    public function getItemEffectNameById(int $id): ?int
+    public function getItemAttributeNameById(int $id): ?int
     {
         return $this->db->where('id', $id)->value('name');
     }
@@ -53,7 +52,7 @@ class ItemEffect extends GameBaseModel
      * @param array $attributes The attributes of the new item.
      * @return int The ID of the newly created item.
      */
-    public function addItemEffect(array $attributes): int 
+    public function addItemAttribute(array $attributes): int 
     {
         // Insert the item data into the database and get the ID of the newly inserted record
         return $this->db->insertGetId($attributes);
@@ -66,13 +65,10 @@ class ItemEffect extends GameBaseModel
      * @param array $attributes The updated attributes of the item.
      * @return bool True if the item was successfully modified, false otherwise.
      */
-    public function modifyItemEffect(int $id, array $attributes): bool
+    public function modifyItemAttribute(int $id, array $attributes): bool
     {
         // Update the item with the provided data
         return $this->db->where('id', $id)->update($attributes);
     }
 }
-
-
-
 
