@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Resources\ItemResource;
 use App\Models\Item;
-
+use App\Models\ItemCategory; 
+use App\Models\ItemSubcategorie;
 /**
  * Class ItemController
  * @package App\Http\Controllers
@@ -18,13 +19,28 @@ class ItemController extends Controller
     protected $item;
 
     /**
+     * @var ItemCategory The Item model instance
+     */
+    protected $itemCategory;
+
+    /**
+    * @var ItemSubcategorie The Item model instance
+    */
+    protected $itemSubcategorie;
+
+
+    
+
+    /**
      * ItemController constructor.
      *
      * @param Item $item The Item model instance
      */
-    public function __construct(Item $item)
+    public function __construct(Item $item, ItemCategory $itemCategory, ItemSubcategorie $itemSubcategorie)
     {
         $this->item = $item;
+        $this->itemCategory = $itemCategory;
+        $this->itemSubcategorie = $itemSubcategorie;
     }
 
     public function getItemLists()
@@ -50,10 +66,31 @@ class ItemController extends Controller
         if ($imageUrl) {
             $validatedData['image_url'] = $imageUrl;
         }
+            // Keys to remove
+            $keysToRemove = [
+                'category_name' => $validatedData['category_name'], 
+                'subcategory_name' => $validatedData['subcategory_name'] 
+            ];
 
+        //  $categoryName = ['category_name' => $validatedData['category_name']];
+        //  $subcategoryName = ['subcategory_name' => $validatedData['subcategory_name']];
+        //  $array = json_decode($categoryName, true);
+        $exculded = array_diff_key($validatedData, $keysToRemove);
         // Create a new item record
-        $this->item->addItem($validatedData);
-
+        // return $categoryName['category_name'];
+        $itemInsertedId = $this->item->addItem($exculded);
+        $itemCategoryInsertedId = $this->itemCategory->addItemCategory(
+            [
+                'category_name' => $keysToRemove['category_name']
+            ]
+        );
+        
+        $itemSubcategorieInsertedId = $this->itemSubcategorie->addItemSubcategorie(
+            [
+                 'subcategory_name' => $keysToRemove['subcategory_name'],
+                 'category_id' => $itemCategoryInsertedId
+            ]
+        );
         // Return a response indicating success
         return response()->json([
             'message' => 'Item with name ' . $validatedData['name'] . ' created successfully',
@@ -74,6 +111,8 @@ class ItemController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'image_url' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'category_name' => ['required', 'string', 'max:255'],
+            'subcategory_name' => ['required', 'string', 'max:255'],
         ];
                 // Check if the request has 'id' field, add validation rule if present
         if ($request->has('id')) 
