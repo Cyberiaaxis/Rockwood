@@ -139,7 +139,7 @@ function Header({ setPage }) {
         <Box gridColumn="span 2">
           <Tooltip title="Explore" arrow>
             <GradientButton fullWidth onClick={() => setPage("explore")} size="large">
-              {header?.countries.country.name}, {header?.countries.region.name}
+              {header?.countries}, {header?.countries}
             </GradientButton>
           </Tooltip>
         </Box>
