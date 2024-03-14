@@ -5,29 +5,41 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Gang;
 use App\Models\User;
-// use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
 {
+    /**
+     * Get the welcome data.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function __invoke()
     {
-        $user = new User();
-        $event = new Event();
-        $gangs = new Gang();
+        $users = (new User())->getTopPlayers();
+        $images = $this->getImages();
+        $events = (new Event())->getEvents();
+        $gangs = (new Gang())->getGangNames();
+
         return response()->json([
-            "players" => $user->getTopPlayers(),
-            "images" => $this->images(),
-            "events" => $event->getEvents(),
-            "gangs" => $gangs->getGangNames()
+            "players" => $users,
+            "images" => $images,
+            "events" => $events,
+            "gangs" => $gangs
         ]);
     }
 
-    private function images()
+    /**
+     * Get the images from the public directory.
+     *
+     * @return array
+     */
+    private function getImages()
     {
-        $imageDirname = "images/";
+        $imageDirname = "images/welcome";
         $mediaPath = public_path($imageDirname);
         $filesInFolder = glob($mediaPath . "/*.{jpg,jpeg,png,gif,webp,svg}", GLOB_BRACE);
         $allMedia = [];
+
         try {
             foreach ($filesInFolder as $path) {
                 $files = pathinfo($path);
@@ -36,6 +48,7 @@ class WelcomeController extends Controller
         } catch (\Exception $e) {
             $allMedia = [];
         }
+
         return $allMedia;
     }
 }

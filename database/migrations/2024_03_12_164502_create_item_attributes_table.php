@@ -16,8 +16,8 @@ class CreateItemAttributesTable extends Migration
         Schema::create('item_attributes', function (Blueprint $table) {
             $table->id();
             $table->string('attribute_name', 255);
-            // Additional columns for attribute details can be added here
-            $table->timestamps(); // Adds created_at and updated_at columns
+            $table->foreignId('subcategory_id');
+            $table->foreign('subcategory_id')->references('id')->on('item_subcategories');
         });
     }
 

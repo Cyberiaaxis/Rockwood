@@ -4,7 +4,6 @@ import {
     Paper,
     Grid,
     styled,
-    AlbumIcon,
     Tooltip,
     Radio,
     RadioGroup,
@@ -28,6 +27,7 @@ import {
     IconButton,
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import AlbumIcon from '@mui/icons-material/Album';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import axios, { isCancel, AxiosError } from "axios";
 

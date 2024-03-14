@@ -13,9 +13,9 @@
 // ['middleware' => ['auth:sanctum', 'role:admin|editor']],
 
 
-$router->get('rightList', 'LandingPageController@rightList');
-$router->get('leftList', 'LandingPageController@leftList');
-// $router->get('welcomelist', 'WelcomeController');
+// $router->get('rightList', 'LandingPageController@rightList');
+// $router->get('leftList', 'LandingPageController@leftList');
+$router->get('welcomelist', 'WelcomeController');
 $router->post('auth/login', 'LoginController@login');
 $router->post('/register', 'RegistrationController@signup');
 // dd();

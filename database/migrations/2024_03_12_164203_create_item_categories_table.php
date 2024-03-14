@@ -15,8 +15,9 @@ class CreateItemCategoriesTable extends Migration
     {
         Schema::create('item_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('category_name', 255);
-            $table->timestamps(); // Adds created_at and updated_at columns
+            $table->string('category_name', 255)->unique();
+            $table->foreignId('item_id');
+            $table->foreign('item_id')->references('id')->on('items');
         });
     }
 

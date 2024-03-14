@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('route_id')->constrained('travel_routes')->unique();
             $table->string('requirement_type')->unique(); // e.g., 'visa', 'passport', etc.
             $table->integer('requirement_id')->unique();
-            $table->timestamps();
+            
         });
     }
 

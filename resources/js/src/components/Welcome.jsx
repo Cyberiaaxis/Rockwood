@@ -24,7 +24,6 @@ import { renderMatches, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import CloseIcon from '@mui/icons-material/Close';
 import { Navigate } from "react-router-dom";
-// import axios, { isCancel, AxiosError } from "axios";
 
 // Define custom styled component
 const Item = styled(Paper)(({ theme }) => ({

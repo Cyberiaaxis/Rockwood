@@ -11,17 +11,6 @@ use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     /**
      * Create a new controller instance.
      *
@@ -31,24 +20,34 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except(['logout', 'ping']);
     }
-    // $user = auth()->user();
-    // $role = $user->getUserRoles();
+    
+    /**
+     * Handle user login.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(Request $request)
     {
         $this->validateInputs($request);
 
         if ($this->attemptLogin($request)) {
-
             return response()->json(['userId' => auth()->id()]);
         }
 
         return $this->sendFailedLoginResponse($request);
     }
 
-    public function validateInputs($request)
+    /**
+     * Validate user input.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
+    public function validateInputs(Request $request)
     {
         $request->validate([
-            'email' => ['email', 'required'],
+            'email' => ['email', 'required', 'exists:users'],
             'password' => ['required']
         ]);
     }
@@ -94,12 +93,10 @@ class LoginController extends Controller
     }
 
     /**
-     * Get the failed login response instance.
+     * Get the logged-in user details.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getUser($user)
     {
@@ -107,10 +104,9 @@ class LoginController extends Controller
     }
 
     /**
-     * Get the failed login response instance.
+     * Ping to check the user's authentication status.
      *
-     * @return loggedIn user session.
-     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function ping()
     {
@@ -121,14 +117,13 @@ class LoginController extends Controller
     }
 
     /**
-     * Get the failed login response instance.
+     * Logout the user.
      *
-     * @return Logout user session.
-     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function logout()
     {
         auth()->guard('web')->logout();
-        return response()->json(["messageOut" => "You are logout successfully"]);
+        return response()->json(["messageOut" => "You have been logged out successfully"]);
     }
 }

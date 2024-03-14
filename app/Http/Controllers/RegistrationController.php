@@ -5,45 +5,38 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserStats;
-use Carbon\Carbon;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class RegistrationController extends Controller
 {
-
-    use AuthenticatesUsers;
+    protected $user;
+    protected $userStats;
 
     /**
-     * Create user
+     * Constructor.
      *
-     * @param  [string] name
-     * @param  [string] email
-     * @param  [string] password
-     * @param  [string] password_confirmation
-     * @return [string] message
+     * @param  User  $user
+     * @param  UserStats  $userStats
+     */
+    public function __construct(User $user, UserStats $userStats)
+    {
+        $this->user = $user;
+        $this->userStats = $userStats;
+    }
+
+    /**
+     * Handle user registration.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function signup(Request $request)
     {
+        $validatedData = $this->validateRequestData($request);
 
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|confirmed'
-        ]);
-
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password)
-        ];
-
-        $user = new User();
-        $userStored = $user->addUser($data);
-
-        $userStats = new UserStats();
-        $userStats->addUserStats($userStored);
+        $userStored = $this->user->addUser($validatedData);
+        $this->userStats->addUserStats($userStored);
 
         return response()->json([
             'status' => true,
@@ -52,71 +45,17 @@ class RegistrationController extends Controller
     }
 
     /**
-     * Login user and create token
+     * Validate registration request data.
      *
-     * @param  [string] email
-     * @param  [string] password
-     * @param  [boolean] remember_me
-     * @return [string] access_token
-     * @return [string] token_type
-     * @return [string] expires_at
+     * @param  Request  $request
+     * @return array
      */
-    public function login(Request $request)
+    protected function validateRequestData($request)
     {
-        $request->validate([
-            'email' => ['required', 'email'],
-            'password' => 'required|string',
-            'remember_me' => 'boolean'
+        return $request->validate([
+            'name' => ['required', 'string'],
+            'email' => ['required', 'string', 'email', 'unique:users'],
+            'password' => ['required', 'string', 'confirmed', 'min:6', 'max:100']
         ]);
-
-        $credentials = $request->only(['email', 'password']);
-
-        if (!auth()->attempt($credentials)) {
-            throw ValidationException::withMessages([
-                $this->username() => [trans('auth.failed')],
-            ]);
-        }
-
-        $user = auth()->user();
-
-        $tokenResult = $user->createToken('Personal Access Token');
-
-        $token = $tokenResult->token;
-
-        if ($request->remember_me)
-            $token->expires_at = Carbon::now()->addWeeks(1);
-
-        $token->save();
-
-        return response()->json([
-            'access_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse(
-                $tokenResult->token->expires_at
-            )->toDateTimeString()
-        ]);
-    }
-
-    /**
-     * Logout user (Revoke the token)
-     *
-     * @return [string] message
-     */
-    public function logout(Request $request)
-    {
-        auth()->user()->token()->revoke();
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ]);
-    }
-
-    /**
-     * Get the authenticated User
-     *
-     * @return [json] user object
-     */
-    public function user(Request $request)
-    {
-        return response()->json($request->user());
     }
 }
