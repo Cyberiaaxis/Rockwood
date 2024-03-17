@@ -121,7 +121,18 @@ export default function Welcome() {
     }, [welcomeData.images.length, currentBackgroundImage]);
 
     // Render active page based on selected page
-    function ActivePage() {
+    // function ActivePage() {
+    //     const pages = {
+    //         about: <About />,
+    //         help: <Help />,
+    //         discussion: <Discussions />,
+    //         upcoming: <Upcomings />,
+    //         "join-us": <Registration onClose={() => setPage(null)} />,
+    //     };
+    //     return pages[page]
+    // }
+    // Render active page based on selected page
+    const ActivePage = React.memo(() => {
         const pages = {
             about: <About />,
             help: <Help />,
@@ -130,7 +141,7 @@ export default function Welcome() {
             "join-us": <Registration onClose={() => setPage(null)} />,
         };
         return pages[page]
-    }
+    });
 
     // Handle click event to open component
     const handleClickOpenComponent = (e) => {

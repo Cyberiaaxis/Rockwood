@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Tabs, Tab, Card, Grid, CardContent, CardMedia, Tooltip, Modal, Typography, ImageList, ImageListItem, Box } from "@mui/material";
 import { toast } from "react-toastify";
 import gameServerApi from "../libraries/gameServerApi";
@@ -23,39 +23,38 @@ const Home = () => {
     setValue(newValue);
   };
 
-  React.useEffect(() => {
-    // Function to load data
-    const getHomeData = async (data) => {
-      const response = await toast.promise(
-        gameServerApi('/home'),
-        {
-          pending: 'Please wait, We are creating your account',
-          success: {
-            render({ data }) {
-              // console.log("data render", data);
-              setPlayerHomeData(data)
+  const memoizedPlayerHomeData = useMemo(() => {
+    const getHomeData = async () => {
+      try {
+        const response = await toast.promise(
+          gameServerApi('/home'),
+          {
+            pending: 'Please wait, We are creating your account',
+            success: {
+              render({ data }) {
+                setPlayerHomeData(data);
+              },
             },
-          },
-          error: {
-            theme: 'colored',
-            render({ data }) {
-              return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message || 'An error occurred while fetching home data';
+            error: {
+              theme: 'colored',
+              render({ data }) {
+                return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message || 'An error occurred while fetching home data';
+              },
             },
-          },
-          // error: 'An error occurred while creating your account',
-        }
-      );
+          }
+        );
+      } catch (error) {
+        // Handle error
+      }
     };
 
-    // Call the fetchData function when the component mounts
     getHomeData();
 
     // Cleanup function (optional)
     return () => {
       // Perform any cleanup if necessary
     };
-  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
-
+  }, []);
   // console.log("playerHomeData", playerHomeData);
   return (
     <React.Fragment>

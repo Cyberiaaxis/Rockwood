@@ -162,36 +162,14 @@ function Header({ setPage }) {
               </Button>
             </Box>
             <Box gridColumn="span 3">
-              <Button fullWidth onClick={(e) => handleClick("two-menu", e)} aria-controls={open ? "two-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} startIcon={<GiSatelliteCommunication />}>
-                Communication
+              <Button fullWidth onClick={() => setPage("mail")} startIcon={<GiSatelliteCommunication />}>
+                Mail
               </Button>
-              <StyledMenu anchorEl={anchorEl && anchorEl["two-menu"]} id="two-menu" open={Boolean(anchorEl && anchorEl["two-menu"])} onClose={handleClose} onClick={handleClose}>
-                <MenuItem>
-                  <ListItemText onClick={() => setPage("mail")}>Mail</ListItemText>
-                </MenuItem>
-                <MenuItem>
-                  <ListItemText>Chat</ListItemText>
-                </MenuItem>
-                <MenuItem>
-                  <ListItemText onClick={() => setPage("forums")}>Forums</ListItemText>
-                </MenuItem>
-              </StyledMenu>
             </Box>
             <Box gridColumn="span 3">
-              <Button fullWidth onClick={(e) => handleClick("three-menu", e)} aria-controls={open ? "three-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} startIcon={<GiCrimeSceneTape />}>
-                Action
+              <Button fullWidth onClick={() => setPage("forums")} startIcon={<GiCrimeSceneTape />}>
+                Forums
               </Button>
-              <StyledMenu anchorEl={anchorEl && anchorEl["three-menu"]} id="three-menu" open={Boolean(anchorEl && anchorEl["three-menu"])} onClose={handleClose} onClick={handleClose}>
-                <MenuItem>
-                  <ListItemText onClick={() => setPage("fightclub")}>fight Clubs</ListItemText>
-                </MenuItem>
-                <MenuItem>
-                  <ListItemText onClick={() => setPage("crimes")}>Crimes</ListItemText>
-                </MenuItem>
-                <MenuItem>
-                  <ListItemText>Missions</ListItemText>
-                </MenuItem>
-              </StyledMenu>
             </Box>
             <Box gridColumn="span 3">
               <Button fullWidth onClick={() => setPage("event")} startIcon={<CgEventbrite />}>

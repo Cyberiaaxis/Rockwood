@@ -27,6 +27,7 @@ $router->post('/register', 'RegistrationController@signup');
 $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/auth/logout', 'LoginController@logout');
     $router->get('/home', 'HomeController@index');
+    $router->get('/userevents', 'UserEventController@userEvents');
     $router->post('/addLocation', 'LocationController@makeLocation');
     $router->get('/getItems', 'ItemController@getItemLists');
     $router->post('/addItem', 'ItemController@createItem');
