@@ -110,6 +110,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->insertGetId($data);
     }
 
+        /**
+     * regiration of new player's in storage.
+     * @param  int $course_id
+     * @return boolean
+     */
+    public function getUsers(): array
+    {
+        return $this->all()->toArray();
+    }
+
     /**
      * get player's name by id from storage.
      * @param  int $userId

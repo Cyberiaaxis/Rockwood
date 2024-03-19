@@ -3,19 +3,17 @@ import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import { Avatar, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import ForumCard from "./ForumCard";
 import gameServerApi from "../libraries/gameServerApi";
 
-
 const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "transparent",
+    backgroundColor: theme.palette.mode === "dark" ? "#303030" : "#f5f5f5", // Dark or light background based on theme mode
     ...theme.typography.body1,
-    padding: theme.spacing(0),
+    padding: theme.spacing(2),
     textAlign: "left",
-    color: theme.palette.text.primary
+    color: theme.palette.text.primary,
 }));
-
 
 export default function ForumList({ forumId, handleClick }) {
     const [forumsList, setForumsList] = React.useState([]);
@@ -28,29 +26,27 @@ export default function ForumList({ forumId, handleClick }) {
         fetchForums();
     }, []);
 
-    // console.log("forumsList", forumsList)
-
     return (
         <React.Fragment>
             <Box>
-                <h5>Forums</h5>
-                {
-                    forumsList.length && forumsList.map((forum, i) =>
-
-                        <Grid key={i} container spacing={1}>
-                            <Grid item xs={12}>
-                                <Item sx={{ backgroundColor: "yellowgreen" }}>
-                                    <Typography variant="h5" component="h2">
-                                        {forum.title}
-                                    </Typography>
-                                </Item>
-                            </Grid>
-                            {forum.forumList && forum.forumList.length && forum.forumList.map((x, i) => <ForumCard key={i} item={x} handleClick={handleClick} />)}
+                <Typography variant="h4" style={{ marginBottom: '1rem', backgroundColor: "black", color: '#FFD700' }}>Forums</Typography>
+                {forumsList.map((forum, index) => (
+                    <Grid key={index} container spacing={2}>
+                        <Grid item xs={12}>
+                            <Item>
+                                <Typography variant="h5" component="h2" style={{ color: '#FFD700' }}>
+                                    {forum.title}
+                                </Typography>
+                            </Item>
                         </Grid>
-                    )
-                }
+                        {forum.forumList && forum.forumList.map((forumItem, idx) => (
+                            <Grid key={idx} item xs={12}>
+                                <ForumCard item={forumItem} handleClick={handleClick} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                ))}
             </Box>
         </React.Fragment>
-
-    )
+    );
 }

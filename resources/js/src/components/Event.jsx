@@ -158,16 +158,16 @@ export default function Event() {
                                         );
                                     })} */}
 
-                                    <StyledTableCell align={row.align}>
-                                        {row.id}
-                                    </StyledTableCell>
+
                                     <StyledTableCell align={row.align}>
                                         {row.event}
                                     </StyledTableCell>
                                     <StyledTableCell align={row.align}>
                                         {row.created_at}
                                     </StyledTableCell>
-
+                                    <StyledTableCell align={row.align}>
+                                        {row.id}
+                                    </StyledTableCell>
                                 </StyledTableRow>
                             ))}
                     </TableBody>

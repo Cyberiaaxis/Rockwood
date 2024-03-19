@@ -29,6 +29,8 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/home', 'HomeController@index');
     $router->get('/userevents', 'UserEventController@userEvents');
     $router->post('/addLocation', 'LocationController@makeLocation');
+    $router->get('/composeMail', 'MailController@composeMail');
+    $router->post('/mailSent', 'MailController@mailSent');
     $router->get('/getItems', 'ItemController@getItemLists');
     $router->post('/addItem', 'ItemController@createItem');
     $router->post('/modifyItem', 'ItemController@updateItem');
