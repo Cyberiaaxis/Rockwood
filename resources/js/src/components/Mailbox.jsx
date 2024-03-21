@@ -24,18 +24,18 @@ import { toast } from "react-toastify";
 import gameServerApi from "../libraries/gameServerApi";
 import ValidationErrors from "../libraries/ValidationErrors";
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
+// function createData(name, calories, fat, carbs, protein) {
+//     return { name, calories, fat, carbs, protein };
+// }
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+// const rows = [
+//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
 
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+//     createData('Eclair', 262, 16.0, 24, 6.0),
+//     createData('Cupcake', 305, 3.7, 67, 4.3),
+//     createData('Gingerbread', 356, 16.0, 49, 3.9),
+// ];
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -75,15 +75,26 @@ export default function Mailbox() {
     const [listData, setListData] = React.useState([]);
     const [value, setValue] = React.useState(0);
     const [messageText, setMessageText] = React.useState(null);
+    const [messageType, setMessageType] = React.useState('inboxMail');
+
 
     const handleChange = (event, newValue) => {
+
+        const mailType = [
+            'inboxMail',
+            'composeMail',
+            'outboxMail'
+        ];
+        setMessageType(mailType[newValue]);
         setValue(newValue);
     };
     React.useEffect(() => {
         const getListData = async () => {
             try {
+                console.log('messageTypemessageType', messageType);
                 const response = await toast.promise(
-                    gameServerApi('/composeMail'),
+
+                    gameServerApi('/' + messageType),
                     {
                         pending: 'Please wait, We are creating your account',
                         success: {
@@ -110,7 +121,7 @@ export default function Mailbox() {
         return () => {
             // Perform any cleanup if necessary
         };
-    }, []); // Empty dependency array ensures this effect runs only once, similar to useMemo with an empty dependency array
+    }, [messageType]); // Empty dependency array ensures this effect runs only once, similar to useMemo with an empty dependency array
 
     console.log('data.results', listData);
 

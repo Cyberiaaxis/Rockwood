@@ -70,7 +70,11 @@ class Mail extends GameBaseModel
      */
     public function getUserToMailByUserId(int $toId): ?array
     {
-        return $this->db->where('to_id', $toId)->get()->toArray();
+        return $this->db->select('mails.*', 'sender.name as sender_name', 'receiver.name as receiver_name')
+            ->join('users as sender', 'mails.from_id', '=', 'sender.id')
+            ->join('users as receiver', 'mails.to_id', '=', 'receiver.id')
+            ->where('mails.to_id', $toId)
+            ->get()->toArray();
     }
 
     /**
@@ -81,6 +85,11 @@ class Mail extends GameBaseModel
      */
     public function getUserFromMailByUserId(int $fromId): ?array
     {
-        return $this->db->where('from_id', $fromId)->get()->toArray();
+        return $this->db->select('mails.*', 'sender.name as sender_name', 'receiver.name as receiver_name')
+            ->join('users as sender', 'mails.from_id', '=', 'sender.id')
+            ->join('users as receiver', 'mails.to_id', '=', 'receiver.id')
+            ->where('mails.from_id', $fromId)
+            ->get()->toArray();
     }
 }
+

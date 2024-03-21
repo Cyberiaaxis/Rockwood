@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class MailController extends Controller
 {
@@ -107,13 +108,10 @@ class MailController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getInbox(Request $request)
+    public function getInbox()
     {
-        // Validate and verify request data
-        $validatedData = $this->validateAndVerifyRequestData($request);
-
         // Retrieve inbox emails by user ID
-        $inboxEmails = $this->mail->getUserFromMailByUserId($validatedData['from_id']);
+        $inboxEmails = $this->mail->getUserFromMailByUserId(auth()->id());
 
         // Return inbox emails as JSON response
         return response()->json($inboxEmails);
@@ -125,15 +123,16 @@ class MailController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getSent(Request $request)
+    public function getOutbox()
     {
-        // Validate and verify request data
-        $validatedData = $this->validateAndVerifyRequestData($request);
 
         // Retrieve sent emails by user ID
-        $sentEmails = $this->mail->getUserToMailByUserId($validatedData['to_id']);
+       $sentEmails = $this->mail->getUserToMailByUserId(auth()->id());
 
         // Return sent emails as JSON response
         return response()->json($sentEmails);
     }
+
+
+    
 }
