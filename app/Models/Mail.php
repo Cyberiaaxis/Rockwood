@@ -32,7 +32,6 @@ class Mail extends GameBaseModel
         'content'
     ];
 
-
     /**
      * The attributes that should be cast.
      *
@@ -53,17 +52,6 @@ class Mail extends GameBaseModel
     }
 
     /**
-     * Retrieve subject and content of mails by user ID.
-     *
-     * @param int $userId
-     * @return array|null
-     */
-    public function getSubjectWithContentMailByUserId(int $userId): ?array
-    {
-        return $this->db->where('user_id', $userId)->get()->toArray();
-    }
-
-    /**
      * Add a new mail.
      *
      * @param array $attributes
@@ -71,6 +59,28 @@ class Mail extends GameBaseModel
      */
     public function addMail(array $attributes): ?int
     {
-        return  $this->db->insertGetId($attributes);
+        return $this->db->insertGetId($attributes);
+    }
+
+    /**
+     * Retrieve mails where the provided user ID is the recipient.
+     *
+     * @param int $toId The ID of the recipient user.
+     * @return array|null An array of mails or null if no mails found.
+     */
+    public function getUserToMailByUserId(int $toId): ?array
+    {
+        return $this->db->where('to_id', $toId)->get()->toArray();
+    }
+
+    /**
+     * Retrieve mails where the provided user ID is the sender.
+     *
+     * @param int $fromId The ID of the sender user.
+     * @return array|null An array of mails or null if no mails found.
+     */
+    public function getUserFromMailByUserId(int $fromId): ?array
+    {
+        return $this->db->where('from_id', $fromId)->get()->toArray();
     }
 }

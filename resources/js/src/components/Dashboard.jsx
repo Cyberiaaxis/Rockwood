@@ -18,7 +18,7 @@ import Crimes from "./Crimes";
 import Travel from "./Travel";
 import Event from "./Event";
 import Forums from "./Forums";
-import Mail from "./mail/Mailbox";
+import Mail from "./Mailbox";
 import Thread from "./Thread";
 import FightClubs from "./FightClubs";
 import MyAccount from "./MyAccount";
