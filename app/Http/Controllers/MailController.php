@@ -111,10 +111,10 @@ class MailController extends Controller
     public function getInbox()
     {
         // Retrieve inbox emails by user ID
-        $inboxEmails = $this->mail->getUserFromMailByUserId(auth()->id());
+        $inboxEmails = $this->mail->getReceivedMailsByUserId(auth()->id());
 
         // Return inbox emails as JSON response
-        return response()->json($inboxEmails);
+        return response()->json(['inbox' => $inboxEmails]);
     }
 
     /**
@@ -127,10 +127,10 @@ class MailController extends Controller
     {
 
         // Retrieve sent emails by user ID
-       $sentEmails = $this->mail->getUserToMailByUserId(auth()->id());
+       $sentEmails = $this->mail->getSentMailsByUserId(auth()->id());
 
         // Return sent emails as JSON response
-        return response()->json($sentEmails);
+        return response()->json(['outbox' => $sentEmails]);
     }
 
 

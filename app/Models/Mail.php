@@ -68,12 +68,12 @@ class Mail extends GameBaseModel
      * @param int $toId The ID of the recipient user.
      * @return array|null An array of mails or null if no mails found.
      */
-    public function getUserToMailByUserId(int $toId): ?array
+    public function getReceivedMailsByUserId(int $receiverId): ?array
     {
-        return $this->db->select('mails.*', 'sender.name as sender_name', 'receiver.name as receiver_name')
-            ->join('users as sender', 'mails.from_id', '=', 'sender.id')
-            ->join('users as receiver', 'mails.to_id', '=', 'receiver.id')
-            ->where('mails.to_id', $toId)
+         return $this->db->select('mails.*', 'sender.name as sender_name', 'receiver.name as receiver_name')
+            ->join('users as sender', 'mails.sender_id', '=', 'sender.id')
+            ->join('users as receiver', 'mails.receiver_id', '=', 'receiver.id')
+            ->where('mails.receiver_id', $receiverId)
             ->get()->toArray();
     }
 
@@ -83,12 +83,12 @@ class Mail extends GameBaseModel
      * @param int $fromId The ID of the sender user.
      * @return array|null An array of mails or null if no mails found.
      */
-    public function getUserFromMailByUserId(int $fromId): ?array
+    public function getSentMailsByUserId(int $senderId): ?array
     {
         return $this->db->select('mails.*', 'sender.name as sender_name', 'receiver.name as receiver_name')
-            ->join('users as sender', 'mails.from_id', '=', 'sender.id')
-            ->join('users as receiver', 'mails.to_id', '=', 'receiver.id')
-            ->where('mails.from_id', $fromId)
+            ->join('users as sender', 'mails.sender_id', '=', 'sender.id')
+            ->join('users as receiver', 'mails.receiver_id', '=', 'receiver.id')
+            ->where('mails.sender_id', $senderId)
             ->get()->toArray();
     }
 }

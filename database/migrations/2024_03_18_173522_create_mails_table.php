@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('mails', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('from_id');
-            $table->foreign('from_id')->references('id')->on('users');
-            $table->foreignId('to_id');
-            $table->foreign('to_id')->references('id')->on('users');
+            $table->foreignId('sender_id');
+            $table->foreign('sender_id')->references('id')->on('users');
+            $table->foreignId('receiver_id');
+            $table->foreign('receiver_id')->references('id')->on('users');
             $table->string('subject', 255);
             $table->longText('content');
             $table->timestamps();
