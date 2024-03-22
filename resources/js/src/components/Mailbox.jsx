@@ -17,9 +17,8 @@ import { Button } from "@mui/material";
 import { toast } from "react-toastify";
 import gameServerApi from "../libraries/gameServerApi";
 import ValidationErrors from "../libraries/ValidationErrors";
-import TablePagination from '@mui/material/TablePagination';
+import TablePagination from "@mui/material/TablePagination";
 import { useForm } from "react-hook-form";
-
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -48,29 +47,34 @@ export default function Mailbox() {
     const [receiver, setReceiver] = React.useState([]);
     const [listData, setListData] = React.useState([]);
     const [value, setValue] = React.useState(0);
-    const [messageText, setMessageText] = React.useState(null);
     const [messageType, setMessageType] = React.useState("inboxMail");
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5); // Adjust as needed
-    const { register, handleSubmit, formState: { errors }, setError, clearErrors } = useForm();
-
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+        setError,
+        clearErrors,
+    } = useForm();
 
     const onSubmit = async (data) => {
-
-        const receive = { "receiver": receiver };
+        const receive = { receiver: receiver };
         const mergedObj = { ...data, ...receive };
-        const newData = {
-            "subject": mergedObj.subject,
-            "content": mergedObj.messagetext,
-            "receiver_id": mergedObj.receiver
-        }
+        let newData = {
+            subject: mergedObj.subject,
+            content: mergedObj.messagetext,
+            receiver_id: mergedObj.receiver,
+        };
 
         try {
-            const response = await gameServerApi('/mailSent', 'post', newData);
-            toast.success('The mail has been sent!');
+            const response = await gameServerApi("/mailSent", "post", newData);
+            toast.success("The mail has been sent!");
             setReceiver([]); // Reset receiver
             setValue(0);
             setMessageType("inboxMail");
+            newData = {};
             reset();
         } catch (error) {
             if (error.response && error.response.data) {
@@ -78,7 +82,7 @@ export default function Mailbox() {
                 const errorMessage = Array.isArray(responseData) ? <ValidationErrors data={responseData} /> : responseData.message;
                 toast.error(errorMessage);
             } else {
-                toast.error('An error occurred while sending mail');
+                toast.error("An error occurred while sending mail");
             }
         }
     };
@@ -129,7 +133,6 @@ export default function Mailbox() {
         };
     }, [messageType]); // Empty dependency array ensures this effect runs only once, similar to useMemo with an empty dependency array
 
-
     // console.log("data.results", listData);
 
     return (
@@ -159,17 +162,15 @@ export default function Mailbox() {
                                 </TableHead>
                                 <TableBody>
                                     {listData.inbox &&
-                                        listData.inbox
-                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            .map((row) => (
-                                                <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                                                    <TableCell component="th" scope="row">
-                                                        {row.sender_name}
-                                                    </TableCell>
-                                                    <TableCell align="left">{row.subject}</TableCell>
-                                                    <TableCell align="right">{row.created_at}</TableCell>
-                                                </TableRow>
-                                            ))}
+                                        listData.inbox.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                                            <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                                <TableCell component="th" scope="row">
+                                                    {row.sender_name}
+                                                </TableCell>
+                                                <TableCell align="left">{row.subject}</TableCell>
+                                                <TableCell align="right">{row.created_at}</TableCell>
+                                            </TableRow>
+                                        ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
@@ -192,12 +193,10 @@ export default function Mailbox() {
                                         fullWidth
                                         id="combo-box-demo"
                                         options={listData.users}
-                                        getOptionLabel={option => option.name}
-                                        renderInput={params => (
-                                            <TextField {...params} label="Select Send to" variant="outlined" fullWidth />
-                                        )}
+                                        getOptionLabel={(option) => option.name}
+                                        renderInput={(params) => <TextField {...params} label="Select Send to" variant="outlined" fullWidth />}
                                         onChange={(event, newValue) => {
-                                            setReceiver(newValue.id)
+                                            setReceiver(newValue.id);
                                             // console.log(newValue, JSON.stringify(newValue, null, ' '));
                                         }}
                                         isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -222,8 +221,6 @@ export default function Mailbox() {
                                     id=""
                                     name="messagetext"
                                     rows="10"
-                                    // value={messageText || ""}
-                                    // onChange={(e) => setMessageText(e.target.value)}
                                     {...register("messagetext", { required: true })} // Add register function for validation
                                 ></textarea>
                             </Box>
@@ -250,17 +247,15 @@ export default function Mailbox() {
                                 </TableHead>
                                 <TableBody>
                                     {listData.outbox &&
-                                        listData.outbox
-                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            .map((row) => (
-                                                <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                                                    <TableCell component="th" scope="row">
-                                                        {row.receiver_name}
-                                                    </TableCell>
-                                                    <TableCell align="left">{row.subject}</TableCell>
-                                                    <TableCell align="right">{row.created_at}</TableCell>
-                                                </TableRow>
-                                            ))}
+                                        listData.outbox.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                                            <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                                <TableCell component="th" scope="row">
+                                                    {row.receiver_name}
+                                                </TableCell>
+                                                <TableCell align="left">{row.subject}</TableCell>
+                                                <TableCell align="right">{row.created_at}</TableCell>
+                                            </TableRow>
+                                        ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
@@ -274,7 +269,6 @@ export default function Mailbox() {
                             onRowsPerPageChange={handleChangeRowsPerPage}
                         />
                     </CustomTabPanel>
-
                 </Box>
             </Box>
         </React.Fragment>
