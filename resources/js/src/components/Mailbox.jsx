@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import gameServerApi from "../libraries/gameServerApi";
 import ValidationErrors from "../libraries/ValidationErrors";
 import TablePagination from '@mui/material/TablePagination';
+import { useForm } from "react-hook-form";
 
 
 function CustomTabPanel(props) {
@@ -44,13 +45,43 @@ function a11yProps(index) {
 }
 
 export default function Mailbox() {
+    const [receiver, setReceiver] = React.useState([]);
     const [listData, setListData] = React.useState([]);
     const [value, setValue] = React.useState(0);
     const [messageText, setMessageText] = React.useState(null);
     const [messageType, setMessageType] = React.useState("inboxMail");
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5); // Adjust as needed
+    const { register, handleSubmit, formState: { errors }, setError, clearErrors } = useForm();
 
+
+    const onSubmit = async (data) => {
+
+        const receive = { "receiver": receiver };
+        const mergedObj = { ...data, ...receive };
+        const newData = {
+            "subject": mergedObj.subject,
+            "content": mergedObj.messagetext,
+            "receiver_id": mergedObj.receiver
+        }
+
+        try {
+            const response = await gameServerApi('/mailSent', 'post', newData);
+            toast.success('The mail has been sent!');
+            setReceiver([]); // Reset receiver
+            setValue(0);
+            setMessageType("inboxMail");
+            reset();
+        } catch (error) {
+            if (error.response && error.response.data) {
+                const responseData = error.response.data;
+                const errorMessage = Array.isArray(responseData) ? <ValidationErrors data={responseData} /> : responseData.message;
+                toast.error(errorMessage);
+            } else {
+                toast.error('An error occurred while sending mail');
+            }
+        }
+    };
 
     const handleChange = (event, newValue) => {
         const mailType = ["inboxMail", "composeMail", "outboxMail"];
@@ -98,7 +129,8 @@ export default function Mailbox() {
         };
     }, [messageType]); // Empty dependency array ensures this effect runs only once, similar to useMemo with an empty dependency array
 
-    console.log("data.results", listData);
+
+    // console.log("data.results", listData);
 
     return (
         <React.Fragment>
@@ -153,54 +185,54 @@ export default function Mailbox() {
                     </CustomTabPanel>
 
                     <CustomTabPanel value={value} index={1}>
-                        <Box>
-                            {listData && listData.users && (
-                                <Autocomplete
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <Box>
+                                {listData && listData.users && (
+                                    <Autocomplete
+                                        fullWidth
+                                        id="combo-box-demo"
+                                        options={listData.users}
+                                        getOptionLabel={option => option.name}
+                                        renderInput={params => (
+                                            <TextField {...params} label="Select Send to" variant="outlined" fullWidth />
+                                        )}
+                                        onChange={(event, newValue) => {
+                                            setReceiver(newValue.id)
+                                            // console.log(newValue, JSON.stringify(newValue, null, ' '));
+                                        }}
+                                        isOptionEqualToValue={(option, value) => option.id === value.id}
+                                    />
+                                )}
+                            </Box>
+                            <Box component="div" autoComplete="off">
+                                <TextField
                                     fullWidth
-                                    id="user-select-demo"
-                                    sx={{ width: 300 }}
-                                    options={listData.users}
-                                    autoHighlight
-                                    getOptionLabel={(option) => option.name}
-                                    renderOption={(props, option) => (
-                                        <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>
-                                            {option.name}
-                                        </Box>
-                                    )}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            fullWidth
-                                            {...params}
-                                            label="Choose a user"
-                                            inputProps={{
-                                                ...params.inputProps,
-                                                autoComplete: "new-password", // disable autocomplete and autofill
-                                            }}
-                                        />
-                                    )}
+                                    id="outlined-basic"
+                                    label="Outlined"
+                                    variant="outlined"
+                                    name="subject"
+                                    {...register("subject", { required: true })} // Add register function for validation
                                 />
-                            )}
-                        </Box>
-                        <Box component="form" autoComplete="off">
-                            <TextField fullWidth id="outlined-basic" label="Outlined" variant="outlined" />
-                        </Box>
-                        <Box>
-                            <textarea
-                                style={{
-                                    width: "100%",
-                                }}
-                                id=""
-                                name="messagetext"
-                                rows="10"
-                                value={messageText || ""}
-                                onChange={(e) => setMessageText(e.target.value)}
-                            ></textarea>
-                        </Box>
-                        <Box>
-                            <Button fullWidth startIcon={<AddShoppingCartIcon />} color="primary" aria-label="add to shopping cart">
-                                Send
-                            </Button>
-                        </Box>
+                            </Box>
+                            <Box>
+                                <textarea
+                                    style={{
+                                        width: "100%",
+                                    }}
+                                    id=""
+                                    name="messagetext"
+                                    rows="10"
+                                    // value={messageText || ""}
+                                    // onChange={(e) => setMessageText(e.target.value)}
+                                    {...register("messagetext", { required: true })} // Add register function for validation
+                                ></textarea>
+                            </Box>
+                            <Box>
+                                <Button type="submit" fullWidth startIcon={<AddShoppingCartIcon />} color="primary" aria-label="add to shopping cart">
+                                    Send
+                                </Button>
+                            </Box>
+                        </form>
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={2}>
                         <TableContainer component={Paper}>

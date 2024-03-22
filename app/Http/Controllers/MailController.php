@@ -36,32 +36,13 @@ class MailController extends Controller
     {
         // Define validation rules
         $rules = [
-            'from_id' => ['required', 'exists:users,id'],
-            'to_id' => ['required', 'exists:users,id'],
+            // 'sender_id' => ['required', 'exists:users,id'],
+            'receiver_id' => ['required', 'exists:users,id'],
             'subject' => ['nullable', 'string'],
             'content' => ['required', 'string', 'max:2000'],
         ];
 
-        // Check if the request has 'from_id' field, add validation rule if present
-        if ($request->has('from_id')) {
-            $rules['from_id'] = ['required', 'exists:users,id'];
-        }
-
-        // Check if the request has 'to_id' field, add validation rule if present
-        if ($request->has('to_id')) {
-            $rules['to_id'] = ['required', 'exists:users,id'];
-        }
-
-        // Check if the request has 'subject' field, add validation rule if present
-        if ($request->has('subject')) {
-            $rules['subject'] =  ['nullable', 'string'];
-        }
-
-        // Check if the request has 'content' field, add validation rule if present
-        if ($request->has('content')) {
-            $rules['content'] = ['required', 'string', 'max:2000'];
-        }
-
+  
         // Validate incoming request data
         $validatedData = $request->validate($rules);
 
@@ -94,6 +75,8 @@ class MailController extends Controller
     {
         // Validate and verify request data
         $validatedData = $this->validateAndVerifyRequestData($request);
+        $validatedData['sender_id'] = auth()->id();
+        $validatedData['created_at'] = now();
 
         // Add mail to database
         $this->mail->addMail($validatedData);
