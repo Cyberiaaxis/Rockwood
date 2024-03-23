@@ -13,12 +13,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { Button } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { toast } from "react-toastify";
 import gameServerApi from "../libraries/gameServerApi";
 import ValidationErrors from "../libraries/ValidationErrors";
 import TablePagination from "@mui/material/TablePagination";
 import { useForm } from "react-hook-form";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Typography from "@mui/material/Typography";
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -50,6 +55,12 @@ export default function Mailbox() {
     const [messageType, setMessageType] = React.useState("inboxMail");
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5); // Adjust as needed
+    const [openModal, setOpenModal] = React.useState(false); // State for modal visibility
+    const [mailContent, setMailContent] = React.useState({
+        subject: '',
+        content: ''
+    }); // State for modal content
+
     const {
         register,
         handleSubmit,
@@ -85,6 +96,37 @@ export default function Mailbox() {
                 toast.error("An error occurred while sending mail");
             }
         }
+    };
+
+
+    // Function to open modal and set modal content
+    const handleOpenModal = async (id, subject, content, createdAt) => {
+        console.log("id", id);
+        setMailContent({
+            subject: subject,
+            content: content,
+            createdAt: createdAt
+        });
+        setOpenModal(true);
+        try {
+            const idRead = { id: id };
+            const response = await gameServerApi("/readMail", "post", idRead);
+            toast.success("Finally, you've read the email !");
+
+        } catch (error) {
+            if (error.response && error.response.data) {
+                const responseData = error.response.data;
+                const errorMessage = Array.isArray(responseData) ? <ValidationErrors data={responseData} /> : responseData.message;
+                toast.error(errorMessage);
+            } else {
+                toast.error("An error occurred while reading mail");
+            }
+        }
+    };
+
+    // Function to close modal
+    const handleCloseModal = () => {
+        setOpenModal(false);
     };
 
     const handleChange = (event, newValue) => {
@@ -165,13 +207,64 @@ export default function Mailbox() {
                                         listData.inbox.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                                             <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                                                 <TableCell component="th" scope="row">
-                                                    {row.sender_name}
+                                                    {row.read === 0 ? "unread - " + row.sender_name : row.sender_name}
                                                 </TableCell>
-                                                <TableCell align="left">{row.subject}</TableCell>
+                                                <TableCell align="left" onClick={() => handleOpenModal(row.id, row.read = 1, row.subject, row.content, row.created_at)}>
+                                                    {row.subject}
+                                                </TableCell> {/* Added onClick to open modal */}
                                                 <TableCell align="right">{row.created_at}</TableCell>
                                             </TableRow>
                                         ))}
                                 </TableBody>
+                                <Modal open={openModal} onClose={handleCloseModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+                                    <Fade in={openModal}>
+                                        <Box sx={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            bgcolor: "rgba(255, 99, 71, 0.8)", // Red color with opacity
+                                            width: '50vw', // Full width of the viewport
+                                            height: '50vh', // Full height of the viewport
+                                            p: 2,
+                                            border: 1,
+                                            boxShadow: (theme) => `inset 0 0 0 2px ${theme.palette.divider}`, // Adjust spread radius and use theme divider color
+                                            borderRadius: "20px",
+                                            outline: "none"
+                                        }}>
+                                            <IconButton
+                                                aria-label="close"
+                                                onClick={handleCloseModal}
+                                                sx={{
+                                                    position: "absolute",
+                                                    right: "8px",
+                                                    top: "8px",
+                                                    color: "inherit",
+                                                }}
+                                            >
+                                                <CloseIcon />
+                                            </IconButton>
+
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={12}>
+                                                    <Typography variant="h6" component="h2" gutterBottom sx={{ textAlign: 'right', marginTop: 2 }}>
+                                                        Received on: {mailContent.createdAt}
+                                                    </Typography>
+                                                    <Typography variant="h6" component="h2" gutterBottom>
+                                                        Subject: {mailContent.subject}
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Box sx={{ padding: 1, maxHeight: '200px', overflowY: 'auto', textAlign: 'justify' }}>
+                                                        <Typography variant="body1" gutterBottom>
+                                                            {mailContent.content}
+                                                        </Typography>
+                                                    </Box>
+                                                </Grid>
+                                            </Grid>
+                                        </Box>
+                                    </Fade>
+                                </Modal>
                             </Table>
                         </TableContainer>
                         <TablePagination
@@ -252,11 +345,62 @@ export default function Mailbox() {
                                                 <TableCell component="th" scope="row">
                                                     {row.receiver_name}
                                                 </TableCell>
-                                                <TableCell align="left">{row.subject}</TableCell>
+                                                <TableCell align="left" onClick={() => handleOpenModal(row.id, row.read = 1, row.subject, row.content, row.created_at)}>
+                                                    {row.subject}
+                                                </TableCell> {/* Added onClick to open modal */}
                                                 <TableCell align="right">{row.created_at}</TableCell>
                                             </TableRow>
                                         ))}
                                 </TableBody>
+                                <Modal open={openModal} onClose={handleCloseModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+                                    <Fade in={openModal}>
+                                        <Box sx={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            bgcolor: "rgba(255, 99, 71, 0.8)", // Red color with opacity
+                                            width: '50vw', // Full width of the viewport
+                                            height: '50vh', // Full height of the viewport
+                                            p: 2,
+                                            border: 1,
+                                            boxShadow: (theme) => `inset 0 0 0 2px ${theme.palette.divider}`, // Adjust spread radius and use theme divider color
+                                            borderRadius: "20px",
+                                            outline: "none"
+                                        }}>
+                                            <IconButton
+                                                aria-label="close"
+                                                onClick={handleCloseModal}
+                                                sx={{
+                                                    position: "absolute",
+                                                    right: "8px",
+                                                    top: "8px",
+                                                    color: "inherit",
+                                                }}
+                                            >
+                                                <CloseIcon />
+                                            </IconButton>
+
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={12}>
+                                                    <Typography variant="h6" component="h2" gutterBottom sx={{ textAlign: 'right', marginTop: 2 }}>
+                                                        Received on: {mailContent.createdAt}
+                                                    </Typography>
+                                                    <Typography variant="h6" component="h2" gutterBottom>
+                                                        Subject: {mailContent.subject}
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Box sx={{ padding: 1, maxHeight: '200px', overflowY: 'auto', textAlign: 'justify' }}>
+                                                        <Typography variant="body1" gutterBottom>
+                                                            {mailContent.content}
+                                                        </Typography>
+                                                    </Box>
+                                                </Grid>
+                                            </Grid>
+                                        </Box>
+                                    </Fade>
+                                </Modal>
                             </Table>
                         </TableContainer>
                         <TablePagination

@@ -74,6 +74,7 @@ class Mail extends GameBaseModel
             ->join('users as sender', 'mails.sender_id', '=', 'sender.id')
             ->join('users as receiver', 'mails.receiver_id', '=', 'receiver.id')
             ->where('mails.receiver_id', $receiverId)
+            ->orderBy('mails.created_at', 'desc')
             ->get()->toArray();
     }
 
@@ -89,7 +90,21 @@ class Mail extends GameBaseModel
             ->join('users as sender', 'mails.sender_id', '=', 'sender.id')
             ->join('users as receiver', 'mails.receiver_id', '=', 'receiver.id')
             ->where('mails.sender_id', $senderId)
+            ->orderBy('mails.created_at', 'desc')
             ->get()->toArray();
+    }
+
+        /**
+     * Modify an existing Mail with the specified attributes.
+     *
+     * @param int $id The ID of the Mail to modify.
+     * @param array $attributes The updated attributes of the travel route.
+     * @return bool True if the Mail was successfully modified, false otherwise.
+     */
+    public function mailReadOut(int $id): bool
+    {
+        // Update the travel route with the provided data
+        return $this->db->where('id', $id)->update(['read' => 1]);
     }
 }
 

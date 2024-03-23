@@ -26,11 +26,10 @@ import {
     DialogContent,
     IconButton,
 } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
-import AlbumIcon from '@mui/icons-material/Album';
-import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import CloseIcon from "@mui/icons-material/Close";
+import AlbumIcon from "@mui/icons-material/Album";
+import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import axios, { isCancel, AxiosError } from "axios";
-
 
 export default function Travel() {
     const [history, setHistory] = React.useState(true);
@@ -41,7 +40,6 @@ export default function Travel() {
         setHistory(false);
     };
 
-
     const TravelLayout = () => {
         const [data, setData] = React.useState(null);
         const [open, setOpen] = React.useState(false);
@@ -50,9 +48,9 @@ export default function Travel() {
         const [travel, setTravel] = React.useState({
             travelLocation: null,
             travelType: null,
-            TravelOption: '',
-            TravelMode: '',
-            transport: '',
+            TravelOption: "",
+            TravelMode: "",
+            transport: "",
         });
 
         const handleClickToOpen = (id = 0) => {
@@ -64,10 +62,10 @@ export default function Travel() {
             setOpen(false);
             setActiveDialog(null);
             setShowTime(false);
-            setTravel(travel => ({
+            setTravel((travel) => ({
                 ...travel,
-                TravelMode: '',
-                transport: '',
+                TravelMode: "",
+                transport: "",
             }));
         };
 
@@ -75,74 +73,71 @@ export default function Travel() {
             textAlign: "center",
         }));
 
-
-
         const handleModeChange = (event) => {
-            setTravel(travel => ({
+            setTravel((travel) => ({
                 ...travel,
-                TravelMode: event.target.value
+                TravelMode: event.target.value,
             }));
-        }
+        };
 
         const handleTransportChange = (event) => {
-
-            setTravel(travel => ({
+            setTravel((travel) => ({
                 ...travel,
-                transport: event.target.value
+                transport: event.target.value,
             }));
             setShowTime(true);
-        }
+        };
 
         const fetchRoutes = async () => {
-            const { data } = await axios.get('/travel.json');
+            const { data } = await axios.get("/travel.json");
 
             setData(data.results);
-        }
+        };
 
         React.useEffect(() => {
-
             fetchRoutes();
-
         }, [locationType]);
 
         const handleTravelBegin = (distance, speed) => {
             setShowTime(false);
-            //axios for save data 
-        }
+            //axios for save data
+        };
 
         return (
             <React.Fragment>
                 <Grid item xs={12} md={12}>
                     <Item sx={{ height: 550, position: "relative" }}>
-                        {data && data.locations.map((location, i) => {
-                            return (<Box
-                                key={i}
-                                sx={{
-                                    zIndex: 1030,
-                                    position: "absolute",
-                                    top: location.top,
-                                    left: location.left,
-                                    right: 'auto',
-                                    // border: 1,
-                                    color: "#801313",
-
-                                }}
-                            >
-                                <Tooltip title={location.locationName}>
-                                    <AlbumIcon onClick={() => handleClickToOpen(location.id)} />
-                                </Tooltip>
-
-                            </Box>);
-                        })}
+                        {data &&
+                            data.locations.map((location, i) => {
+                                return (
+                                    <Box
+                                        key={i}
+                                        sx={{
+                                            zIndex: 1030,
+                                            position: "absolute",
+                                            top: location.top,
+                                            left: location.left,
+                                            right: "auto",
+                                            // border: 1,
+                                            color: "#801313",
+                                        }}
+                                    >
+                                        <Tooltip title={location.locationName}>
+                                            <AlbumIcon onClick={() => handleClickToOpen(location.id)} />
+                                        </Tooltip>
+                                    </Box>
+                                );
+                            })}
                     </Item>
                 </Grid>
                 <Dialog open={open} fullWidth>
-                    <DialogTitle>{"You are planning to travel " + activeDialog?.locationName}
+                    <DialogTitle>
+                        {"You are planning to travel " + activeDialog?.locationName}
                         <IconButton
                             aria-label="close"
                             onClick={handleToClose}
                             sx={{
-                                position: 'absolute',
+                                position: "absolute",
                                 right: 8,
                                 top: 8,
                                 color: (theme) => theme.palette.grey[500],
@@ -154,42 +149,39 @@ export default function Travel() {
                     <DialogContent>
                         <FormControl required sx={{ m: 1, minWidth: 120 }}>
                             <InputLabel id="travel-mode">Mode</InputLabel>
-                            <Select
-                                fullWidth
-                                labelId="travel-mode"
-                                id="demo-simple-select1"
-                                value={travel.TravelMode}
-                                label="Mode"
-                                onChange={handleModeChange}
-                            >
-                                {data?.travelModes.map((x, i) => <MenuItem key={i} value={x.id}>{x.type}</MenuItem>)}
+                            <Select fullWidth labelId="travel-mode" id="demo-simple-select1" value={travel.TravelMode} label="Mode" onChange={handleModeChange}>
+                                {data?.travelModes.map((x, i) => (
+                                    <MenuItem key={i} value={x.id}>
+                                        {x.type}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
                         <FormControl required sx={{ m: 1, minWidth: 120 }}>
                             <InputLabel id="travel-transport">Transport</InputLabel>
-                            <Select
-                                fullWidth
-                                labelId="travel-transport"
-                                id="demo-simple-select2"
-                                value={travel.transport}
-                                label="Transport"
-                                onChange={handleTransportChange}
-                            >
-                                {data?.travelModes[travel.TravelMode]?.travelTransportations.map((x, i) => <MenuItem key={i} value={x.id}>{x.transportName}</MenuItem>)}
+                            <Select fullWidth labelId="travel-transport" id="demo-simple-select2" value={travel.transport} label="Transport" onChange={handleTransportChange}>
+                                {data?.travelModes[travel.TravelMode]?.travelTransportations.map((x, i) => (
+                                    <MenuItem key={i} value={x.id}>
+                                        {x.transportName}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
-                        <Box padding={4}>
-                            {showTime ? <p>Expected travel duration{data.estimatedTravelTime}</p> : ''}
-                        </Box>
+                        <Box padding={4}>{showTime ? <p>Expected travel duration{data.estimatedTravelTime}</p> : ""}</Box>
                     </DialogContent>
                     <DialogActions>
-                        {
-                            activeDialog?.travelRequirements.status ?
-                                <button onClick={() => handleTravelBegin(activeDialog.distance, activeDialog.speed)}
-                                    color="primary" autoFocus>
-                                    <TravelExploreIcon />
-                                </button> : activeDialog?.travelRequirements && Object.keys(activeDialog.travelRequirements).map((x, i) => <p key={i}>{x} : {activeDialog?.travelRequirements[x]}</p>)
-                        }
+                        {activeDialog?.travelRequirements.status ? (
+                            <button onClick={() => handleTravelBegin(activeDialog.distance, activeDialog.speed)} color="primary" autoFocus>
+                                <TravelExploreIcon />
+                            </button>
+                        ) : (
+                            activeDialog?.travelRequirements &&
+                            Object.keys(activeDialog.travelRequirements).map((x, i) => (
+                                <p key={i}>
+                                    {x} : {activeDialog?.travelRequirements[x]}
+                                </p>
+                            ))
+                        )}
                     </DialogActions>
                 </Dialog>
             </React.Fragment>

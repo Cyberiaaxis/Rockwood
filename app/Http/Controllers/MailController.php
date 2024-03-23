@@ -42,7 +42,6 @@ class MailController extends Controller
             'content' => ['required', 'string', 'max:2000'],
         ];
 
-  
         // Validate incoming request data
         $validatedData = $request->validate($rules);
 
@@ -88,7 +87,6 @@ class MailController extends Controller
     /**
      * Retrieve inbox emails of the specified user.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function getInbox()
@@ -101,21 +99,35 @@ class MailController extends Controller
     }
 
     /**
-     * Retrieve sent emails of the specified user.
+     * Read the specified email.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
+    public function readMail(Request $request)
+    {
+        // Validate request data
+        $request->validate(['id' => ['required' ,  'integer' ]]);
+        $id = $request->input('id');
+
+        // Retrieve email and mark as read
+        $sentEmails = $this->mail->mailReadOut($id);
+        
+        // Return success message as JSON response
+        return response()->json(['message' => 'Email marked as read successfully']);
+    }
+
+    /**
+     * Retrieve sent emails of the specified user.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getOutbox()
     {
-
         // Retrieve sent emails by user ID
-       $sentEmails = $this->mail->getSentMailsByUserId(auth()->id());
+        $sentEmails = $this->mail->getSentMailsByUserId(auth()->id());
 
         // Return sent emails as JSON response
         return response()->json(['outbox' => $sentEmails]);
-    }
-
-
-    
+    }   
 }

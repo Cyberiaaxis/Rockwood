@@ -33,6 +33,7 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/inboxMail', 'MailController@getInbox');
     $router->get('/outboxMail', 'MailController@getOutbox');
     $router->post('/mailSent', 'MailController@mailSent');
+    $router->post('/readMail', 'MailController@readMail');
     $router->get('/getItems', 'ItemController@getItemLists');
     $router->post('/addItem', 'ItemController@createItem');
     $router->post('/modifyItem', 'ItemController@updateItem');

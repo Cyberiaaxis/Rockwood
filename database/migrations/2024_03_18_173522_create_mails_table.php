@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('receiver_id');
             $table->foreign('receiver_id')->references('id')->on('users');
             $table->string('subject', 255);
+            $table->boolean('read')->default(0);
             $table->longText('content');
             $table->timestamps();
         });
