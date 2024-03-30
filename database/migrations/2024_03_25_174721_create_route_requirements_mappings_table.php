@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('route_requirements_mappings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('route_id')->constrained('travel_routes')->unique();
-            $table->string('requirement_type')->unique(); // e.g., 'visa', 'passport', etc.
-            $table->integer('requirement_id')->unique();
-            
+            $table->foreignId('route_id');
+            $table->foreign('route_id')->references('id')->on('travel_routes')->unique();
+            $table->foreignId('item_id');
+            $table->foreign('item_id')->references('id')->on('items')->unique();
         });
     }
 

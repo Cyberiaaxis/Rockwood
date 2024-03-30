@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Paper,
@@ -20,36 +20,32 @@ import {
     TableHead,
     TableRow,
     Dialog,
-    DialogContentText,
-    DialogTitle,
-    DialogActions,
-    DialogContent,
     IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AlbumIcon from "@mui/icons-material/Album";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
-import axios, { isCancel, AxiosError } from "axios";
+import axios from "axios";
 
 export default function Travel() {
-    const [history, setHistory] = React.useState(true);
-    const [locationType, setLocationType] = React.useState(null);
+    const [isHistory, setIsHistory] = useState(true);
+    const [locationType, setLocationType] = useState(null);
 
     const handleTravel = (e) => {
         setLocationType(e.target.value);
-        setHistory(false);
+        setIsHistory(false);
     };
 
     const TravelLayout = () => {
-        const [data, setData] = React.useState(null);
-        const [open, setOpen] = React.useState(false);
-        const [activeDialog, setActiveDialog] = React.useState(null);
-        const [showTime, setShowTime] = React.useState(false);
-        const [travel, setTravel] = React.useState({
+        const [routes, setRoutes] = useState(null);
+        const [open, setOpen] = useState(false);
+        const [activeDialog, setActiveDialog] = useState(null);
+        const [showTime, setShowTime] = useState(false);
+        const [travel, setTravel] = useState({
             travelLocation: null,
             travelType: null,
-            TravelOption: "",
-            TravelMode: "",
+            travelOption: "",
+            travelMode: "",
             transport: "",
         });
 
@@ -62,11 +58,11 @@ export default function Travel() {
             setOpen(false);
             setActiveDialog(null);
             setShowTime(false);
-            setTravel((travel) => ({
+            setTravel({
                 ...travel,
-                TravelMode: "",
+                travelMode: "",
                 transport: "",
-            }));
+            });
         };
 
         const Item = styled(Paper)(({ theme }) => ({
@@ -74,33 +70,36 @@ export default function Travel() {
         }));
 
         const handleModeChange = (event) => {
-            setTravel((travel) => ({
+            setTravel({
                 ...travel,
-                TravelMode: event.target.value,
-            }));
+                travelMode: event.target.value,
+            });
         };
 
         const handleTransportChange = (event) => {
-            setTravel((travel) => ({
+            setTravel({
                 ...travel,
                 transport: event.target.value,
-            }));
+            });
             setShowTime(true);
         };
 
         const fetchRoutes = async () => {
-            const { data } = await axios.get("/travel.json");
-
-            setData(data.results);
+            try {
+                const { data } = await axios.get("/travel.json");
+                setRoutes(data.results);
+            } catch (error) {
+                // Handle error
+            }
         };
 
-        React.useEffect(() => {
+        useEffect(() => {
             fetchRoutes();
         }, [locationType]);
 
         const handleTravelBegin = (distance, speed) => {
             setShowTime(false);
-            //axios for save data
+            // Axios for saving data
         };
 
         return (
@@ -108,26 +107,25 @@ export default function Travel() {
                 <Grid item xs={12} md={12}>
                     <Item sx={{ height: 550, position: "relative" }}>
                         {data &&
-                            data.locations.map((location, i) => {
-                                return (
-                                    <Box
-                                        key={i}
-                                        sx={{
-                                            zIndex: 1030,
-                                            position: "absolute",
-                                            top: location.top,
-                                            left: location.left,
-                                            right: "auto",
-                                            // border: 1,
-                                            color: "#801313",
-                                        }}
-                                    >
-                                        <Tooltip title={location.locationName}>
-                                            <AlbumIcon onClick={() => handleClickToOpen(location.id)} />
-                                        </Tooltip>
-                                    </Box>
-                                );
-                            })}
+                            data.locations.map((location, i) => (
+                                <Box
+                                    key={i}
+                                    sx={{
+                                        zIndex: 1030,
+                                        position: "absolute",
+                                        top: location.top,
+                                        left: location.left,
+                                        right: "auto",
+                                        color: "#801313",
+                                    }}
+                                >
+                                    <Tooltip title={location.locationName}>
+                                        <AlbumIcon
+                                            onClick={() => handleClickToOpen(location.id)}
+                                        />
+                                    </Tooltip>
+                                </Box>
+                            ))}
                     </Item>
                 </Grid>
                 <Dialog open={open} fullWidth>
@@ -149,7 +147,14 @@ export default function Travel() {
                     <DialogContent>
                         <FormControl required sx={{ m: 1, minWidth: 120 }}>
                             <InputLabel id="travel-mode">Mode</InputLabel>
-                            <Select fullWidth labelId="travel-mode" id="demo-simple-select1" value={travel.TravelMode} label="Mode" onChange={handleModeChange}>
+                            <Select
+                                fullWidth
+                                labelId="travel-mode"
+                                id="demo-simple-select1"
+                                value={travel.travelMode}
+                                label="Mode"
+                                onChange={handleModeChange}
+                            >
                                 {data?.travelModes.map((x, i) => (
                                     <MenuItem key={i} value={x.id}>
                                         {x.type}
@@ -159,19 +164,40 @@ export default function Travel() {
                         </FormControl>
                         <FormControl required sx={{ m: 1, minWidth: 120 }}>
                             <InputLabel id="travel-transport">Transport</InputLabel>
-                            <Select fullWidth labelId="travel-transport" id="demo-simple-select2" value={travel.transport} label="Transport" onChange={handleTransportChange}>
-                                {data?.travelModes[travel.TravelMode]?.travelTransportations.map((x, i) => (
-                                    <MenuItem key={i} value={x.id}>
-                                        {x.transportName}
-                                    </MenuItem>
-                                ))}
+                            <Select
+                                fullWidth
+                                labelId="travel-transport"
+                                id="demo-simple-select2"
+                                value={travel.transport}
+                                label="Transport"
+                                onChange={handleTransportChange}
+                            >
+                                {data?.travelModes[travel.travelMode]?.travelTransportations.map(
+                                    (x, i) => (
+                                        <MenuItem key={i} value={x.id}>
+                                            {x.transportName}
+                                        </MenuItem>
+                                    )
+                                )}
                             </Select>
                         </FormControl>
-                        <Box padding={4}>{showTime ? <p>Expected travel duration{data.estimatedTravelTime}</p> : ""}</Box>
+                        <Box padding={4}>
+                            {showTime ? (
+                                <p>Expected travel duration{data.estimatedTravelTime}</p>
+                            ) : (
+                                ""
+                            )}
+                        </Box>
                     </DialogContent>
                     <DialogActions>
                         {activeDialog?.travelRequirements.status ? (
-                            <button onClick={() => handleTravelBegin(activeDialog.distance, activeDialog.speed)} color="primary" autoFocus>
+                            <button
+                                onClick={() =>
+                                    handleTravelBegin(activeDialog.distance, activeDialog.speed)
+                                }
+                                color="primary"
+                                autoFocus
+                            >
                                 <TravelExploreIcon />
                             </button>
                         ) : (
@@ -188,20 +214,15 @@ export default function Travel() {
         );
     };
 
-    // console.log("history", <TravelLayout />);
-
     const HistoryLayout = () => {
-        function createData(name, calories, fat, carbs, protein) {
-            return { name, calories, fat, carbs, protein };
-        }
-
         const rows = [
-            createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-            createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-            createData("Eclair", 262, 16.0, 24, 6.0),
-            createData("Cupcake", 305, 3.7, 67, 4.3),
-            createData("Gingerbread", 356, 16.0, 49, 3.9),
+            { name: "Frozen yoghurt", calories: 159, fat: 6.0, carbs: 24, protein: 4.0 },
+            { name: "Ice cream sandwich", calories: 237, fat: 9.0, carbs: 37, protein: 4.3 },
+            { name: "Eclair", calories: 262, fat: 16.0, carbs: 24, protein: 6.0 },
+            { name: "Cupcake", calories: 305, fat: 3.7, carbs: 67, protein: 4.3 },
+            { name: "Gingerbread", calories: 356, fat: 16.0, carbs: 49, protein: 3.9 },
         ];
+
         return (
             <TableContainer>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -215,8 +236,8 @@ export default function Travel() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <TableRow key={row.name} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                        {rows.map((row, index) => (
+                            <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                                 <TableCell component="th" scope="row">
                                     {row.name}
                                 </TableCell>
@@ -233,23 +254,38 @@ export default function Travel() {
     };
 
     return (
-        <React.Fragment>
-            <Box>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={12}>
-                        <FormControl>
-                            <FormLabel id="demo-row-radio-buttons-group-label">Travel Option</FormLabel>
-                            <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" onChange={handleTravel}>
-                                <FormControlLabel value="country" control={<Radio />} label="Country" />
-                                <FormControlLabel value="city" control={<Radio />} label="City" />
-                                <FormControlLabel value="area" control={<Radio />} label="Area" />
-                            </RadioGroup>
-                        </FormControl>
-                    </Grid>
-
-                    {history ? <HistoryLayout /> : <TravelLayout />}
+        <Box>
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={12}>
+                    <FormControl>
+                        <FormLabel id="demo-row-radio-buttons-group-label">Travel Option</FormLabel>
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            onChange={handleTravel}
+                        >
+                            <FormControlLabel
+                                value="country"
+                                control={<Radio />}
+                                label="Country"
+                            />
+                            <FormControlLabel
+                                value="city"
+                                control={<Radio />}
+                                label="City"
+                            />
+                            <FormControlLabel
+                                value="area"
+                                control={<Radio />}
+                                label="Area"
+                            />
+                        </RadioGroup>
+                    </FormControl>
                 </Grid>
-            </Box>
-        </React.Fragment>
+
+                {isHistory ? <HistoryLayout /> : <TravelLayout />}
+            </Grid>
+        </Box>
     );
 }

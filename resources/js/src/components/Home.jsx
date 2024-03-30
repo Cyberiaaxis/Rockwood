@@ -55,7 +55,7 @@ const Home = () => {
       // Perform any cleanup if necessary
     };
   }, []);
-  // console.log("playerHomeData", playerHomeData);
+  console.log("playerHomeData", playerHomeData);
   return (
     <React.Fragment>
 

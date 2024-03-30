@@ -25,6 +25,8 @@ class TravelRoute extends GameBaseModel
         'duration',
         'cost',
         'status',
+        'coordinateX',
+        'coordinateY'
     ];
 
     /**
@@ -36,15 +38,11 @@ class TravelRoute extends GameBaseModel
         'status' => 'boolean',
     ];
 
-    /**
-     * Retrieve travel routes by status.
-     *
-     * @param bool $status The status of the travel routes to retrieve.
-     * @return array An array of travel routes.
-     */
-    public function getTravelRoutesByStatus(bool $status): array
+
+
+    public function getTravelRoutesByStatusAndCityId(bool $status, int  $cityId): array
     {
-        return $this->db->where('status', $status)->get()->toArray();
+        return $this->db->where('status', $status)->where('from_city_id', $cityId)->get()->toArray();
     }
 
     /**
@@ -53,10 +51,10 @@ class TravelRoute extends GameBaseModel
      * @param int $currentLocationId The ID of the current location.
      * @return array An array of travel routes.
      */
-    public function getTravelRoutesFromCurrentLocation(int $currentLocationId): array
-    {
-        return $this->db->where('from_city_id', $currentLocationId)->get();
-    }
+    // public function getTravelRoutesFromCurrentLocation(int $currentLocationId): array
+    // {
+    //     return $this->db->where('from_city_id', $currentLocationId)->get()->toArray();
+    // }
 
     /**
      * Retrieve a travel route by its ID.
@@ -89,7 +87,7 @@ class TravelRoute extends GameBaseModel
      * @param array $attributes The attributes of the new travel route.
      * @return int The ID of the newly created travel route.
      */
-    public function addTravelRoute(array $attributes): int 
+    public function addTravelRoute(array $attributes): int
     {
         // Insert the travel route data into the database and get the ID of the newly inserted record
         return $this->db->insertGetId($attributes);
@@ -106,5 +104,48 @@ class TravelRoute extends GameBaseModel
     {
         // Update the travel route with the provided data
         return $this->db->where('id', $id)->update($attributes);
+    }
+
+
+
+    /**
+     * Retrieve travel routes with requirements and city-to-country names based on the provided starting city ID.
+     *
+     * @param int $fromCityId The ID of the starting city for which travel routes are to be retrieved.
+     *
+     * @return array Array containing travel routes with their associated requirements and city-to-country names.
+     */
+    public function getTravelRoutesWithRequirementsAndCityToCountryNames(int $fromCityId): array
+    {
+        return $this->db->select(
+            'travel_routes.coordinateY as TravelRoutesCoordinateY',
+            'travel_routes.coordinateX as TravelRoutesCoordinateX',
+            'travel_routes.duration as TravelDuration',
+            'items.name as ItemName',
+            'items.id as ItemId',
+            'from_cities.name as FromCityName',
+            'from_cities.id as FromCityId',
+            'from_regions.name as FromRegionName',
+            'from_regions.id as FromRegionId',
+            'from_countries.name as FromCountryName',
+            'from_countries.id as FromCountryId',
+            'to_cities.id as ToCityId',
+            'to_regions.name as ToRegionName',
+            'to_regions.id as ToRegionId',
+            'to_countries.name as ToCountryName',
+            'to_countries.id as ToCountryId'
+        )
+            ->join('cities as from_cities', 'travel_routes.from_city_id', '=', 'from_cities.id')
+            ->join('regions as from_regions', 'from_cities.region_id', '=', 'from_regions.id')
+            ->join('countries as from_countries', 'from_regions.country_id', '=', 'from_countries.id')
+            ->join('cities as to_cities', 'travel_routes.to_city_id', '=', 'to_cities.id')
+            ->join('regions as to_regions', 'to_cities.region_id', '=', 'to_regions.id')
+            ->join('countries as to_countries', 'to_regions.country_id', '=', 'to_countries.id')
+            ->join('route_requirements_mappings', 'travel_routes.id', '=', 'route_requirements_mappings.route_id')
+            ->join('items', 'items.id', '=', 'route_requirements_mappings.item_id')
+            ->where('travel_routes.from_city_id', '=', $fromCityId)
+            ->where('travel_routes.status', '=', 1)
+            ->get()
+            ->toArray();
     }
 }

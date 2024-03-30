@@ -18,8 +18,8 @@ class CountriesTable extends Migration
             $table->string('name'); // Name of the location (country, region, or city)
             $table->string('avatar')->nullable(); // Path to the avatar image (optional)
             $table->text('description')->nullable(); // Description of the location (optional)
-            $table->integer('coordinateX')->nullable(); // X coordinate (numeric value)
-            $table->integer('coordinateY')->nullable(); // Y coordinate (numeric value)
+            // $table->integer('coordinateX')->nullable(); // X coordinate (numeric value)
+            // $table->integer('coordinateY')->nullable(); // Y coordinate (numeric value)
             $table->timestamps(); // Timestamps for record creation and modification
         });
     }

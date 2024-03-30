@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserTravelHistory extends Model
+class UserTravelHistory extends GameBaseModel
 {
     /**
      * The table associated with the model.
@@ -34,9 +34,9 @@ class UserTravelHistory extends Model
         return $this->db->all();
     }
 
-    public function getUserTravelHistoryByUserIdAndStatus(int $userId, bool $status = true) : ?int
+    public function getUserTravelHistoryByUserIdAndStatus(int $userId, bool $status = true): ?int
     {
-        return $this->where('user_id', $userId)->where('status', $status)->value('city_id');
+        return $this->db->where(['user_id' => $userId, 'status' => $status])->value('city_id');
     }
 
     /**

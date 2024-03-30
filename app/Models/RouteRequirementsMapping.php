@@ -20,9 +20,9 @@ class RouteRequirementsMapping extends GameBaseModel
      * @var array
      */
     protected $fillable = [
+        'id',
         'route_id',
-        'requirement_type',
-        'requirement_id',
+        'item_id',
     ];
 
     /**
@@ -32,8 +32,7 @@ class RouteRequirementsMapping extends GameBaseModel
      */
     protected $casts = [
         'route_id' => 'integer',
-        'requirement_type' => 'string',
-        'requirement_id' => 'integer',
+        'item_id' => 'integer',
     ];
 
     /**
@@ -45,7 +44,7 @@ class RouteRequirementsMapping extends GameBaseModel
      */
     public function getRequirementsByRouteId(int $routeId): ?array
     {
-        return $this->db->where('route_id', $routeId)->get();
+        return $this->db->where('route_id', $routeId)->get()->toArray();
     }
 
     /**
@@ -55,7 +54,7 @@ class RouteRequirementsMapping extends GameBaseModel
      *
      * @return int The inserted record ID.
      */
-    public function addRouteRequirements(array $attributes): int
+    public function addRouteRequirement(array $attributes): int
     {
         return $this->db->insertGetId($attributes);
     }

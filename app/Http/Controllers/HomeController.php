@@ -119,7 +119,7 @@ class HomeController extends Controller
         UserStats $userStats,
         Carbon $carbon,
         RealEstate $realEstate,
-        UserReward $userReward, 
+        UserReward $userReward,
         Country $country,
         City $city,
         Gang $gang,
@@ -224,8 +224,8 @@ class HomeController extends Controller
      */
     public function currentCourse()
     {
-         // Get the user's current course for today's date
-       $userCurrentCourse = $this->userCourseHistory->getLastCourseById(
+        // Get the user's current course for today's date
+        $userCurrentCourse = $this->userCourseHistory->getLastCourseById(
             $this->authenticatedUserId
         );
         // Get the user's course history for today's date
@@ -244,7 +244,7 @@ class HomeController extends Controller
         return $this->course->getCourseNameById($userCourseHistory);
     }
 
-   /**
+    /**
      * Retrieve the level information for the authenticated user.
      *
      * This method fetches the level ID of the authenticated user and then
@@ -257,7 +257,7 @@ class HomeController extends Controller
         // dd($this->userDetails->getGangId($this->authenticatedUserId));
         return  $this->gang->getGangNameById($this->userDetails->getGangId($this->authenticatedUserId));
     }
-   
+
     /**
      * Retrieve the active house information for the authenticated user.
      *
@@ -298,11 +298,12 @@ class HomeController extends Controller
     public function currentLocation()
     {
         $userTravelHistoryId = $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus($this->authenticatedUserId);
-        
-        if($userTravelHistoryId === null){
+
+        if ($userTravelHistoryId === null) {
             return "Untracable Location";
         }
-        return $this->city->getCityRegionCountryById($userTravelHistoryId); 
+        // dd($this->city->getCityRegionCountryById($userTravelHistoryId));
+        return $this->city->getCityRegionCountryById($userTravelHistoryId);
     }
 
     /**
@@ -315,7 +316,7 @@ class HomeController extends Controller
      * @return mixed The area information of the authenticated user.
      */
     public function headerStats()
-    {        
+    {
         return response()->json([
             "countries" => $this->currentLocation(),
             "barStats" => $this->userStats->getMultipleStats($this->authenticatedUserId),

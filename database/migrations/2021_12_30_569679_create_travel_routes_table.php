@@ -22,6 +22,8 @@ class CreateTravelRoutesTable extends Migration
             $table->integer('duration');
             $table->integer('cost');
             $table->boolean('status');
+            $table->integer('coordinateX')->nullable(); // X coordinate (numeric value)
+            $table->integer('coordinateY')->nullable(); // Y coordinate (numeric value)
             $table->timestamps();
         });
     }

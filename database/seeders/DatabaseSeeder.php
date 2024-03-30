@@ -20,11 +20,12 @@ use App\Models\RealEstate;
 use App\Models\Reward;
 use App\Models\Role;
 use App\Models\TravelRoute;
+use App\Models\UserTravelHistory;
 use App\Models\User;
 use App\Models\UserCrime;
 use App\Models\UserDetail;
 use App\Models\UserStats;
-use App\Models\UserTravel;
+use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -59,7 +60,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('Admin@1234'),
             'email_verified_at' => Carbon::now(),
         ];
-        
+
         $user = new User();
         $userStored = $user->create($data);
 
@@ -73,7 +74,42 @@ class DatabaseSeeder extends Seeder
 
         $userDetails = new UserDetail();
         $userDetails->addUserDetails($userStored->id);
-               $country = new Country();
+
+        $item = new Item();
+
+        $item->insert([
+            [
+                'name' => 'Ak47',
+                'description' => 'description',
+                'image_url' => 'image_url',
+                'updated_at' => now(),
+                'created_at' => now()
+            ],
+            [
+                'name' => 'burger',
+                'description' => 'description',
+                'image_url' => 'image_url',
+                'updated_at' => now(),
+                'created_at' => now()
+            ],
+            [
+                'name' => 'Blueprints',
+                'description' => 'description',
+                'image_url' => 'image_url',
+                'updated_at' => now(),
+                'created_at' => now()
+            ],
+            [
+                'name' => 'Air Ticket',
+                'description' => 'description',
+                'image_url' => 'image_url',
+                'updated_at' => now(),
+                'created_at' => now()
+            ],
+
+        ]);
+
+        $country = new Country();
 
         $country->insert([
             ['name' => 'India'],
@@ -83,7 +119,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $region = new Region();
-        
+
         $region->insert([
             ['name' => 'New Delhi', 'country_id' => 1],
             ['name' => 'Punjab', 'country_id' => 1],
@@ -92,12 +128,21 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $city = new City();
-        
-        $city->insert([
+
+        $storedCity = $city->insert([
             ['name' => 'Uttam Nagar', 'region_id' => 1],
             ['name' => 'Najafgarh', 'region_id' => 1],
             ['name' => 'KarolBagh', 'region_id' => 1],
             ['name' => 'Janakpuri', 'region_id' => 1],
+        ]);
+
+        $userTravelHistory = new UserTravelHistory();
+
+        $userTravelHistory->insert([
+            [
+                'user_id' => $userStored->id,
+                'city_id' =>  $storedCity
+            ],
         ]);
 
         // $LocationData = [
@@ -276,6 +321,8 @@ class DatabaseSeeder extends Seeder
             'cost' => '2',
             'status' => '1',
             'duration' => '30',
+            'coordinateX' => 10,
+            'coordinateY' => 20,
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -289,36 +336,36 @@ class DatabaseSeeder extends Seeder
 
         $gangData = [
             [
-            'name' => 'Demo Gang 1',
-            'description' => 'description',
-            'image' => 'image',
-            'created_at' =>  now(),
-            'updated_at' => now(), 
-        ],[
-            'name' => 'Demo Gang 2',
-            'description' => 'description',
-                'image' => 'image',
-            'created_at' =>  now(),
-            'updated_at' => now(),
-        ], [
-            'name' => 'Demo Gang 3',
+                'name' => 'Demo Gang 1',
                 'description' => 'description',
                 'image' => 'image',
-            'created_at' =>  now(),
-            'updated_at' => now(),
-        ], [
-            'name' => 'Demo Gang 4',
+                'created_at' =>  now(),
+                'updated_at' => now(),
+            ], [
+                'name' => 'Demo Gang 2',
                 'description' => 'description',
                 'image' => 'image',
-            'created_at' =>  now(),
-            'updated_at' => now(),
-        ], [
-            'name' => 'Demo Gang 5',
+                'created_at' =>  now(),
+                'updated_at' => now(),
+            ], [
+                'name' => 'Demo Gang 3',
                 'description' => 'description',
                 'image' => 'image',
-            'created_at' =>  now(),
-            'updated_at' => now(),
-        ],[
+                'created_at' =>  now(),
+                'updated_at' => now(),
+            ], [
+                'name' => 'Demo Gang 4',
+                'description' => 'description',
+                'image' => 'image',
+                'created_at' =>  now(),
+                'updated_at' => now(),
+            ], [
+                'name' => 'Demo Gang 5',
+                'description' => 'description',
+                'image' => 'image',
+                'created_at' =>  now(),
+                'updated_at' => now(),
+            ], [
                 'name' => 'Demo Gang 6',
                 'description' => 'description',
                 'image' => 'image',
@@ -379,9 +426,8 @@ class DatabaseSeeder extends Seeder
                 'created_at' =>  now(),
                 'updated_at' => now(),
             ],
-    ];
+        ];
         $gang = new Gang();
         $gang->insert($gangData);
-
     }
 }
