@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Validation\Rule;
-use App\Models\UserTravelHistory;
 use Illuminate\Http\Request;
+use App\Models\UserTravelHistory;
+use App\Models\City;
 
 class UserTravelHistoryController extends Controller
 {
     protected $userTravelHistory;
+    protected $city;
 
     /**
      * Create a new instance of UserTravelHistoryController.
@@ -16,9 +17,10 @@ class UserTravelHistoryController extends Controller
      * @param  \App\Models\UserTravelHistory  $userTravelHistory
      * @return void
      */
-    public function __construct(UserTravelHistory $userTravelHistory)
+    public function __construct(UserTravelHistory $userTravelHistory, City $city)
     {
         $this->userTravelHistory = $userTravelHistory;
+        $this->city = $city;
     }
 
     /**
@@ -83,12 +85,28 @@ class UserTravelHistoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCurrentUserTravelHistory(Request $request)
+    public function getUserTravel()
     {
-        $userTravelHistory = $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus(auth()->id(), true);
-        // Return the organized user travel history records
-        return response()->json($userTravelHistory);
+        // Get the user's currently ongoing travel
+        $userCurrentlyTravelling = $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus(auth()->id());
+
+        // Get the user's completed travel history
+        return  $userTravelHistory = $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus(auth()->id(), false);
+        // dd($userTravelHistory);
+        // $userTravelHistory;
+        // $userCurrentlyTravelling[0]->city_id;
+        $locationDetails = $this->city->getCityRegionCountryById(
+            $userTravelHistory
+        );
+        // dd($userCurrentlyTravelling['city_id'] || $userTravelHistory['city_id']);
+
+        // Return the data in a JSON response
+        return response()->json([
+            // 'current_travel' => $userCurrentlyTravelling, // Currently ongoing travel
+            'completed_travels' => $userTravelHistory // Completed travel history
+        ]);
     }
+
 
     /**
      * Amend a user travel history record.

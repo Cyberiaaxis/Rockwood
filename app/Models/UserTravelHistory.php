@@ -34,10 +34,12 @@ class UserTravelHistory extends GameBaseModel
         return $this->db->all();
     }
 
-    public function getUserTravelHistoryByUserIdAndStatus(int $userId, bool $status = true): ?int
+    public function getUserTravelHistoryByUserIdAndStatus(int $userId, bool $status = true): ?array
     {
-        return $this->db->where(['user_id' => $userId, 'status' => $status])->value('city_id');
+        // dd($status);
+        return $this->db->where(['user_id' => $userId, 'status' => $status])->get()->toArray();
     }
+
 
     /**
      * Retrieve user travel history by user ID.
@@ -47,7 +49,7 @@ class UserTravelHistory extends GameBaseModel
      */
     public function getUserTravelHistoryByUserId(int $userId): ?array
     {
-        return $this->db->where('user_id', $userId)->get();
+        return $this->db->where('user_id', $userId)->get()->toArray();
     }
 
     /**

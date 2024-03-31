@@ -19,13 +19,15 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    Typography, TablePagination, TableSortLabel,
     Dialog,
     IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AlbumIcon from "@mui/icons-material/Album";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
-import axios from "axios";
+import { toast } from "react-toastify";
+import gameServerApi from "../libraries/gameServerApi";
 
 export default function Travel() {
     const [isHistory, setIsHistory] = useState(true);
@@ -215,50 +217,126 @@ export default function Travel() {
     };
 
     const HistoryLayout = () => {
-        const rows = [
-            { name: "Frozen yoghurt", calories: 159, fat: 6.0, carbs: 24, protein: 4.0 },
-            { name: "Ice cream sandwich", calories: 237, fat: 9.0, carbs: 37, protein: 4.3 },
-            { name: "Eclair", calories: 262, fat: 16.0, carbs: 24, protein: 6.0 },
-            { name: "Cupcake", calories: 305, fat: 3.7, carbs: 67, protein: 4.3 },
-            { name: "Gingerbread", calories: 356, fat: 16.0, carbs: 49, protein: 3.9 },
+        const [data, setData] = useState([]);
+        const [page, setPage] = useState(0);
+        const [rowsPerPage, setRowsPerPage] = useState(5);
+        const [orderBy, setOrderBy] = useState("");
+        const [order, setOrder] = useState("asc");
+
+        const columns = [
+            { id: "origin", label: "Origin" },
+            { id: "destination", label: "Destination" },
+            { id: "times", label: "Travelled Count" },
+            { id: "Completed", label: "Completed" },
         ];
 
+        useEffect(() => {
+            const fetchData = async () => {
+                try {
+                    const response = await toast.promise(gameServerApi("/getUserTravel"), {
+                        pending: "Fetching travel data...",
+                        success: {
+                            render({ data }) {
+                                setData(data); // Update the state with fetched data
+                            },
+                        },
+                        error: {
+                            render({ data }) {
+                                console.error("Error fetching travel data:", data);
+                                return "Error fetching travel data";
+                            },
+                        },
+                    });
+                } catch (error) {
+                    console.error("Error fetching travel data:", error);
+                }
+            };
+
+            fetchData(); // Call the fetchData function when component mounts
+        }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+
+        const handleSort = (columnId) => {
+            const isAsc = orderBy === columnId && order === "asc";
+            setOrder(isAsc ? "desc" : "asc");
+            setOrderBy(columnId);
+        };
+
+        const sortedData = React.useMemo(() => {
+            if (orderBy) {
+                const comparator = (a, b) => {
+                    const aValue = a[orderBy];
+                    const bValue = b[orderBy];
+                    return order === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+                };
+                return [...data].sort(comparator);
+            }
+            return data;
+        }, [data, orderBy, order]);
+
+        const handleChangePage = (event, newPage) => {
+            setPage(newPage);
+        };
+
+        const handleChangeRowsPerPage = (event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0);
+        };
+
+        const renderHeader = () => {
+            return columns.map((column) => (
+                <Grid key={column.id} item xs={3} >
+                    <TableSortLabel
+                        active={orderBy === column.id}
+                        direction={orderBy === column.id ? order : "asc"}
+                        onClick={() => handleSort(column.id)}
+                    >
+                        <Typography variant="subtitle1" sx={{ whiteSpace: 'nowrap' }}>{column.label}</Typography>
+                    </TableSortLabel>
+                </Grid>
+            ));
+        };
+
+        const renderBody = () => {
+            const startIndex = page * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+            return sortedData.slice(startIndex, endIndex).map((row, index) => (
+                <Grid key={index} container spacing={1}>
+                    {columns.map((column) => (
+                        <Grid key={column.id} item xs={3}>
+                            <Typography variant="body1">{row[column.id]}</Typography>
+                        </Grid>
+                    ))}
+                </Grid>
+            ));
+        };
+
         return (
-            <TableContainer>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Dessert (100g serving)</TableCell>
-                            <TableCell align="right">Calories</TableCell>
-                            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row, index) => (
-                            <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                                <TableCell component="th" scope="row">
-                                    {row.name}
-                                </TableCell>
-                                <TableCell align="right">{row.calories}</TableCell>
-                                <TableCell align="right">{row.fat}</TableCell>
-                                <TableCell align="right">{row.carbs}</TableCell>
-                                <TableCell align="right">{row.protein}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <div >
+                <Grid container spacing={20}>
+                    {renderHeader()}
+                    {renderBody()}
+                </Grid>
+                <TablePagination
+                    rowsPerPageOptions={[]}
+                    component="div"
+                    count={sortedData.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+
+            </div>
         );
-    };
+    }
+
 
     return (
         <Box>
-            <Grid container spacing={2}>
+            <Grid container paddingLeft={10} spacing={2}>
                 <Grid item xs={12} md={12}>
                     <FormControl>
-                        <FormLabel id="demo-row-radio-buttons-group-label">Travel Option</FormLabel>
+                        {/* <FormLabel id="demo-row-radio-buttons-group-label">Travel Possibilities</FormLabel> */}
                         <RadioGroup
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
@@ -266,19 +344,9 @@ export default function Travel() {
                             onChange={handleTravel}
                         >
                             <FormControlLabel
-                                value="country"
+                                value="travelableRoutes"
                                 control={<Radio />}
-                                label="Country"
-                            />
-                            <FormControlLabel
-                                value="city"
-                                control={<Radio />}
-                                label="City"
-                            />
-                            <FormControlLabel
-                                value="area"
-                                control={<Radio />}
-                                label="Area"
+                                label="Travel Possibilities"
                             />
                         </RadioGroup>
                     </FormControl>

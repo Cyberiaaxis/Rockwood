@@ -107,4 +107,17 @@ class TravelRoutesController extends Controller
 
         return $this->travelRoute->getTravelRoutesWithRequirementsAndCityToCountryNames(true, $userCurrentCity);
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $travelRouteId
+     * @return \Illuminate\Http\Response
+     */
+    public function travelledHistory()
+    {
+        $userCurrentCity =  $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus(auth()->id());
+
+        return $this->travelRoute->getTravelRoutesWithRequirementsAndCityToCountryNames(true, $userCurrentCity);
+    }
 }

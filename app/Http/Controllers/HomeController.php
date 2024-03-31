@@ -297,13 +297,13 @@ class HomeController extends Controller
      */
     public function currentLocation()
     {
-        $userTravelHistoryId = $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus($this->authenticatedUserId);
-
-        if ($userTravelHistoryId === null) {
-            return "Untracable Location";
-        }
-        // dd($this->city->getCityRegionCountryById($userTravelHistoryId));
-        return $this->city->getCityRegionCountryById($userTravelHistoryId);
+        $userTravelHistoryId = $this->userTravelHistory
+            ->getUserTravelHistoryByUserIdAndStatus(
+                $this->authenticatedUserId
+            );
+        return $this->city->getCityRegionCountryById(
+            $userTravelHistoryId[0]->city_id
+        );
     }
 
     /**

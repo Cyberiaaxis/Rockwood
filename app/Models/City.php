@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 /**
  * Class City
  *
@@ -20,17 +21,17 @@ class City extends GameBaseModel
      * @var string
      */
     protected $table = "cities";
-    
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 
-        'avatar', 
-        'description', 
-        'coordinateX', 
+        'name',
+        'avatar',
+        'description',
+        'coordinateX',
         'coordinateY'
     ];
 
@@ -43,7 +44,7 @@ class City extends GameBaseModel
         'coordinateX' => 'integer',
         'coordinateY' => 'integer',
     ];
-    
+
     /**
      * Retrieve all cities.
      *
@@ -65,7 +66,7 @@ class City extends GameBaseModel
         return $this->db->find($id)->value('name');
     }
 
-        /**
+    /**
      * Get the name of the city by its ID and region ID.
      *
      * @param int $cityId The ID of the city.
@@ -78,13 +79,16 @@ class City extends GameBaseModel
      * @param int $cityId The ID of the city.
      * @return array|null An array containing the city name, region ID, and region name, or null if not found.
      */
-    public function getCityRegionCountryById(int $cityId)
+    public function getCityRegionCountryById($cityIds)
     {
-       return  $this->db->join('regions', 'cities.region_id', '=', 'regions.id')
+        // Convert $cityIds to an array if it's not already
+        $cityIds = (array) $cityIds;
+        return  $this->db->join('regions', 'cities.region_id', '=', 'regions.id')
             ->join('countries', 'regions.country_id', '=', 'countries.id')
             ->select('cities.name as city_name', 'regions.name as region_name', 'countries.name as country_name')
-            ->where('cities.id', $cityId)
-            ->first();
+            ->where('cities.id', $cityIds)
+            ->get()
+            ->toArray();
     }
 
     /**

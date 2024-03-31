@@ -132,14 +132,14 @@ function Header({ setPage }) {
     };
   }, []); // Empty dependency array ensures the effect runs only once when the component mounts
 
-  // console.log("header", header ? header.countries.country[0].name : "notprint");
+  console.log("header", header?.countries[0].city_name);
   return (
     <React.Fragment>
       <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
         <Box gridColumn="span 2">
           <Tooltip title="Explore" arrow>
             <GradientButton fullWidth onClick={() => setPage("explore")} size="large">
-              {header?.countries.city_name}, {header?.countries.region_name}, {header?.countries.country_name}
+              {header?.countries[0].city_name}, {header?.countries[0].region_name}, {header?.countries[0].country_name}
             </GradientButton>
           </Tooltip>
         </Box>
