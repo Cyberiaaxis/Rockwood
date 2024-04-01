@@ -14,6 +14,7 @@ class UserTravelHistoriesTable extends Migration
     public function up()
     {
         Schema::create('user_travel_histories', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')->unique();
             $table->unsignedBigInteger('city_id');

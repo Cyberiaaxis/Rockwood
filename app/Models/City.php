@@ -83,10 +83,10 @@ class City extends GameBaseModel
     {
         // Convert $cityIds to an array if it's not already
         $cityIds = (array) $cityIds;
-        return  $this->db->join('regions', 'cities.region_id', '=', 'regions.id')
-            ->join('countries', 'regions.country_id', '=', 'countries.id')
-            ->select('cities.name as city_name', 'regions.name as region_name', 'countries.name as country_name')
-            ->where('cities.id', $cityIds)
+        return $this->db->join('regions as r1', 'cities.region_id', '=', 'r1.id')
+            ->join('countries', 'r1.country_id', '=', 'countries.id')
+            ->select('cities.name as city_name', 'r1.name as region_name', 'countries.name as country_name')
+            ->whereIn('cities.id', $cityIds)
             ->get()
             ->toArray();
     }

@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\UserTravelHistory;
 use App\Models\City;
+use App\Models\User;
 
+// $this->user->getUserNameById
 class UserTravelHistoryController extends Controller
 {
     protected $userTravelHistory;
     protected $city;
+    protected $user;
 
     /**
      * Create a new instance of UserTravelHistoryController.
@@ -17,10 +20,11 @@ class UserTravelHistoryController extends Controller
      * @param  \App\Models\UserTravelHistory  $userTravelHistory
      * @return void
      */
-    public function __construct(UserTravelHistory $userTravelHistory, City $city)
+    public function __construct(UserTravelHistory $userTravelHistory, City $city, User $user)
     {
         $this->userTravelHistory = $userTravelHistory;
         $this->city = $city;
+        $this->user = $user;
     }
 
     /**
@@ -90,19 +94,16 @@ class UserTravelHistoryController extends Controller
         // Get the user's currently ongoing travel
         $userCurrentlyTravelling = $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus(auth()->id());
 
-        // Get the user's completed travel history
-        return  $userTravelHistory = $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus(auth()->id(), false);
-        // dd($userTravelHistory);
-        // $userTravelHistory;
-        // $userCurrentlyTravelling[0]->city_id;
-        $locationDetails = $this->city->getCityRegionCountryById(
-            $userTravelHistory
-        );
-        // dd($userCurrentlyTravelling['city_id'] || $userTravelHistory['city_id']);
+        // // Get the user's completed travel history
+        $userTravelHistory = $this->userTravelHistory->getUserTravelDetailsWithLocation(auth()->id());
 
         // Return the data in a JSON response
         return response()->json([
-            // 'current_travel' => $userCurrentlyTravelling, // Currently ongoing travel
+            'current_travel' => [
+                "city" => $this->city->getCityRegionCountryById($userCurrentlyTravelling[0]['city_id']),
+                "total_visits" =>  $this->userTravelHistory->getUserTravelHistoryCountByUserIdAndCityId(auth()->id(), $userCurrentlyTravelling[0]['city_id']),
+                "lastVisited" => $userCurrentlyTravelling[0]['created_at']
+            ], // Currently ongoing travel
             'completed_travels' => $userTravelHistory // Completed travel history
         ]);
     }

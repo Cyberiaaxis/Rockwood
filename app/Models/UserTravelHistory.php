@@ -34,12 +34,17 @@ class UserTravelHistory extends GameBaseModel
         return $this->db->all();
     }
 
-    public function getUserTravelHistoryByUserIdAndStatus(int $userId, bool $status = true): ?array
+    public function getUserTravelHistoryByUserIdAndStatus(int $userId, bool $status = true)
     {
-        // dd($status);
-        return $this->db->where(['user_id' => $userId, 'status' => $status])->get()->toArray();
+        return $this->pdoWhere('user_id', $userId)->pdoWhere('status', $status)->pdoGet();
     }
 
+    public function getUserTravelHistoryCountByUserIdAndCityId(int $userId, int $city_id)
+    {
+        return $this->db->Where('user_id', $userId)
+            ->Where('city_id', $city_id)
+            ->count();
+    }
 
     /**
      * Retrieve user travel history by user ID.
@@ -73,5 +78,23 @@ class UserTravelHistory extends GameBaseModel
     public function modifyUserTravelHistory(int $id, array $data): int
     {
         return $this->db->where('id', $id)->update($data);
+    }
+
+    public function getUserTravelDetailsWithLocation(int $userId, bool $status = false)
+    {
+        return $this->db->select(
+            'cities.name as city_name',
+            'regions.name as region_name',
+            'countries.name as country_name',
+            $this->db->raw('COUNT(*) as travel_count')
+        )
+            ->join('cities', 'user_travel_histories.city_id', '=', 'cities.id')
+            ->join('regions', 'cities.region_id', '=', 'regions.id')
+            ->join('countries', 'regions.country_id', '=', 'countries.id')
+            ->where('user_travel_histories.user_id', $userId)
+            ->where('user_travel_histories.status', $status)
+            ->groupBy('user_travel_histories.city_id')
+            ->get()
+            ->toArray();
     }
 }

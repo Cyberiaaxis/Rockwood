@@ -4,9 +4,12 @@ namespace App\Models;
 
 use BadMethodCallException;
 use Closure;
+use Error;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use PDO;
+use PDOException;
 
 class GameBaseModel
 {
@@ -15,6 +18,8 @@ class GameBaseModel
      * The connection name for the model.
      */
     protected $db;
+    protected $pdo;
+    protected $query;
 
     /**
      * The table associated with the model.
@@ -107,10 +112,22 @@ class GameBaseModel
         $capsule = new Capsule();
 
         $config = config("database.connections.mysql");
+
+        $db_host = $config['host'];
+        $db_name = $config['database'];
+        $db_user = $config['username'];
+        $db_pass = $config['password'];
+
         $capsule->addConnection($config);
         $capsule->setAsGlobal();
 
         $this->db = $capsule->table($this->getTable());
+
+        try {
+            $this->pdo = new PDO('mysql:host=' . $db_host . ';dbname=' . $db_name, $db_user, $db_pass);
+        } catch (PDOException $e) {
+            throw new Error('Unable to connect db');
+        }
     }
 
     /**
@@ -124,19 +141,66 @@ class GameBaseModel
      */
     public function where($column, $operator = null, $value = null, $boolean = 'and')
     {
-        $this->db->where($column, $operator, $value);
+
+        return $this->db->where(...func_get_args());
+    }
+
+
+    public function pdoWhere($column, $operator = "=", $value = null)
+    {
+        if (is_array(($column))) {
+            return $column;
+        }
+
+        // Here we will make some assumptions about the operator. If only 2 values are
+        // passed to the method, we will assume that the operator is an equals sign
+        // and keep going. Otherwise, we'll require the operator to be passed in.
+        [$value, $operator] = $this->prepareValueAndOperator(
+            $value,
+            $operator,
+            func_num_args() === 2
+        );
+
+        $query = "select * from " . $this->table . " where $column $operator ?";
+
+        $this->query = $this->pdo->prepare($query);
+        $this->query->execute([$value]);
 
         return $this;
     }
 
+    public function pdoGet()
+    {
+        return $this->query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Prepare the value and operator for a where clause.
+     *
+     * @param  string  $value
+     * @param  string  $operator
+     * @param  bool  $useDefault
+     * @return array
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function prepareValueAndOperator($value, $operator, $useDefault = false)
+    {
+        if ($useDefault) {
+            return [$operator, '='];
+        }
+
+        return [$value, $operator];
+    }
+
     public function insert(array $data)
     {
-      return $this->db->insert($data);
+        return $this->db->insert($data);
     }
 
     public function insertGetId(array $data)
     {
-      return $this->db->insertGetId($data);
+        return $this->db->insertGetId($data);
     }
 
     /**
@@ -195,7 +259,7 @@ class GameBaseModel
      */
     public function select($columns = ['*'])
     {
-        return $this->select($columns);
+        return $this->db->select($columns);
     }
 
 
@@ -209,6 +273,7 @@ class GameBaseModel
     {
         return $this->limit($value);
     }
+    
 
     /**
      * Set the "limit" value of the query.
