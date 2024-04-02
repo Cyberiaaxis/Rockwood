@@ -16,10 +16,10 @@ class UserTravelHistoriesTable extends Migration
         Schema::create('user_travel_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->unique();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('city_id');
-            $table->foreign('city_id')->references('id')->on('cities')->unique();
-            $table->boolean('status')->default(0);
+            $table->foreign('city_id')->references('id')->on('cities');
+            // $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

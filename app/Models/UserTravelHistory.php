@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use DateTime;
+
 use Illuminate\Database\Eloquent\Model;
 
 class UserTravelHistory extends GameBaseModel
@@ -80,20 +82,23 @@ class UserTravelHistory extends GameBaseModel
         return $this->db->where('id', $id)->update($data);
     }
 
-    public function getUserTravelDetailsWithLocation(int $userId, bool $status = false)
+    public function getUserTravelDetailsWithLocation(int $userId)
     {
+        // return $date;
         return $this->db->select(
             'cities.name as city_name',
             'regions.name as region_name',
             'countries.name as country_name',
-            $this->db->raw('COUNT(*) as travel_count')
+            $this->db->raw('COUNT(*) as travel_count'),
+            $this->db->raw("CASE WHEN MAX(user_travel_histories.created_at) > now() THEN 'active' ELSE 'inactive' END as status")
         )
             ->join('cities', 'user_travel_histories.city_id', '=', 'cities.id')
             ->join('regions', 'cities.region_id', '=', 'regions.id')
             ->join('countries', 'regions.country_id', '=', 'countries.id')
             ->where('user_travel_histories.user_id', $userId)
-            ->where('user_travel_histories.status', $status)
             ->groupBy('user_travel_histories.city_id')
+            ->groupBy('user_travel_histories.created_at')
+            ->orderBy('user_travel_histories.created_at', 'desc')
             ->get()
             ->toArray();
     }
