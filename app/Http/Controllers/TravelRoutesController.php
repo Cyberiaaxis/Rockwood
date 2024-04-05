@@ -105,7 +105,7 @@ class TravelRoutesController extends Controller
     {
         $userCurrentCity =  $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus(auth()->id());
 
-        return $this->travelRoute->getTravelRoutesWithRequirementsAndCityToCountryNames(true, $userCurrentCity);
+        return $this->travelRoute->getTravelRoutesWithRequirementsAndCityToCountryNames($userCurrentCity[0]["city_id"]);
     }
 
     /**

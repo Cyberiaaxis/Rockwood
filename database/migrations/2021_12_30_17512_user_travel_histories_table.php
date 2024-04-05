@@ -19,7 +19,7 @@ class UserTravelHistoriesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('cities');
-            // $table->boolean('status')->default(0);
+            $table->boolean('isAtLocation')->default(0);
             $table->timestamps();
         });
     }

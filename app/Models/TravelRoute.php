@@ -115,36 +115,29 @@ class TravelRoute extends GameBaseModel
      *
      * @return array Array containing travel routes with their associated requirements and city-to-country names.
      */
-    public function getTravelRoutesWithRequirementsAndCityToCountryNames(int $fromCityId): array
+    public function getTravelRoutesWithRequirementsAndCityToCountryNames(int $fromCityId, bool $status = true)
     {
-        return $this->db->select(
-            'travel_routes.coordinateY as TravelRoutesCoordinateY',
-            'travel_routes.coordinateX as TravelRoutesCoordinateX',
-            'travel_routes.duration as TravelDuration',
-            'items.name as ItemName',
-            'items.id as ItemId',
-            'from_cities.name as FromCityName',
-            'from_cities.id as FromCityId',
-            'from_regions.name as FromRegionName',
-            'from_regions.id as FromRegionId',
-            'from_countries.name as FromCountryName',
-            'from_countries.id as FromCountryId',
-            'to_cities.id as ToCityId',
-            'to_regions.name as ToRegionName',
-            'to_regions.id as ToRegionId',
-            'to_countries.name as ToCountryName',
-            'to_countries.id as ToCountryId'
-        )
-            ->join('cities as from_cities', 'travel_routes.from_city_id', '=', 'from_cities.id')
-            ->join('regions as from_regions', 'from_cities.region_id', '=', 'from_regions.id')
-            ->join('countries as from_countries', 'from_regions.country_id', '=', 'from_countries.id')
-            ->join('cities as to_cities', 'travel_routes.to_city_id', '=', 'to_cities.id')
-            ->join('regions as to_regions', 'to_cities.region_id', '=', 'to_regions.id')
-            ->join('countries as to_countries', 'to_regions.country_id', '=', 'to_countries.id')
-            ->join('route_requirements_mappings', 'travel_routes.id', '=', 'route_requirements_mappings.route_id')
-            ->join('items', 'items.id', '=', 'route_requirements_mappings.item_id')
+        return $this->db
+            ->select(
+                'travel_routes.id',
+                'toCities.name as ToCityName',
+                'toCities.id as ToCityId',
+                'toRegion.name as ToRegionName',
+                'toCountries.name as ToCountryName',
+                $this->db->raw('JSON_ARRAYAGG(JSON_OBJECT("RequirementItemId", requirements.item_id, "ItemName", items.name)) as Requirements'),
+                $this->db->raw('JSON_ARRAYAGG(JSON_OBJECT("travelModeId", transportationType.id, "travelModeName", transportationType.name)) as TravelModes')
+
+            )
+            ->join('cities as toCities', 'toCities.id', '=', 'travel_routes.to_city_id')
+            ->join('regions as toRegion', 'toRegion.id', '=', 'toCities.region_id')
+            ->join('countries as toCountries', 'toCountries.id', '=', 'toRegion.country_id')
+            ->leftJoin('route_transportations as routeTransportation', 'routeTransportation.route_id', '=', 'travel_routes.id')
+            ->leftJoin('transportation_types as transportationType', 'transportationType.id', '=', 'routeTransportation.transportation_type_id')
+            ->leftJoin('route_requirements_mappings as requirements', 'travel_routes.id', '=', 'requirements.route_id')
+            ->leftJoin('items', 'items.id', '=', 'requirements.item_id')
             ->where('travel_routes.from_city_id', '=', $fromCityId)
-            ->where('travel_routes.status', '=', 1)
+            ->where('travel_routes.status', '=', $status)
+            ->groupBy('travel_routes.id')
             ->get()
             ->toArray();
     }

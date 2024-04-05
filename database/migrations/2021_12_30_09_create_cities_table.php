@@ -20,8 +20,6 @@ class CreateCitiesTable extends Migration
             $table->longText('description')->nullable();
             $table->foreignId('region_id')->nullable();
             $table->foreign('region_id')->references('id')->on('regions');
-            $table->integer('coordinateX')->nullable(); // X coordinate (numeric value)
-            $table->integer('coordinateY')->nullable(); // Y coordinate (numeric value)
             $table->timestamps(); // Timestamps for record creation and modification
         });
     }

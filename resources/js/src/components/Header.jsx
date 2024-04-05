@@ -132,7 +132,7 @@ function Header({ setPage }) {
     };
   }, []); // Empty dependency array ensures the effect runs only once when the component mounts
 
-  console.log("header", header?.countries[0].city_name);
+  // console.log("header", header?.countries[0]);
   return (
     <React.Fragment>
       <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>

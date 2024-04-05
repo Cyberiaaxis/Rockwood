@@ -301,8 +301,9 @@ class HomeController extends Controller
             ->getUserTravelHistoryByUserIdAndStatus(
                 $this->authenticatedUserId
             );
+
         return $this->city->getCityRegionCountryById(
-            $userTravelHistoryId[0]->city_id
+            $userTravelHistoryId[0]['city_id']
         );
     }
 

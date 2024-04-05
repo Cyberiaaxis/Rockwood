@@ -36,9 +36,9 @@ class UserTravelHistory extends GameBaseModel
         return $this->db->all();
     }
 
-    public function getUserTravelHistoryByUserIdAndStatus(int $userId, bool $status = true)
+    public function getUserTravelHistoryByUserIdAndStatus(int $userId, bool $isAtLocation = true)
     {
-        return $this->pdoWhere('user_id', $userId)->pdoWhere('status', $status)->pdoGet();
+        return $this->pdoWhere('user_id', $userId)->pdoWhere('isAtLocation', $isAtLocation)->pdoGet();
     }
 
     public function getUserTravelHistoryCountByUserIdAndCityId(int $userId, int $city_id)

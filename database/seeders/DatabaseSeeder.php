@@ -26,6 +26,9 @@ use App\Models\UserCrime;
 use App\Models\UserDetail;
 use App\Models\UserStats;
 use App\Models\Item;
+use App\Models\RouteRequirementsMapping;
+use App\Models\RouteTransportation;
+use App\Models\TransportationType;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -141,72 +144,10 @@ class DatabaseSeeder extends Seeder
         $userTravelHistory->insert([
             [
                 'user_id' => $userStored->id,
-                'city_id' =>  $storedCity
+                'city_id' =>  $storedCity,
+                'isAtLocation' => 1
             ],
         ]);
-
-        // $LocationData = [
-        //     [
-        //         'name' => 'Demo Country Name',
-        //         'type' => 'country',
-        //          'coordinateX' => 10,
-        //          'coordinateY' => 20
-        //     ],
-        //     [
-        //         'name' => 'Demo Region Name',
-        //          'type' => 'region',
-        //          'coordinateX' => 30,
-        //          'coordinateY' => 40
-
-        //     ],
-        //     [
-        //         'name' => 'Demo City Name',
-        //          'type' => 'city',
-        //          'coordinateX' => 50,
-        //          'coordinateY' => 60
-        //     ],
-        //     [
-        //         'name' => 'Demo New Country Name',
-        //         'type' => 'country',
-        //         'coordinateX' => 70,
-        //          'coordinateY' => 80
-        //     ],
-        //     [
-        //         'name' => 'Demo New Region Name',
-        //          'type' => 'region',
-        //         'coordinateX' => 90,
-        //          'coordinateY' => 100
-
-        //     ],
-        //     [
-        //         'name' => 'Demo New City Name',
-        //          'type' => 'city',
-        //         'coordinateX' => 110,
-        //          'coordinateY' => 120
-        //     ],
-        //     [
-        //         'name' => 'Demo New Another Country Name',
-        //         'type' => 'country',
-        //         'coordinateX' => 130,
-        //          'coordinateY' => 140
-        //     ],
-        //     [
-        //         'name' => 'Demo New Another Region Name',
-        //          'type' => 'region',
-        //          'coordinateX' => 150,
-        //          'coordinateY' => 160
-
-        //     ],
-        //     [
-        //         'name' => 'Demo New Another City Name',
-        //          'type' => 'city',
-        //          'coordinateX' => 170,
-        //          'coordinateY' => 180
-        //     ]
-        // ];
-
-        // $locations = new Location();
-        // $locations->insert($LocationData);
 
         $forums = new Forum();
         $forums->insert([
@@ -328,8 +269,30 @@ class DatabaseSeeder extends Seeder
         ];
 
         $travelRoutes = new TravelRoute();
-        $travelRoutes->addTravelRoute($routeData);
-        // $userTravel = new UserTravel();
+        $travelRouteId = $travelRoutes->addTravelRoute($routeData);
+
+        $routeRequirementData = [
+            'route_id' => $travelRouteId,
+            'item_id' => 1
+        ];
+
+        $transportationTypeData = [
+            'name' => "Areoplane",
+        ];
+        $transportationType = new TransportationType();
+        $transportationTypeLastId = $transportationType->addTransportationType($transportationTypeData);
+
+        $routeTransportationData = [
+            'route_id' => $travelRouteId,
+            'transportation_type_id' =>  $transportationTypeLastId
+        ];
+
+        $routeTransportation = new RouteTransportation();
+        $routeTransportation->addRouteTransportation($routeTransportationData);
+
+
+        $routeRequirementsMapping = new RouteRequirementsMapping();
+        $routeRequirementsMapping->addRouteRequirement($routeRequirementData);
 
         $attacks = new Attack();
         $attacks->addAttackRecords($userStored->id);
