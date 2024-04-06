@@ -108,14 +108,16 @@ class TravelRoute extends GameBaseModel
 
 
 
+
     /**
-     * Retrieve travel routes with requirements and city-to-country names based on the provided starting city ID.
+     * Get travel routes with requirements and city to country names.
      *
-     * @param int $fromCityId The ID of the starting city for which travel routes are to be retrieved.
+     * @param int  $fromCityId The ID of the city to travel from.
+     * @param bool $status     The status of the travel routes. Default is true.
      *
-     * @return array Array containing travel routes with their associated requirements and city-to-country names.
+     * @return array An array of travel routes with associated requirements and city to country names.
      */
-    public function getTravelRoutesWithRequirementsAndCityToCountryNames(int $fromCityId, bool $status = true)
+    public function getTravelRoutesWithRequirementsAndCityToCountryNames(int $fromCityId, bool $status = true): array
     {
         return $this->db
             ->select(
@@ -124,17 +126,12 @@ class TravelRoute extends GameBaseModel
                 'toCities.id as ToCityId',
                 'toRegion.name as ToRegionName',
                 'toCountries.name as ToCountryName',
-                $this->db->raw('JSON_ARRAYAGG(JSON_OBJECT("RequirementItemId", requirements.item_id, "ItemName", items.name)) as Requirements'),
-                $this->db->raw('JSON_ARRAYAGG(JSON_OBJECT("travelModeId", transportationType.id, "travelModeName", transportationType.name)) as TravelModes')
-
+                $this->db->raw('(SELECT IFNULL(JSON_ARRAYAGG(JSON_OBJECT("RequirementItemId", item_id, "ItemName", name)), JSON_ARRAY()) FROM route_requirements_mappings INNER JOIN items ON items.id = route_requirements_mappings.item_id WHERE route_requirements_mappings.route_id = travel_routes.id) AS Requirements'),
+                $this->db->raw('(SELECT IFNULL(JSON_ARRAYAGG(JSON_OBJECT("travelModeId", transportation_types.id, "travelModeName", transportation_types.name)), JSON_ARRAY()) FROM route_transportations INNER JOIN transportation_types ON transportation_types.id = route_transportations.transportation_type_id WHERE route_transportations.route_id = travel_routes.id) AS TravelModes')
             )
             ->join('cities as toCities', 'toCities.id', '=', 'travel_routes.to_city_id')
             ->join('regions as toRegion', 'toRegion.id', '=', 'toCities.region_id')
             ->join('countries as toCountries', 'toCountries.id', '=', 'toRegion.country_id')
-            ->leftJoin('route_transportations as routeTransportation', 'routeTransportation.route_id', '=', 'travel_routes.id')
-            ->leftJoin('transportation_types as transportationType', 'transportationType.id', '=', 'routeTransportation.transportation_type_id')
-            ->leftJoin('route_requirements_mappings as requirements', 'travel_routes.id', '=', 'requirements.route_id')
-            ->leftJoin('items', 'items.id', '=', 'requirements.item_id')
             ->where('travel_routes.from_city_id', '=', $fromCityId)
             ->where('travel_routes.status', '=', $status)
             ->groupBy('travel_routes.id')

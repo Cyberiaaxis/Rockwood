@@ -9,17 +9,12 @@ import {
     RadioGroup,
     FormControlLabel,
     FormControl,
-    FormLabel,
     InputLabel,
     MenuItem,
     Select,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Typography, TablePagination, TableSortLabel,
+    Typography,
+    TablePagination,
+    TableSortLabel,
     Dialog,
     IconButton,
 } from "@mui/material";
@@ -217,14 +212,13 @@ export default function Travel() {
     };
 
     const HistoryLayout = () => {
-        const [data, setData] = useState([]);
+        const [userTravelData, setUserTravelData] = useState([]);
         const [page, setPage] = useState(0);
         const [rowsPerPage, setRowsPerPage] = useState(5);
         const [orderBy, setOrderBy] = useState("");
         const [order, setOrder] = useState("asc");
 
         const columns = [
-            { id: "origin", label: "Origin" },
             { id: "destination", label: "Destination" },
             { id: "times", label: "Travelled Count" },
             { id: "Completed", label: "Completed" },
@@ -237,7 +231,7 @@ export default function Travel() {
                         pending: "Fetching travel data...",
                         success: {
                             render({ data }) {
-                                setData(data); // Update the state with fetched data
+                                setUserTravelData(data); // Update the state with fetched data
                             },
                         },
                         error: {
@@ -254,7 +248,7 @@ export default function Travel() {
 
             fetchData(); // Call the fetchData function when component mounts
         }, []); // Empty dependency array ensures the effect runs only once when the component mounts
-
+        console.log("userTravelData", userTravelData);
         const handleSort = (columnId) => {
             const isAsc = orderBy === columnId && order === "asc";
             setOrder(isAsc ? "desc" : "asc");
@@ -268,10 +262,10 @@ export default function Travel() {
                     const bValue = b[orderBy];
                     return order === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
                 };
-                return [...data].sort(comparator);
+                return [...userTravelData].sort(comparator);
             }
-            return data;
-        }, [data, orderBy, order]);
+            return userTravelData;
+        }, [userTravelData, orderBy, order]);
 
         const handleChangePage = (event, newPage) => {
             setPage(newPage);
@@ -300,15 +294,32 @@ export default function Travel() {
             const startIndex = page * rowsPerPage;
             const endIndex = startIndex + rowsPerPage;
             return sortedData.slice(startIndex, endIndex).map((row, index) => (
-                <Grid key={index} container spacing={1}>
+                <Grid key={index} container spacing={1} paddingLeft={20}>
                     {columns.map((column) => (
                         <Grid key={column.id} item xs={3}>
-                            <Typography variant="body1">{row[column.id]}</Typography>
+                            <Typography variant="body1">
+                                {getColumnValue(column, row)}
+                            </Typography>
                         </Grid>
                     ))}
                 </Grid>
             ));
         };
+
+        const getColumnValue = (column, row) => {
+            switch (column.id) {
+                case 'destination':
+                    return `${row['city_name']} ${row['region_name']} ${row['country_name']}`;
+                case 'times':
+                    return row['travel_count'];
+                case 'Completed':
+                    return row['status'] === "inactive" ? "Travelled" : "Travelling";
+                default:
+                    return '';
+            }
+        };
+
+        console.log("sortedData", sortedData);
 
         return (
             <div >
@@ -325,18 +336,15 @@ export default function Travel() {
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-
             </div>
         );
     }
-
 
     return (
         <Box>
             <Grid container paddingLeft={10} spacing={2}>
                 <Grid item xs={12} md={12}>
                     <FormControl>
-                        {/* <FormLabel id="demo-row-radio-buttons-group-label">Travel Possibilities</FormLabel> */}
                         <RadioGroup
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
@@ -351,7 +359,6 @@ export default function Travel() {
                         </RadioGroup>
                     </FormControl>
                 </Grid>
-
                 {isHistory ? <HistoryLayout /> : <TravelLayout />}
             </Grid>
         </Box>
