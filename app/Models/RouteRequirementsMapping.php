@@ -42,9 +42,9 @@ class RouteRequirementsMapping extends GameBaseModel
      *
      * @return array|null The requirements or null if not found.
      */
-    public function getItemIdByRouteId(int $routeId): ?array
+    public function getItemIdByRouteId(int $routeId)
     {
-        return $this->db->where('route_id', $routeId)->get('item_id')->toArray();
+        return $this->pdoWhere('route_id', $routeId)->pdoGet();
     }
 
     /**

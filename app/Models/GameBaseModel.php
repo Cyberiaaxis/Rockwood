@@ -193,6 +193,25 @@ class GameBaseModel
         return [$value, $operator];
     }
 
+    public function pdoExists()
+    {
+        return $this->query->fetch(PDO::FETCH_ASSOC) ? true : false;
+    }
+
+    public function pdoPluck($column = null)
+    {
+
+        if (!$column) {
+            return [];
+        }
+
+        $results = $this->pdoGet();
+
+        return array_map(function ($row) use ($column) {
+            return $row[$column];
+        }, $results);
+    }
+
     public function insert(array $data)
     {
         return $this->db->insert($data);
@@ -273,7 +292,7 @@ class GameBaseModel
     {
         return $this->limit($value);
     }
-    
+
 
     /**
      * Set the "limit" value of the query.

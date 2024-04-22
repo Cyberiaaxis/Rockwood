@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Arr;
+
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Inventory;
 use App\Models\TravelRoute;
 use App\Models\UserTravelHistory;
 use App\Models\Item;
 use App\Models\RouteRequirementsMapping;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -20,6 +24,7 @@ class TravelRoutesController extends Controller
     protected $userTravelHistory;
     protected $item;
     protected $routeRequirementsMapping;
+    protected $inventory;
 
     public function __construct(
         City $city,
@@ -27,6 +32,7 @@ class TravelRoutesController extends Controller
         TravelRoute $travelRoute,
         UserTravelHistory $userTravelHistory,
         Item $item,
+        Inventory $inventory,
         RouteRequirementsMapping $routeRequirementsMapping
     ) {
         $this->city = $city;
@@ -34,6 +40,7 @@ class TravelRoutesController extends Controller
         $this->travelRoute = $travelRoute;
         $this->userTravelHistory = $userTravelHistory;
         $this->item = $item;
+        $this->inventory = $inventory;
         $this->routeRequirementsMapping  = $routeRequirementsMapping;
     }
 
@@ -107,12 +114,15 @@ class TravelRoutesController extends Controller
         $currentLocations = $this->travelRoute->getTravelRoutesWithCityToRegionToCountry($userCurrentCity);
 
         foreach ($currentLocations as $currentLocation) {
-            $currentLocation->recurements =
-                $this->routeRequirementsMapping->getItemIdByRouteId($currentLocation->RouteId);
+            foreach ($this->routeRequirementsMapping->getItemIdByRouteId($currentLocation->RouteId) as $id) {
+                $currentLocation->recurements[] = [
+                    "itemName" => $this->item->getItemNameById($id['item_id']),
+                    "status" => $this->inventory->getItemStatusByUserAndItemId(auth()->id(), $id['item_id']),
+                ];
+            }
         }
 
-        dd($currentLocations);
-        // dd($this->routeRequirementsMapping->getRequirementByRouteId($userCurrentCity[0]->route_id));
+        return $currentLocations;
     }
 
     /**

@@ -44,9 +44,10 @@ class Item extends GameBaseModel
      * @param int $id The ID of the item.
      * @return Item|null The item if found, or null otherwise.
      */
-    public function getItemNameById(int $id): ?int
+    public function getItemNameById(int $id)
     {
-        return $this->db->where('id', $id)->value('name');
+        return $this->pdoWhere('id', $id)->pdoPluck('name');
+        // return $this->db->where('id', $id)->value('name');
     }
 
     /**
@@ -55,7 +56,7 @@ class Item extends GameBaseModel
      * @param array $attributes The attributes of the new item.
      * @return int The ID of the newly created item.
      */
-    public function addItem(array $attributes): int 
+    public function addItem(array $attributes): int
     {
         // Insert the item data into the database and get the ID of the newly inserted record
         return $this->db->insertGetId($attributes);

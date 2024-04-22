@@ -33,7 +33,7 @@ class Inventory extends GameBaseModel
      */
     public function getUserInventoryItems(int $userId): ?array
     {
-        return $this->db->where('user_id', $userId)->get()->toArray();
+        return $this->pdoWhere('user_id', $userId)->get()->toArray();
     }
 
     /**
@@ -41,12 +41,12 @@ class Inventory extends GameBaseModel
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getItemInventoryByUserId(int $userId): ?array
+    public function getItemStatusByUserAndItemId(int $userId, int $itemId): ?bool
     {
-        return $this->db->where('user_id', $userId)->get()->toArray();
+        return $this->pdoWhere('user_id', $userId)->pdoWhere('item_Id', $itemId)->pdoExists();
     }
 
-    /**
+    /**  'item_id' => $itemId
      * Add a new item to the user's inventory.
      *
      * @param array $attributes The attributes of the new inventory item.
