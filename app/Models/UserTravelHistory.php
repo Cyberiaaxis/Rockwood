@@ -36,9 +36,11 @@ class UserTravelHistory extends GameBaseModel
         return $this->db->all();
     }
 
-    public function getUserTravelHistoryByUserIdAndStatus(int $userId, bool $isAtLocation = true)
+    public function getUserCurrentLocationByUserIdAndStatus(int $userId, bool $isAtLocation = true): ?int
     {
-        return $this->pdoWhere('user_id', $userId)->pdoWhere('isAtLocation', $isAtLocation)->pdoGet();
+        return $this->Where('user_id', $userId)
+            ->Where('isAtLocation', $isAtLocation)
+            ->value('city_id');
     }
 
     public function getUserTravelHistoryCountByUserIdAndCityId(int $userId, int $city_id)
@@ -89,6 +91,7 @@ class UserTravelHistory extends GameBaseModel
             'cities.name as city_name',
             'regions.name as region_name',
             'countries.name as country_name',
+            'user_travel_histories.created_at as visited',
             $this->db->raw('COUNT(*) as travel_count'),
             $this->db->raw("CASE WHEN MAX(user_travel_histories.created_at) > now() THEN 'active' ELSE 'inactive' END as status")
         )

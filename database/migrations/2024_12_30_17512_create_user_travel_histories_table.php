@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UserTravelHistoriesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,6 +17,8 @@ class UserTravelHistoriesTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignId('route_id');
+            $table->foreign('route_id')->references('id')->on('travel_routes');
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('cities');
             $table->boolean('isAtLocation')->default(0);
@@ -33,4 +35,4 @@ class UserTravelHistoriesTable extends Migration
     {
         Schema::dropIfExists('user_travels');
     }
-}
+};

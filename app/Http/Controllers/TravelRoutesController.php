@@ -103,9 +103,16 @@ class TravelRoutesController extends Controller
      */
     public function travelableRoutes()
     {
-        $userCurrentCity =  $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus(auth()->id());
+        $userCurrentCity =  $this->userTravelHistory->getUserCurrentLocationByUserIdAndStatus(auth()->id());
+        $currentLocations = $this->travelRoute->getTravelRoutesWithCityToRegionToCountry($userCurrentCity);
 
-        return $this->travelRoute->getTravelRoutesWithRequirementsAndCityToCountryNames($userCurrentCity[0]["city_id"]);
+        foreach ($currentLocations as $currentLocation) {
+            $currentLocation->recurements =
+                $this->routeRequirementsMapping->getItemIdByRouteId($currentLocation->RouteId);
+        }
+
+        dd($currentLocations);
+        // dd($this->routeRequirementsMapping->getRequirementByRouteId($userCurrentCity[0]->route_id));
     }
 
     /**
@@ -114,10 +121,10 @@ class TravelRoutesController extends Controller
      * @param  int  $travelRouteId
      * @return \Illuminate\Http\Response
      */
-    public function travelledHistory()
-    {
-        $userCurrentCity =  $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus(auth()->id());
+    // public function travelledHistory()
+    // {
+    //     $userCurrentCity =  $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus(auth()->id());
 
-        return $this->travelRoute->getTravelRoutesWithRequirementsAndCityToCountryNames(true, $userCurrentCity);
-    }
+    //     return $this->travelRoute->getTravelRoutesWithCityToRegionToCountryWithReuireItems(true, $userCurrentCity);
+    // }
 }

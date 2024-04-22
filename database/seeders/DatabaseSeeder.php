@@ -139,16 +139,6 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Janakpuri', 'region_id' => 1],
         ]);
 
-        $userTravelHistory = new UserTravelHistory();
-
-        $userTravelHistory->insert([
-            [
-                'user_id' => $userStored->id,
-                'city_id' =>  $storedCity,
-                'isAtLocation' => 1
-            ],
-        ]);
-
         $forums = new Forum();
         $forums->insert([
             ['title' => 'Ganeral', 'parent_id' => null, 'is_cat' => 1],
@@ -286,6 +276,18 @@ class DatabaseSeeder extends Seeder
             'route_id' => $travelRouteId,
             'transportation_type_id' =>  $transportationTypeLastId
         ];
+
+
+        $userTravelHistory = new UserTravelHistory();
+
+        $userTravelHistory->insert([
+            [
+                'user_id' => $userStored->id,
+                'city_id' =>  1,
+                'route_id' => $travelRouteId,
+                'isAtLocation' => 1
+            ],
+        ]);
 
         $routeTransportation = new RouteTransportation();
         $routeTransportation->addRouteTransportation($routeTransportationData);

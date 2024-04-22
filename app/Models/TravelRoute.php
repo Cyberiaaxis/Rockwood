@@ -117,24 +117,31 @@ class TravelRoute extends GameBaseModel
      *
      * @return array An array of travel routes with associated requirements and city to country names.
      */
-    public function getTravelRoutesWithRequirementsAndCityToCountryNames(int $fromCityId, bool $status = true): array
+    public function getTravelRoutesWithCityToRegionToCountry(int $fromCityId, bool $status = true)
     {
         return $this->db
             ->select(
-                'travel_routes.id',
-                'toCities.name as ToCityName',
-                'toCities.id as ToCityId',
-                'toRegion.name as ToRegionName',
-                'toCountries.name as ToCountryName',
-                $this->db->raw('(SELECT IFNULL(JSON_ARRAYAGG(JSON_OBJECT("RequirementItemId", item_id, "ItemName", name)), JSON_ARRAY()) FROM route_requirements_mappings INNER JOIN items ON items.id = route_requirements_mappings.item_id WHERE route_requirements_mappings.route_id = travel_routes.id) AS Requirements'),
-                $this->db->raw('(SELECT IFNULL(JSON_ARRAYAGG(JSON_OBJECT("travelModeId", transportation_types.id, "travelModeName", transportation_types.name)), JSON_ARRAY()) FROM route_transportations INNER JOIN transportation_types ON transportation_types.id = route_transportations.transportation_type_id WHERE route_transportations.route_id = travel_routes.id) AS TravelModes')
+                'travel_routes.id AS RouteId',
+                'toCities.name AS ToCityName',
+                'toCities.id AS ToCityId',
+                'toRegion.name AS ToRegionName',
+                'toCountries.name AS ToCountryName',
+                'travel_routes.coordinateY AS coordinateYTop',
+                'travel_routes.coordinateX AS coordinateXLeft',
             )
-            ->join('cities as toCities', 'toCities.id', '=', 'travel_routes.to_city_id')
-            ->join('regions as toRegion', 'toRegion.id', '=', 'toCities.region_id')
-            ->join('countries as toCountries', 'toCountries.id', '=', 'toRegion.country_id')
-            ->where('travel_routes.from_city_id', '=', $fromCityId)
-            ->where('travel_routes.status', '=', $status)
-            ->groupBy('travel_routes.id')
+            ->join('cities AS toCities', 'toCities.id', '=', 'travel_routes.to_city_id')
+            ->join('regions AS toRegion', 'toRegion.id', '=', 'toCities.region_id')
+            ->join('countries AS toCountries', 'toCountries.id', '=', 'toRegion.country_id')
+            ->where('travel_routes.from_city_id', $fromCityId)
+            ->where('travel_routes.status', $status)
+            ->groupBy(
+                'travel_routes.id',
+                'toCities.name',
+                'toCities.id',
+                'toRegion.name',
+                'toCountries.name',
+                'travel_routes.coordinateX',
+            )
             ->get()
             ->toArray();
     }
