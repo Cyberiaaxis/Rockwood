@@ -42,9 +42,9 @@ class RouteTransportation extends GameBaseModel
      * @param int $id The ID of the route transportation record.
      * @return array|null The route transportation record if found, otherwise null.
      */
-    public function findRouteTransportationById(int $id): ?array
+    public function getRouteTransportationByRouteId(int $routeId)
     {
-        return $this->db->where('id', $id)->get()->toArray();
+        return $this->pdoWhere('route_id', $routeId)->pdoGet();
     }
 
 

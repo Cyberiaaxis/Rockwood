@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('route_id')->references('id')->on('travel_routes')->unique();
             $table->foreignId('transportation_type_id');
             $table->foreign('transportation_type_id')->references('id')->on('transportation_types')->unique();
+            $table->integer('duration')->default(0);
             $table->timestamps();
         });
     }

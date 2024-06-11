@@ -37,6 +37,7 @@ class UserTravelHistoryController extends Controller
      */
     public function makeUserTravelHistory(Request $request)
     {
+        // dd($request);
         // Validate incoming request data and perform unique validation
         $validatedData = $this->validateAndVerifyRequestData($request);
 
@@ -59,7 +60,9 @@ class UserTravelHistoryController extends Controller
     private function validateAndVerifyRequestData(Request $request): array
     {
         // Define validation rules
+
         $rules = [
+            'RouteId' => ['required', 'integer'],
             'user_id' => ['required', 'integer'],
             'city_id' => ['required', 'integer'],
             'status' => ['required', 'boolean'],

@@ -41,6 +41,7 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/routes', 'TravelRoutesController@routes');
     $router->get('/travelableRoutes', 'TravelRoutesController@travelableRoutes');
     $router->post('/getRequirements', 'RouteRequirementsMappingController@travelableRouteRequirements');
+    $router->post('/addUserUserTravelHistory', 'UserTravelHistoryController@makeUserTravelHistory');
 
     $router->get('/getUserTravel', 'UserTravelHistoryController@getUserTravel');
     $router->post('/addRoute', 'TravelRoutesController@configureRoute');

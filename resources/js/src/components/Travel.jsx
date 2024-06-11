@@ -21,6 +21,7 @@ import {
     DialogContent,
     DialogActions,
 } from "@mui/material";
+import AlarmIcon from '@mui/icons-material/Alarm';
 import CloseIcon from "@mui/icons-material/Close";
 import AlbumIcon from "@mui/icons-material/Album";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
@@ -43,36 +44,16 @@ export default function Travel() {
         const [activeDialog, setActiveDialog] = useState(null);
         const [showTime, setShowTime] = useState(false);
         const [travel, setTravel] = useState({
-            travelLocation: null,
-            travelType: null,
-            travelOption: "",
-            travelMode: "",
-            transport: "",
+            transporateId: "",
+            transporateName: "",
+            transporateDuration: 0,
         });
         // getRequirements
-        const handleClickToOpen = async (id) => {
+        const handleClickToOpen = async (currenTravelRouteData) => {
             setOpen(true);
-            console.log("ididididididididididid", id);
-            try {
-                const response = await toast.promise(gameServerApi("/getRequirements", 'post', { "route_id": id }), {
-                    pending: "Fetching travel data...",
-                    success: {
-                        render({ data }) {
-                            setRouteReuirementData(data); // Update the state with fetched data
-                        },
-                    },
-                    error: {
-                        render({ data }) {
+            // console.log("ididididididididididid", currenTravelRouteData.transportations);
 
-                            console.error("Error fetching travel data:", data);
-                            return "Error fetching travel data";
-                        },
-                    },
-                });
-            } catch (error) {
-                console.error("Error fetching travel data:", error);
-            }
-            setActiveDialog(id);
+            setActiveDialog(currenTravelRouteData);
         };
 
         const handleToClose = () => {
@@ -81,8 +62,9 @@ export default function Travel() {
             setShowTime(false);
             setTravel({
                 ...travel,
-                travelMode: "",
-                transport: "",
+                transporateId: "",
+                transporateName: "",
+                transporateDuration: 0,
             });
         };
 
@@ -90,20 +72,35 @@ export default function Travel() {
             textAlign: "center",
         }));
 
-        const handleModeChange = (event) => {
-            setTravel({
-                ...travel,
-                travelMode: event.target.value,
-            });
-        };
+        // const handleModeChange = (event) => {
+        //     setTravel({
+        //         ...travel,
+        //         travelMode: event.target.value,
+        //     });
+        // };
+        const handleChange = (event) => {
+            const selectedId = event.target.value;
+            const selectedTransport = activeDialog.transportations.find(
+                (x) => x.transporateId === selectedId
+            );
 
-        const handleTransportChange = (event) => {
             setTravel({
                 ...travel,
-                transport: event.target.value,
+                transporateId: selectedId,
+                transporateName: selectedTransport ? selectedTransport.transporateName : '',
+                transporateDuration: 0,
             });
             setShowTime(true);
+            console.log('event.target.value', selectedId);
+            console.log('selectedTransport.transporateName', selectedTransport ? selectedTransport.transporateName : '');
         };
+        // const handleTransportChange = (event) => {
+        //     setTravel({
+        //         ...travel,
+        //         transport: event.target.value,
+        //     });
+        //     setShowTime(true);
+        // };
 
         const fetchTravelableRoutesWithReuirements = async () => {
             try {
@@ -132,9 +129,28 @@ export default function Travel() {
         }, []);
         // console.log("routeReuirementData", routeReuirementData);
         //travelableRoutes
-        const handleTravelBegin = (distance, speed) => {
-            setShowTime(false);
-            // Axios for saving data
+        const handleTravelBegin = async () => {
+            console.log("handleTravelBegin", activeDialog);
+            // setShowTime(false);
+            try {
+                const response = await toast.promise(gameServerApi("/addUserUserTravelHistory", 'post', activeDialog), {
+                    pending: "Fetching travel data...",
+                    success: {
+                        render({ data }) {
+                            setTravelableRoutesData(data); // Update the state with fetched data
+                        },
+                    },
+                    error: {
+                        render({ data }) {
+
+                            console.error("Error fetching travel data:", data);
+                            return "Error fetching travel data";
+                        },
+                    },
+                });
+            } catch (error) {
+                console.error("Error fetching travel data:", error);
+            }
         };
         console.log("travelableRoutesData", travelableRoutesData);
 
@@ -149,8 +165,8 @@ export default function Travel() {
                                     sx={{
                                         zIndex: 1030,
                                         position: "absolute",
-                                        top: location.Top,
-                                        left: location.Left,
+                                        top: location.coordinateYTop,
+                                        left: location.coordinateXLeft,
                                         right: "auto",
                                         color: "#801313",
                                     }}
@@ -160,16 +176,17 @@ export default function Travel() {
                                             <li>
                                                 {location.ToCountryName}, {location.ToRegionName}, {location.ToCityName}
                                             </li>
-                                            {JSON.parse(location.Requirements).map(item => (
-                                                <li key={item.RequirementItemId}>
-                                                    Require: {item.ItemName}
+                                            {location.recurements.map((item, index) => (
+                                                <li key={`${item.itemName}-${index}`}>
+                                                    Require: {item.itemName}
                                                 </li>
                                             ))}
+
                                         </ul>
 
                                     }>
                                         <AlbumIcon
-                                            onClick={() => handleClickToOpen(location.id)}
+                                            onClick={() => handleClickToOpen(location)}
                                         />
                                     </Tooltip>
                                 </Box>
@@ -178,7 +195,7 @@ export default function Travel() {
                 </Grid>
                 <Dialog open={open} fullWidth>
                     <DialogTitle>
-                        {"You are planning to travel " + activeDialog}
+                        {`You are planning to travel ${activeDialog?.ToCountryName}, ${activeDialog?.ToRegionName}, ${activeDialog?.ToCityName}`}
                         <IconButton
                             aria-label="close"
                             onClick={handleToClose}
@@ -193,34 +210,45 @@ export default function Travel() {
                         </IconButton>
                     </DialogTitle>
                     <DialogContent>
-                        <FormControl required sx={{ m: 1, minWidth: 120 }}>
+                        <FormControl fullWidth required sx={{ m: 1, minWidth: 120 }}>
                             <InputLabel id="travel-transport">Transport</InputLabel>
                             <Select
-                                fullWidth
+
                                 labelId="travel-transport"
                                 id="demo-simple-select2"
-                                value={travel.transport}
+                                value={travel.transporateId}
                                 label="Transport"
-                                onChange={handleTransportChange}
+                                onChange={handleChange}
                             >
-                                {/* {data?.travelModes[travel.travelMode]?.travelTransportations.map(
-                                    (x, i) => (
-                                        <MenuItem key={i} value={x.id}>
-                                            {x.transportName}
-                                        </MenuItem>
-                                    )
-                                )} */}
+                                {activeDialog?.transportations.map((x) => (
+                                    <MenuItem key={x.transporateId} value={x.transporateId}>
+                                        {x.transporateName}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
-                        <Box padding={4}>
+                        <Box padding={4} >
                             {showTime ? (
-                                <p>Expected travel duration{data.estimatedTravelTime}</p>
+                                <React.Fragment>
+                                    <Box sx={{ textAlign: "center", border: 1, boxShadow: 4 }}> Expected travel duration {travel.transporateDuration} </Box>
+                                    <Box sx={{ textAlign: "center", paddingTop: 2 }}>
+                                        <IconButton
+                                            aria-label="close"
+                                            onClick={handleTravelBegin}
+                                            sx={{
+                                                color: 'red',
+                                            }}
+                                        >
+                                            <AlarmIcon />
+                                        </IconButton>
+                                    </Box>
+                                </React.Fragment>
                             ) : (
                                 ""
                             )}
                         </Box>
                     </DialogContent>
-                    <DialogActions>
+                    {/* <DialogActions>
                         {activeDialog?.travelRequirements ? (
                             <button
                                 onClick={() =>
@@ -239,7 +267,7 @@ export default function Travel() {
                                 </p>
                             ))
                         )}
-                    </DialogActions>
+                    </DialogActions> */}
                 </Dialog>
             </React.Fragment >
         );

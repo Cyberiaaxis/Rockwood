@@ -46,7 +46,7 @@ class Item extends GameBaseModel
      */
     public function getItemNameById(int $id)
     {
-        return $this->pdoWhere('id', $id)->pdoPluck('name');
+        return $this->pdoWhere('id', $id)->pdoValue('name');
         // return $this->db->where('id', $id)->value('name');
     }
 

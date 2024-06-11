@@ -77,6 +77,19 @@ class GameBaseModel
         return $this->db->orderBy($data);
     }
 
+    function pdoValue($column)
+    {
+        // Check if the array is not empty
+        $array = $this->pdoGet();
+        if (!empty($array)) {
+            // Retrieve the first item of the array
+            $firstItem = reset($array);
+            return isset($firstItem[$column]) ? $firstItem[$column] : null;
+        } else {
+            // Return null or handle empty array case based on your requirements
+            return null;
+        }
+    }
     /**
      * Get the table associated with the model.
      *

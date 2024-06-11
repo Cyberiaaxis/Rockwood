@@ -297,13 +297,13 @@ class HomeController extends Controller
      */
     public function currentLocation()
     {
-        $userTravelHistoryId = $this->userTravelHistory
-            ->getUserTravelHistoryByUserIdAndStatus(
+        $currentLocationId = $this->userTravelHistory
+            ->getUserCurrentLocationByUserIdAndStatus(
                 $this->authenticatedUserId
             );
 
         return $this->city->getCityRegionCountryById(
-            $userTravelHistoryId[0]['city_id']
+            $currentLocationId
         );
     }
 

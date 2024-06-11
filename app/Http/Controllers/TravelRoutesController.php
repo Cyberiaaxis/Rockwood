@@ -11,6 +11,8 @@ use App\Models\TravelRoute;
 use App\Models\UserTravelHistory;
 use App\Models\Item;
 use App\Models\RouteRequirementsMapping;
+use App\Models\RouteTransportation;
+use App\Models\TransportationType;
 
 
 use Illuminate\Http\Request;
@@ -25,6 +27,8 @@ class TravelRoutesController extends Controller
     protected $item;
     protected $routeRequirementsMapping;
     protected $inventory;
+    protected $routeTransportation;
+    protected $transportationType;
 
     public function __construct(
         City $city,
@@ -33,7 +37,9 @@ class TravelRoutesController extends Controller
         UserTravelHistory $userTravelHistory,
         Item $item,
         Inventory $inventory,
-        RouteRequirementsMapping $routeRequirementsMapping
+        RouteRequirementsMapping $routeRequirementsMapping,
+        RouteTransportation $routeTransportation,
+        TransportationType $transportationType
     ) {
         $this->city = $city;
         $this->country = $country;
@@ -42,6 +48,8 @@ class TravelRoutesController extends Controller
         $this->item = $item;
         $this->inventory = $inventory;
         $this->routeRequirementsMapping  = $routeRequirementsMapping;
+        $this->routeTransportation = $routeTransportation;
+        $this->transportationType = $transportationType;
     }
 
     /**
@@ -114,17 +122,27 @@ class TravelRoutesController extends Controller
         $currentLocations = $this->travelRoute->getTravelRoutesWithCityToRegionToCountry($userCurrentCity);
 
         foreach ($currentLocations as $currentLocation) {
+
             foreach ($this->routeRequirementsMapping->getItemIdByRouteId($currentLocation->RouteId) as $id) {
                 $currentLocation->recurements[] = [
                     "itemName" => $this->item->getItemNameById($id['item_id']),
                     "status" => $this->inventory->getItemStatusByUserAndItemId(auth()->id(), $id['item_id']),
                 ];
             }
+
+            foreach ($this->routeTransportation->getRouteTransportationByRouteId($currentLocation->RouteId) as $routeId) {
+                $currentLocation->transportations[] = [
+                    "transporateId" => $routeId['id'],
+                    "transporateName" => $this->transportationType->getTransportationNameById($routeId['transportation_type_id']),
+                    "transporateDuration" => $routeId['duration'],
+                ];
+            }
         }
 
         return $currentLocations;
     }
-
+    // getTransportationNameById
+    // getRouteTransportationByRouteId
     /**
      * Display the specified resource.
      *

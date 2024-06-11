@@ -40,9 +40,9 @@ class TransportationType extends GameBaseModel
      * @param int $id The ID of the transportation type record.
      * @return array|null The transportation type record if found, otherwise null.
      */
-    public function findTransportationTypeById(int $id): ?array
+    public function  getTransportationNameById(int $id)
     {
-        return $this->db->where('id', $id)->get()->toArray();
+        return $this->pdoWhere('id', $id)->pdoValue('name');
     }
 
     /**
