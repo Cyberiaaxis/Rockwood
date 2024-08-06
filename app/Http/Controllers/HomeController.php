@@ -18,7 +18,7 @@ use App\Models\{
     Country,
     City,
     Gang,
-    UserTravelHistory
+    UserTravel
 };
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -61,7 +61,7 @@ class HomeController extends Controller
      * @var Region        $region             The instance of the Region model.
      * @var City          $country            The instance of the City model.
      * @var Gang          $gang               The instance of the gang model.
-     * @var UserTravelHistory          $userTravelHistory               The instance of the UserTravelHistory model.
+     * @var UserTravel    $userTravel         The instance of the UserTravel model.
      */
     protected $region,
         $attack,
@@ -81,7 +81,7 @@ class HomeController extends Controller
         $authenticatedUserId,
         $course,
         $userCourseHistory,
-        $userTravelHistory;
+        $userTravel;
 
     /**
      * Create a new controller instance.
@@ -105,7 +105,7 @@ class HomeController extends Controller
      * @param Gang $gang The gang model instance.
      * @param Course $course The gang model instance. 
      * @param UserCourseHistory $userCourseHHistory The gang model instance. 
-     * @param UserTravelHistory $userTravelHistory The UserTravelHistory model instance. 
+     * @param UserTravel $userTravel The UserTravel model instance. 
      * @return void 
      */
     public function __construct(
@@ -125,7 +125,7 @@ class HomeController extends Controller
         Gang $gang,
         Course $course,
         UserCourseHistory $userCourseHistory,
-        UserTravelHistory $userTravelHistory
+        UserTravel $userTravel
     ) {
         $this->authenticatedUserId = auth()->user(); // Set the authenticated user ID
         $this->region = $region;
@@ -145,7 +145,7 @@ class HomeController extends Controller
         $this->course = $course;
         $this->userCourseHistory = $userCourseHistory;
         $this->authenticatedUserId = $this->getAuthenticatedUserId(); // Retrieve and set the authenticated user ID
-        $this->userTravelHistory = $userTravelHistory;
+        $this->userTravel = $userTravel;
     }
 
     /**
@@ -297,7 +297,7 @@ class HomeController extends Controller
      */
     public function currentLocation()
     {
-        $currentLocationId = $this->userTravelHistory
+        $currentLocationId = $this->userTravel
             ->getUserCurrentLocationByUserIdAndStatus(
                 $this->authenticatedUserId
             );

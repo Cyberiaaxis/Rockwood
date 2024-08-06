@@ -6,7 +6,7 @@ use DateTime;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserTravelHistory extends GameBaseModel
+class UserTravel extends GameBaseModel
 {
     /**
      * The table associated with the model.

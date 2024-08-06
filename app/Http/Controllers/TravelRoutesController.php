@@ -8,7 +8,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\Inventory;
 use App\Models\TravelRoute;
-use App\Models\UserTravelHistory;
+use App\Models\UserTravel;
 use App\Models\Item;
 use App\Models\RouteRequirementsMapping;
 use App\Models\RouteTransportation;
@@ -23,7 +23,7 @@ class TravelRoutesController extends Controller
     protected $city;
     protected $country;
     protected $travelRoute;
-    protected $userTravelHistory;
+    protected $userTravel;
     protected $item;
     protected $routeRequirementsMapping;
     protected $inventory;
@@ -34,7 +34,7 @@ class TravelRoutesController extends Controller
         City $city,
         Country $country,
         TravelRoute $travelRoute,
-        UserTravelHistory $userTravelHistory,
+        UserTravel $userTravel,
         Item $item,
         Inventory $inventory,
         RouteRequirementsMapping $routeRequirementsMapping,
@@ -44,7 +44,7 @@ class TravelRoutesController extends Controller
         $this->city = $city;
         $this->country = $country;
         $this->travelRoute = $travelRoute;
-        $this->userTravelHistory = $userTravelHistory;
+        $this->userTravel = $userTravel;
         $this->item = $item;
         $this->inventory = $inventory;
         $this->routeRequirementsMapping  = $routeRequirementsMapping;
@@ -118,7 +118,7 @@ class TravelRoutesController extends Controller
      */
     public function travelableRoutes()
     {
-        $userCurrentCity =  $this->userTravelHistory->getUserCurrentLocationByUserIdAndStatus(auth()->id());
+        $userCurrentCity =  $this->userTravel->getUserCurrentLocationByUserIdAndStatus(auth()->id());
         $currentLocations = $this->travelRoute->getTravelRoutesWithCityToRegionToCountry($userCurrentCity);
 
         foreach ($currentLocations as $currentLocation) {
@@ -151,7 +151,7 @@ class TravelRoutesController extends Controller
      */
     // public function travelledHistory()
     // {
-    //     $userCurrentCity =  $this->userTravelHistory->getUserTravelHistoryByUserIdAndStatus(auth()->id());
+    //     $userCurrentCity =  $this->userTravel->getUserTravelHistoryByUserIdAndStatus(auth()->id());
 
     //     return $this->travelRoute->getTravelRoutesWithCityToRegionToCountryWithReuireItems(true, $userCurrentCity);
     // }

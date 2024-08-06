@@ -3,27 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\UserTravelHistory;
+use App\Models\UserTravel;
 use App\Models\City;
 use App\Models\User;
 use Carbon\Carbon;
 // $this->user->getUserNameById
-class UserTravelHistoryController extends Controller
+class UserTravelController extends Controller
 {
-    protected $userTravelHistory;
+    protected $userTravel;
     protected $city;
     protected $user;
     protected $carbon;
 
     /**
-     * Create a new instance of UserTravelHistoryController.
+     * Create a new instance of UserTravelController.
      *
-     * @param  \App\Models\UserTravelHistory  $userTravelHistory
+     * @param  \App\Models\UserTravel  $userTravel
      * @return void
      */
-    public function __construct(UserTravelHistory $userTravelHistory, City $city, User $user, Carbon $carbon)
+    public function __construct(UserTravel $userTravel, City $city, User $user, Carbon $carbon)
     {
-        $this->userTravelHistory = $userTravelHistory;
+        $this->userTravel = $userTravel;
         $this->city = $city;
         $this->user = $user;
         $this->carbon = $carbon;
@@ -37,12 +37,12 @@ class UserTravelHistoryController extends Controller
      */
     public function makeUserTravelHistory(Request $request)
     {
-        // dd($request);
+        dd($request);
         // Validate incoming request data and perform unique validation
         $validatedData = $this->validateAndVerifyRequestData($request);
 
         // Add a new user travel history record
-        $this->userTravelHistory->addUserTravelHistory($validatedData);
+        $this->userTravel->addUserTravelHistory($validatedData);
 
         // Return a response indicating success
         return response()->json([
@@ -83,7 +83,7 @@ class UserTravelHistoryController extends Controller
      */
     public function getUserTravelHistory(Request $request)
     {
-        $userTravelHistory = $this->userTravelHistory->getUserTravelHistoryByUserId(auth()->id());
+        $userTravelHistory = $this->userTravel->getUserTravelHistoryByUserId(auth()->id());
         // Return the organized user travel history records
         return response()->json($userTravelHistory);
     }
@@ -97,7 +97,7 @@ class UserTravelHistoryController extends Controller
     public function getUserTravel()
     {
         // Retrieve user travel details with location using UserTravelHistory service
-        $userTravels = $this->userTravelHistory
+        $userTravels = $this->userTravel
             ->getUserTravelDetailsWithLocation(auth()->id());
 
         // Return user travel details as JSON response
@@ -118,6 +118,6 @@ class UserTravelHistoryController extends Controller
         $validatedData = $this->validateAndVerifyRequestData($request);
 
         // Modify the user travel history record using 'id' and other data
-        return $this->userTravelHistory->modifyUserTravelHistory($validatedData['id'], $validatedData);
+        return $this->userTravel->modifyUserTravelHistory($validatedData['id'], $validatedData);
     }
 }
