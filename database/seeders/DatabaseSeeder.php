@@ -20,7 +20,7 @@ use App\Models\RealEstate;
 use App\Models\Reward;
 use App\Models\Role;
 use App\Models\TravelRoute;
-use App\Models\UserTravelHistory;
+use App\Models\UserTravel;
 use App\Models\User;
 use App\Models\UserCrime;
 use App\Models\UserDetail;
@@ -278,9 +278,9 @@ class DatabaseSeeder extends Seeder
         ];
 
 
-        $userTravelHistory = new UserTravelHistory();
+        $userTravel = new UserTravel();
 
-        $userTravelHistory->insert([
+        $userTravel->insert([
             [
                 'user_id' => $userStored->id,
                 'city_id' =>  1,

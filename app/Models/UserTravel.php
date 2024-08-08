@@ -13,7 +13,8 @@ class UserTravel extends GameBaseModel
      *
      * @var string
      */
-    protected $table = "user_travel_histories";
+    protected $table = "user_travels";
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -23,7 +24,8 @@ class UserTravel extends GameBaseModel
     protected $fillable = [
         'user_id',
         'city_id',
-        'status',
+        'isAtLocation',
+        'created_at',
     ];
 
     /**
@@ -67,7 +69,7 @@ class UserTravel extends GameBaseModel
      * @param  array  $attributes
      * @return int|null The ID of the newly created user travel history record, or null on failure
      */
-    public function addUserTravelHistory(array $attributes): ?int
+    public function addUserTravel(array $attributes): ?int
     {
         return $this->db->insertGetId($attributes);
     }

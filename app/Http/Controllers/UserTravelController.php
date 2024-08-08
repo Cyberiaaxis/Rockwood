@@ -35,19 +35,26 @@ class UserTravelController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function makeUserTravelHistory(Request $request)
+    public function makeUserTravel(Request $request)
     {
-        dd($request);
+        // dd($request);
+        $request->merge([
+            'user_id' => auth()->id(),
+            'isAtLocation' => 1,
+            'created_at' => $this->carbon->now(),
+        ]);
+
+        // dd($userTravelData);
         // Validate incoming request data and perform unique validation
         $validatedData = $this->validateAndVerifyRequestData($request);
 
         // Add a new user travel history record
-        $this->userTravel->addUserTravelHistory($validatedData);
+        $this->userTravel->addUserTravel($validatedData);
 
         // Return a response indicating success
         return response()->json([
-            'message' => 'User travel history record added successfully',
-            'user_travel_history' => $validatedData
+            'message' => 'User travel record added successfully',
+            'user_travel' => $validatedData
         ], 201);
     }
 
@@ -57,22 +64,16 @@ class UserTravelController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    private function validateAndVerifyRequestData(Request $request): array
+    private function validateAndVerifyRequestData($request)
     {
-        // Define validation rules
-
-        $rules = [
-            'RouteId' => ['required', 'integer'],
+        // dd($request);
+        return $request->validate([
+            'route_id' => ['required', 'integer'],
             'user_id' => ['required', 'integer'],
             'city_id' => ['required', 'integer'],
-            'status' => ['required', 'boolean'],
-        ];
-
-        // Validate incoming request data
-        $validatedData = $request->validate($rules);
-
-        // Return the validated data
-        return $validatedData;
+            'isAtLocation' => ['required', 'integer'],
+            'created_at' => ['nullable', 'date'],
+        ]);
     }
 
     /**

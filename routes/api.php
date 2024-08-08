@@ -41,9 +41,9 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->get('/routes', 'TravelRoutesController@routes');
     $router->get('/travelableRoutes', 'TravelRoutesController@travelableRoutes');
     $router->post('/getRequirements', 'RouteRequirementsMappingController@travelableRouteRequirements');
-    $router->post('/addUserUserTravelHistory', 'UserTravelHistoryController@makeUserTravelHistory');
+    $router->post('/addUserTravel', 'UserTravelController@makeUserTravel');
 
-    $router->get('/getUserTravel', 'UserTravelHistoryController@getUserTravel');
+    $router->get('/getUserTravel', 'UserTravelController@getUserTravel');
     $router->post('/addRoute', 'TravelRoutesController@configureRoute');
     $router->post('/amendLocation', 'LocationController@amendLocation');
     // i think the 'ping' should go here? so it only works when authenticated

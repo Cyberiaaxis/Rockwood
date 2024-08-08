@@ -229,10 +229,10 @@ class HomeController extends Controller
             $this->authenticatedUserId
         );
         // Get the user's course history for today's date
-        // $userCourseHistory = $this->userCourseHistory->getUserCurrentCourseById(
-        //     $this->authenticatedUserId,
-        //     $this->carbon->now()->toDateString()
-        // );
+        $userCourseHistory = $this->userCourseHistory->getUserCurrentCourseById(
+            $this->authenticatedUserId,
+            $this->carbon->now()->toDateString()
+        );
 
         // Check if the user has a current course
         if ($userCurrentCourse === null) {

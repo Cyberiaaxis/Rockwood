@@ -130,10 +130,14 @@ export default function Travel() {
         // console.log("routeReuirementData", routeReuirementData);
         //travelableRoutes
         const handleTravelBegin = async () => {
-            console.log("handleTravelBegin", activeDialog);
+            // console.log("handleTravelBegin", activeDialog);
+
             // setShowTime(false);
             try {
-                const response = await toast.promise(gameServerApi("/addUserUserTravelHistory", 'post', activeDialog), {
+                const response = await toast.promise(gameServerApi("/addUserTravel", 'post', {
+                    route_id: activeDialog.RouteId,
+                    city_id: activeDialog.ToCityId
+                }), {
                     pending: "Fetching travel data...",
                     success: {
                         render({ data }) {
