@@ -93,17 +93,17 @@ class UserTravel extends GameBaseModel
             'cities.name as city_name',
             'regions.name as region_name',
             'countries.name as country_name',
-            'user_travel_histories.created_at as visited',
+            'user_travels.created_at as visited',
             $this->db->raw('COUNT(*) as travel_count'),
-            $this->db->raw("CASE WHEN MAX(user_travel_histories.created_at) > now() THEN 'active' ELSE 'inactive' END as status")
+            $this->db->raw("CASE WHEN MAX(user_travels.created_at) > now() THEN 'active' ELSE 'inactive' END as status")
         )
-            ->join('cities', 'user_travel_histories.city_id', '=', 'cities.id')
+            ->join('cities', 'user_travels.city_id', '=', 'cities.id')
             ->join('regions', 'cities.region_id', '=', 'regions.id')
             ->join('countries', 'regions.country_id', '=', 'countries.id')
-            ->where('user_travel_histories.user_id', $userId)
-            ->groupBy('user_travel_histories.city_id')
-            ->groupBy('user_travel_histories.created_at')
-            ->orderBy('user_travel_histories.created_at', 'desc')
+            ->where('user_travels.user_id', $userId)
+            ->groupBy('user_travels.city_id')
+            ->groupBy('user_travels.created_at')
+            ->orderBy('user_travels.created_at', 'desc')
             ->get()
             ->toArray();
     }
