@@ -22,6 +22,7 @@ import Mail from "./Mailbox";
 import Thread from "./Thread";
 import FightClubs from "./FightClubs";
 import MyAccount from "./MyAccount";
+import UserOnline from "./UserOnline";
 
 export default function Dashboard() {
     const [openStates, setOpenStates] = React.useState({});
@@ -50,7 +51,8 @@ export default function Dashboard() {
         forums: <Forums />,
         thread: <Thread threadId={threadId} />,
         fightclub: <FightClubs />,
-        myaccount: <MyAccount />
+        myaccount: <MyAccount />,
+        useronline: <UserOnline />
     }), [threadId]);
 
     return (

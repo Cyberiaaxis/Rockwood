@@ -12,6 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\UserStats;
+use DateTime;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -37,7 +38,12 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'gender', 'type', 'avatar'
+        'name',
+        'email',
+        'password',
+        'gender',
+        'type',
+        'avatar'
     ];
 
     protected $guard_name = 'web';
@@ -48,7 +54,9 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'pivot',
+        'password',
+        'remember_token',
+        'pivot',
     ];
 
     /**
@@ -58,6 +66,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_seen' => 'datetime'
     ];
 
     /**
@@ -65,7 +74,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'last_seen'];
+    protected $dates = ['created_at', 'updated_at'];
 
 
     // /**  
@@ -110,7 +119,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->insertGetId($data);
     }
 
-        /**
+    /**
      * regiration of new player's in storage.
      * @param  int $course_id
      * @return boolean
@@ -174,6 +183,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * regiration of new player's in storage.
+     * @param  int $course_id
+     * @return boolean
+     */
+    public function getUsersOnlineTimeBasis($time): array
+    {
+        return $this->where('last_seen', '<=', $time)->get(['id', 'name', 'last_seen', 'avatar'])->toArray();
+    }
+
+    /**
      * get user from storage.
      * @param
      * @return a collection
@@ -212,9 +231,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param
      * @return a collection
      */
-    public function getSaccessAttribute()
-    {
-    }
+    public function getSaccessAttribute() {}
 
     public function getUserIdsByFightClubId(int $fightClubId)
     {

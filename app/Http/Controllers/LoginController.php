@@ -20,7 +20,7 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except(['logout', 'ping']);
     }
-    
+
     /**
      * Handle user login.
      *
@@ -32,11 +32,17 @@ class LoginController extends Controller
         $this->validateInputs($request);
 
         if ($this->attemptLogin($request)) {
+            $user = auth()->user();
+            $user->last_seen = now();
+            $user->save();
+
             return response()->json(['userId' => auth()->id()]);
         }
 
         return $this->sendFailedLoginResponse($request);
     }
+
+
 
     /**
      * Validate user input.
@@ -111,9 +117,11 @@ class LoginController extends Controller
     public function ping()
     {
         $user = auth()->user();
+        $user->last_seen = now();
+        $user->save();
         $role = $user->getUserRoles();
         $status = (session("saccess_status")) ? session("saccess_status") : false;
-        return response()->json(["userId" => $user->id, "userName" => $user->name, "userRoles" => $role, "status" => $status]);
+        return response()->json(["userId" => $user->id, "userName" => $user->name, "lastSeen" => $user->last_seen, "userRoles" => $role, "status" => $status]);
     }
 
     /**

@@ -17,7 +17,7 @@ const CurrentUserGuard = ({ children }) => {
             try {
                 const response = await gameServerApi('ping');
                 // TODO: if ping request says authenticated, call setUser to store username/id/type in context
-                setUser({ userId: response.userId, userName: response.userName, userRole: response.userRoles })
+                setUser({ userId: response.userId, userId: response.userId, userName: response.userName, userRole: response.userRoles })
 
                 if (response.status) {
                     history.push('/staff/');

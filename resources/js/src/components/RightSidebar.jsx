@@ -17,9 +17,9 @@ export default function RightSideBar({ setPage, opener }) {
     },
     // c:\Users\cyber\Downloads\Hall-Of-Fame-PNG-Download-Image.png
     {
-      title: "Forums",
+      title: "Recently Active Players",
       icon: <FaSteamSquare style={{ height: 80, width: 40 }} />,
-      url: "forums",
+      url: "useronline",
     },
 
     {

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\{Role, Permission};
 use Hash;
 use Carbon\Carbon;
@@ -11,13 +10,7 @@ use App\Http\Resources\UserResource;
 use App\Models\{UserTravel, TravelRoute, UserDetail, User, UserStats};
 use Exception;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 
-// use Auth;
-// use DateTime;
-// use DateTimeZone;
-// use Illuminate\Foundation\Auth\User as AuthUser;
-// use Mockery\Expectation;
 
 class UsersController extends Controller
 {
@@ -214,9 +207,7 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getUser($id)
-    {
-    }
+    public function getUser($id) {}
 
     /**
      * Remove the specified resource from storage.
@@ -389,7 +380,18 @@ class UsersController extends Controller
         return 'false';
     }
 
-
+    /**
+     * Remove the specified resource from storage.
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function OnlinePlayers(Request $request)
+    {
+        $futureDateTime = Carbon::now()->addMinutes($request->timeData);
+        $futureDateTimeString = $futureDateTime->toDateTimeString();
+        $user = new User();
+        return $user->getUsersOnlineTimeBasis($futureDateTimeString);
+    }
 
     // public function heal(UserDetail $userDetails)
     // {
@@ -422,4 +424,6 @@ class UsersController extends Controller
 
     //     // return $userStats->decrementNerve(auth()->user()->id, $requireNerve);
     // }
+
+
 }
