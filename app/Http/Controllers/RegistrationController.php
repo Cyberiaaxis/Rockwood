@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserStats;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class RegistrationController extends Controller
@@ -33,11 +34,19 @@ class RegistrationController extends Controller
      */
     public function signup(Request $request)
     {
+        // Validate the request data
         $validatedData = $this->validateRequestData($request);
 
+        // Hash the password before saving the user
+        $validatedData['password'] = Hash::make($validatedData['password']);
+
+        // Store the user in the database
         $userStored = $this->user->addUser($validatedData);
+
+        // Add user statistics
         $this->userStats->addUserStats($userStored);
 
+        // Return a success response
         return response()->json([
             'status' => true,
             'message' => 'Successfully created user!'

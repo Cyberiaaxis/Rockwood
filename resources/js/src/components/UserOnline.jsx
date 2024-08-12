@@ -1,4 +1,3 @@
-// src/PlayerOnline.js
 import React, { useState, useEffect } from 'react';
 import { Avatar, Badge, Typography, Box, Tabs, Tab, Grid, List, ListItem, ListItemText, ListItemAvatar } from '@mui/material';
 import OnlineIcon from '@mui/icons-material/OnlinePrediction';
@@ -17,9 +16,9 @@ const formatTime = (timestamp) => {
     if (timeDiff < 15 * 60 * 1000) { // Less than 15 minutes
         return 'Online';
     } else if (timeDiff < 60 * 60 * 1000) { // Less than 1 hour
-        return '  1 hour ago';
+        return '1 hour ago';
     } else {
-        return ` ${Math.floor(timeDiff / (24 * 60 * 60 * 1000))} days ago`;
+        return `${Math.floor(timeDiff / (24 * 60 * 60 * 1000))} days ago`;
     }
 };
 
@@ -33,11 +32,11 @@ const getColorByTime = (timestamp) => {
     const timeDiff = now - lastSeenDate;
 
     if (timeDiff < 15 * 60 * 1000) { // Less than 15 minutes
-        return 'green';
+        return 'success'; // Green
     } else if (timeDiff < 60 * 60 * 1000) { // Less than 1 hour
-        return 'orange';
+        return 'warning'; // Orange
     } else {
-        return 'red';
+        return 'error'; // Red
     }
 };
 
@@ -144,15 +143,19 @@ const UsersOnline = () => {
                             onlinePlayers.length ? onlinePlayers.map((player, index) => (
                                 <ListItem key={index} variant="body2">
                                     <ListItemAvatar>
-                                        <Avatar alt={player.name} src={player.avatar} />
+                                        <Badge
+                                            color={getColorByTime(player.last_seen)}
+                                            variant="dot"
+                                            overlap="circular"
+                                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                        >
+                                            <Avatar alt={player.name} src={player.avatar} />
+                                        </Badge>
                                     </ListItemAvatar>
                                     <ListItemText primary={
-                                        <Grid container>
-                                            <Box mr={7} >
-                                                <Typography
-                                                    variant="subtitle1"
-                                                    sx={{ color: getColorByTime(player.last_seen) }}
-                                                >
+                                        <Grid container alignItems="center">
+                                            <Box mr={2}>
+                                                <Typography variant="subtitle1">
                                                     {player.name}
                                                 </Typography>
                                             </Box>
@@ -176,15 +179,19 @@ const UsersOnline = () => {
                             onlinePlayers.length ? onlinePlayers.map((player, index) => (
                                 <ListItem key={index} variant="body2">
                                     <ListItemAvatar>
-                                        <Avatar alt={player.name} src={player.avatar} />
+                                        <Badge
+                                            color={getColorByTime(player.last_seen)}
+                                            variant="dot"
+                                            overlap="circular"
+                                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                        >
+                                            <Avatar alt={player.name} src={player.avatar} />
+                                        </Badge>
                                     </ListItemAvatar>
                                     <ListItemText primary={
-                                        <Grid container>
-                                            <Box mr={7} >
-                                                <Typography
-                                                    variant="subtitle1"
-                                                    sx={{ color: getColorByTime(player.last_seen) }}
-                                                >
+                                        <Grid container alignItems="center">
+                                            <Box mr={2}>
+                                                <Typography variant="subtitle1">
                                                     {player.name}
                                                 </Typography>
                                             </Box>
@@ -208,15 +215,19 @@ const UsersOnline = () => {
                             onlinePlayers.length ? onlinePlayers.map((player, index) => (
                                 <ListItem key={index} variant="body2">
                                     <ListItemAvatar>
-                                        <Avatar alt={player.name} src={player.avatar} />
+                                        <Badge
+                                            color={getColorByTime(player.last_seen)}
+                                            variant="dot"
+                                            overlap="circular"
+                                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                        >
+                                            <Avatar alt={player.name} src={player.avatar} />
+                                        </Badge>
                                     </ListItemAvatar>
                                     <ListItemText primary={
-                                        <Grid container>
-                                            <Box mr={7} >
-                                                <Typography
-                                                    variant="subtitle1"
-                                                    sx={{ color: getColorByTime(player.last_seen) }}
-                                                >
+                                        <Grid container alignItems="center">
+                                            <Box mr={2}>
+                                                <Typography variant="subtitle1">
                                                     {player.name}
                                                 </Typography>
                                             </Box>

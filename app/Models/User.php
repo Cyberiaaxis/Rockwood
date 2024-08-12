@@ -189,7 +189,10 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getUsersOnlineTimeBasis($time): array
     {
-        return $this->where('last_seen', '<=', $time)->get(['id', 'name', 'last_seen', 'avatar'])->toArray();
+        return $this->where('last_seen', '<=', $time)
+            ->orderBy('last_seen', 'desc')  // Order by last_seen in descending order
+            ->get(['id', 'name', 'last_seen', 'avatar'])
+            ->toArray();
     }
 
     /**
