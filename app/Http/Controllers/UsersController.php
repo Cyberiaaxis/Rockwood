@@ -387,10 +387,34 @@ class UsersController extends Controller
      */
     public function OnlinePlayers(Request $request)
     {
-        $futureDateTime = Carbon::now()->addMinutes($request->timeData);
+        // Define a mapping for time units
+        $timeUnits = [
+            'minutes' => $request->timeData,
+            'hours'   => $request->timeData * 60,
+            'days'    => $request->timeData * 1440,
+        ];
+
+        // Determine the unit of time
+        $timeUnit = 'minutes'; // Default unit is minutes
+
+        if ($request->timeData >= 60 && $request->timeData < 1440) {
+            $timeUnit = 'hours'; // Consider values between 60 and 1439 as hours
+        } elseif ($request->timeData >= 1440) {
+            $timeUnit = 'days'; // Consider values 1440 or higher as days
+        }
+
+        // Calculate the threshold time
+        $minutes = $timeUnits[$timeUnit];
+        $futureDateTime = Carbon::now()->subMinutes($minutes);
         $futureDateTimeString = $futureDateTime->toDateTimeString();
         $user = new User();
-        return $user->getUsersOnlineTimeBasis($futureDateTimeString);
+        // Add timeUnit to the data array
+        $response = [
+            'timeUnit' => $timeUnit,
+            'data' => $user->getUsersOnlineTimeBasis($futureDateTimeString)
+        ];
+
+        return response()->json($response);
     }
 
     // public function heal(UserDetail $userDetails)
