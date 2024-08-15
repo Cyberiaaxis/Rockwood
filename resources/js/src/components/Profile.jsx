@@ -10,14 +10,17 @@ import Signature from "./Signature";
 import Communication from "./Communication";
 import Action from "./Action";
 import SwipeableTextMobileStepper from "./Medal";
+import { useProfile } from "../libraries/ProfileContext";
 
 export default function Profile() {
+    const { playerId } = useProfile();
     const [value, setValue] = React.useState("Details");
-
+    // console.log("Profile(id)", id);
     const handleChange = (event, newValue) => {
         // console.log("newValue", newValue);
         setValue(newValue);
     };
+    console.log("Profile", playerId);
     return (
         <React.Fragment>
             <div className="profileContainer">

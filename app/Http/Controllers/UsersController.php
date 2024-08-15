@@ -387,35 +387,40 @@ class UsersController extends Controller
      */
     public function OnlinePlayers(Request $request)
     {
-        // Define a mapping for time units
-        $timeUnits = [
-            'minutes' => $request->timeData,
-            'hours'   => $request->timeData * 60,
-            'days'    => $request->timeData * 1440,
-        ];
-
-        // Determine the unit of time
-        $timeUnit = 'minutes'; // Default unit is minutes
-
-        if ($request->timeData >= 60 && $request->timeData < 1440) {
-            $timeUnit = 'hours'; // Consider values between 60 and 1439 as hours
-        } elseif ($request->timeData >= 1440) {
-            $timeUnit = 'days'; // Consider values 1440 or higher as days
-        }
-
-        // Calculate the threshold time
-        $minutes = $timeUnits[$timeUnit];
-        $futureDateTime = Carbon::now()->subMinutes($minutes);
+        // Validate the request data
+        $validated = $request->validate([
+            'timeData' => ['required', 'integer', 'min:1', 'max:1440'], // Ensure timeData is a required integer greater than or equal to 1
+        ]);
+        $timeData = $validated['timeData'];
+        $futureDateTime = Carbon::now()->subMinutes($timeData);
         $futureDateTimeString = $futureDateTime->toDateTimeString();
+
+        // Fetch users based on the calculated time
         $user = new User();
-        // Add timeUnit to the data array
-        $response = [
-            'timeUnit' => $timeUnit,
-            'data' => $user->getUsersOnlineTimeBasis($futureDateTimeString)
+        $usersList = $user->getUsersOnlineTimeBasis($futureDateTimeString);
+
+        // Define the mapping for activity status
+        $statusMapping = [
+            'online'  => 15,   // Online if last seen within the last 15 minutes
+            'idle'    => 60,   // Idle if last seen within the last hour
         ];
 
-        return response()->json($response);
+        // Add timeUnit and status to each user record
+        $formattedData = array_map(function ($user) use ($statusMapping) {
+            $lastSeenDiffInMinutes = Carbon::parse($user['last_seen'])->diffInMinutes();
+
+            // Determine the user's activity status
+            $user['activity_status'] = $lastSeenDiffInMinutes <= $statusMapping['online'] ? 'Online' : ($lastSeenDiffInMinutes <= $statusMapping['idle'] ? 'Idle' : 'Offline');
+
+            // Format the 'last_seen' field to be human-readable
+            $user['last_seen'] = Carbon::parse($user['last_seen'])->diffForHumans();
+            return $user;
+        }, $usersList);
+
+        return response()->json($formattedData);
     }
+
+
 
     // public function heal(UserDetail $userDetails)
     // {

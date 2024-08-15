@@ -1,92 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Badge, Typography, Box, Tabs, Tab, Grid, List, ListItem, ListItemText, ListItemAvatar, Tooltip } from '@mui/material';
+import { Avatar, Badge, Typography, Box, Tabs, Tab, List, ListItem, ListItemText, ListItemAvatar, Tooltip } from '@mui/material';
 import OnlineIcon from '@mui/icons-material/OnlinePrediction';
 import { toast } from "react-toastify";
 import gameServerApi from "../libraries/gameServerApi";
+import { useProfile } from "../libraries/ProfileContext";
 
-// Utility function to format time
-const formatTime = (timestamp) => {
-
-    if (!timestamp) return 'Unknown';
-
-    const now = new Date();
-    const lastSeenDate = new Date(timestamp);
-
-    const timeDiff = now - lastSeenDate;
-
-    // Handle the case where the timestamp is in UTC (ends with 'Z')
-    if (isNaN(lastSeenDate.getTime())) {
-        return 'Invalid Date';
-    }
-
-    if (timeDiff < 15 * 60 * 1000) { // Less than 15 minutes
-        return 'Online';
-    } else if (timeDiff < 60 * 60 * 1000) { // Less than 1 hour
-        const minutesAgo = Math.floor(timeDiff / (60 * 1000));
-        return `${minutesAgo} minutes ago`;
-    } else if (timeDiff < 24 * 60 * 60 * 1000) { // Less than 24 hours
-        const hoursAgo = Math.floor(timeDiff / (60 * 60 * 1000));
-        return `${hoursAgo} hours ago`;
-    } else {
-        const daysAgo = Math.floor(timeDiff / (24 * 60 * 60 * 1000));
-        return `${daysAgo} days ago`;
+/**
+ * Function to determine the color based on the user's activity status.
+ *
+ * @param {string} status - The activity status ('Online', 'Idle', 'Offline').
+ * @param {boolean} [badge=true] - Whether the color is for a badge or text.
+ * @returns {string} The color associated with the status.
+ */
+const getColorByStatus = (status, badge = true) => {
+    switch (status) {
+        case "Online":
+            return badge ? 'success' : '#004d00'; // Very dark green for 'Online'
+        case "Idle":
+            return badge ? 'warning' : '#BFA600'; // Dark yellow for 'Idle'
+        case "Offline":
+        default:
+            return badge ? 'error' : '#f44336'; // Red for 'Offline'
     }
 };
 
-// Function to determine the color based on time
-const getColorByTime = (timestamp, badge = true) => {
-    if (!timestamp) return '#808080'; // gray
+/**
+ * TabPanel component to render content based on the selected tab.
+ *
+ * @param {object} props - The component props.
+ * @param {number} props.value - The current value of the selected tab.
+ * @param {number} props.index - The index of this TabPanel.
+ * @param {React.ReactNode} props.children - The content to display inside the panel.
+ * @returns {JSX.Element} The rendered TabPanel component.
+ */
+const TabPanel = ({ value, index, children }) => (
+    <Box
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        sx={{ maxHeight: '25rem', overflowY: "auto" }}
+    >
+        {value === index && <Box p={3}>{children}</Box>}
+    </Box>
+);
 
-    const now = new Date();
-    const lastSeenDate = new Date(timestamp);
+/**
+ * UsersOnline component that displays a list of online players based on different time filters.
+ *
+ * @param {function} setPage - Function to change the current page/view.
+ * @returns {JSX.Element} The rendered UsersOnline component.
+ */
+const UsersOnline = ({ setPage }) => {
+    const { setPlayerId } = useProfile(); // Access setPlayerId from ProfileContext
+    const [onlinePlayers, setOnlinePlayers] = useState([]); // State to store online players
+    const [tabValue, setTabValue] = useState(0); // State to store the current tab value
 
-    const timeDiff = now - lastSeenDate;
-
-    if (timeDiff < 15 * 60 * 1000) { // Less than 15 minutes
-        return badge ? 'success' : '#004d00'; // Very dark green
-    } else if (timeDiff < 60 * 60 * 1000) { // Less than 1 hour
-        return badge ? 'warning' : '#BFA600';
-    } else {
-        return badge ? 'error' : '#f44336'; // Red
-    }
-};
-
-// TabPanel Component
-const TabPanel = ({ value, index, children }) => {
-    return (
-        <Box
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            sx={{
-                maxHeight: '25rem',
-                overflowY: "auto",
-            }}
-        >
-            {value === index && (
-                <Box p={3}>
-                    {children}
-                </Box>
-            )}
-        </Box>
-    );
-};
-
-const UsersOnline = () => {
-    const [onlinePlayers, setOnlinePlayers] = useState([]);
-    const [tabValue, setTabValue] = useState(0);
-
+    /**
+     * Fetch the list of online players based on the selected time range.
+     *
+     * @param {number} timeData - The time range in minutes to filter online players.
+     */
     const handleFilterOnlineList = async (timeData) => {
-        // console.log("handleFilterOnlineList", timeData);
         try {
             const response = await toast.promise(
-                gameServerApi('/onlinePlayers', 'POST', { timeData }), // Adjust the API endpoint as needed
+                gameServerApi('/onlinePlayers', 'POST', { timeData }),
                 {
                     pending: 'Fetching online players...',
                     success: {
                         render({ data }) {
                             setOnlinePlayers(data);
+                            return 'Online players fetched successfully!';
                         },
                     },
                     error: {
@@ -98,40 +82,51 @@ const UsersOnline = () => {
                 }
             );
         } catch (error) {
-            // Handle error
+            toast.error('Failed to fetch online players');
         }
     };
 
+    // Fetch initial data for players online within the last 15 minutes.
     useEffect(() => {
-        handleFilterOnlineList(15); // Initial load with the last 15 minutes
+        handleFilterOnlineList(15);
     }, []);
 
+    /**
+     * Handle tab change event to update the selected time range.
+     *
+     * @param {object} event - The event object.
+     * @param {number} newValue - The new value for the tab.
+     */
     const handleChange = (event, newValue) => {
         setTabValue(newValue);
     };
-    console.log("onlinePlayers", onlinePlayers.data);
+
+    /**
+     * Handle redirect to profile and set player ID.
+     *
+     * @param {string} playerId - The ID of the player to set.
+     */
+    const handleRedirect = (playerId) => {
+        setPlayerId(playerId); // Set the player ID in context
+        setPage("profile"); // Navigate to profile page
+    };
+
     return (
         <React.Fragment>
-            <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                sx={{
-                    flexDirection: 'column',
-                    textAlign: 'center',
-                }}
-            >
+            {/* Avatar and Badge for displaying online status */}
+            <Box display="flex" alignItems="center" justifyContent="center" sx={{ flexDirection: 'column', textAlign: 'center' }}>
                 <Badge
-                    color={getColorByTime(Date.now())} // Using the current time to simulate online status
+                    color={getColorByStatus("Online")}
                     variant="dot"
                     overlap="circular"
                 >
-                    <Avatar sx={{ width: 56, height: 56, color: "green", backgroundColor: "black" }}>
+                    <Avatar sx={{ width: 36, height: 36, color: "green", backgroundColor: "black" }}>
                         <OnlineIcon />
                     </Avatar>
                 </Badge>
             </Box>
 
+            {/* Tabs for time range filters */}
             <Box>
                 <Tabs
                     value={tabValue}
@@ -144,57 +139,60 @@ const UsersOnline = () => {
                     <Tab onClick={() => handleFilterOnlineList(60)} label="Last Hour Online Players" />
                     <Tab onClick={() => handleFilterOnlineList(1440)} label="Last 24 Hours Online Players" />
                 </Tabs>
+
+                {/* Tab panels for displaying players based on the selected time range */}
                 {[15, 60, 1440].map((time, index) => (
                     <TabPanel value={tabValue} index={index} key={index}>
                         <List sx={{ width: '100%', maxWidth: 360, margin: 'auto' }}>
-                            {
-                                onlinePlayers.data ? onlinePlayers.data.map((player, idx) => (
-                                    <ListItem key={idx} variant="body2" sx={{ padding: 0 }}>
-                                        <ListItemAvatar>
-                                            <Badge
-                                                color={getColorByTime(player.last_seen)}
-                                                variant="dot"
-                                                overlap="circular"
-                                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                            >
-                                                <Avatar alt={player.name} src={player.avatar} />
-                                            </Badge>
-                                        </ListItemAvatar>
-                                        <ListItemText
-                                            primary={
-                                                <React.Fragment>
-                                                    <Box>
-                                                        <Tooltip
-                                                            title={
-                                                                <Typography style={{ color: getColorByTime(player.last_seen) }}>
-                                                                    {formatTime(player.last_seen)}
-                                                                </Typography>
-                                                            }
-                                                            arrow
-                                                            placement="top"
-                                                        >
-                                                            <Typography
-                                                                variant="subtitle1"
-                                                                style={{ color: getColorByTime(player.last_seen) }}
-                                                            >
-                                                                {player.name}
-                                                            </Typography>
-                                                        </Tooltip>
-
-                                                        <Typography
-                                                            variant="subtitle1"
-                                                            style={{ color: getColorByTime(player.last_seen, false) }}
-                                                        >
-                                                            {formatTime(player.last_seen)}
+                            {onlinePlayers.length ? onlinePlayers.map((player, idx) => (
+                                <ListItem key={idx} sx={{ padding: 0 }}>
+                                    <ListItemAvatar>
+                                        <Badge
+                                            color={getColorByStatus(player.activity_status)}
+                                            variant="dot"
+                                            overlap="circular"
+                                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                        >
+                                            <Avatar alt={player.name} src={player.avatar} />
+                                        </Badge>
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        primary={
+                                            <Box>
+                                                {/* Player's name with tooltip showing last seen time */}
+                                                <Tooltip
+                                                    title={
+                                                        <Typography style={{ color: getColorByStatus(player.activity_status) }}>
+                                                            {player.last_seen}
                                                         </Typography>
-                                                    </Box>
-                                                </React.Fragment>
-                                            } />
-                                    </ListItem>
-                                )) : <Typography variant="subtitle1">
+                                                    }
+                                                    arrow
+                                                    placement="top"
+                                                >
+                                                    <Typography
+                                                        variant="subtitle1"
+                                                        style={{ color: getColorByStatus(player.activity_status) }}
+                                                    >
+                                                        {player.name}
+                                                    </Typography>
+                                                </Tooltip>
+                                                {/* Last seen time with click event to redirect to profile */}
+                                                <Typography
+                                                    variant="subtitle1"
+                                                    sx={{ color: getColorByStatus(player.activity_status, false), cursor: 'pointer' }}
+                                                    onClick={() => handleRedirect(player.id)}
+                                                >
+                                                    {player.last_seen}
+                                                </Typography>
+                                            </Box>
+                                        }
+                                    />
+                                </ListItem>
+                            )) : (
+                                <Typography variant="subtitle1" align="center">
                                     No Data
                                 </Typography>
-                            }
+                            )}
                         </List>
                     </TabPanel>
                 ))}

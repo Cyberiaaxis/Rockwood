@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ProfileProvider } from "../libraries/ProfileContext";
 import "../styles/Main.css";
 import Header from "./Header";
 import LeftSidebar from "./LeftSidebar";
@@ -52,42 +53,45 @@ export default function Dashboard() {
         thread: <Thread threadId={threadId} />,
         fightclub: <FightClubs />,
         myaccount: <MyAccount />,
-        useronline: <UserOnline />
+        useronline: <UserOnline setPage={setActivePage} />
     }), [threadId]);
 
     return (
         <React.Fragment>
-            <div className="App">
-                <nav
-                    className={openStates['top'] ? 'top_menu active' : 'top_menu'}
-                    tabIndex="0"
-                >
-                    <Header setPage={setActivePage} />
-                </nav>
-                <nav
-                    className={openStates["left"] ? "left_menu active" : "left_menu"}
-                    tabIndex="0"
-                    onClick={() => toggleOpen("left")}
-                >
-                    <LeftSidebar setPage={setActivePage} opener={openStates.left} />
-                </nav>
-                <nav
-                    className={openStates["right"] ? "right_menu active" : "right_menu"}
-                    tabIndex="0"
-                    onClick={() => toggleOpen("right")}
-                >
-                    <RightSidebar setPage={setActivePage} opener={openStates.right} />
-                </nav>
-                <nav
-                    className={openStates["bottom"] ? "bottom_menu active" : "bottom_menu"}
-                    tabIndex="0"
-                >
-                    <Footer setPage={setActivePage} />
-                </nav>
-                <main className="content-area">
-                    {pages[activePage] || pages.home}
-                </main>
-            </div>
+            <ProfileProvider>
+                <div className="App">
+                    <nav
+                        className={openStates['top'] ? 'top_menu active' : 'top_menu'}
+                        tabIndex="0"
+                    >
+                        <Header setPage={setActivePage} />
+                    </nav>
+                    <nav
+                        className={openStates["left"] ? "left_menu active" : "left_menu"}
+                        tabIndex="0"
+                        onClick={() => toggleOpen("left")}
+                    >
+                        <LeftSidebar setPage={setActivePage} opener={openStates.left} />
+                    </nav>
+                    <nav
+                        className={openStates["right"] ? "right_menu active" : "right_menu"}
+                        tabIndex="0"
+                        onClick={() => toggleOpen("right")}
+                    >
+                        <RightSidebar setPage={setActivePage} opener={openStates.right} />
+                    </nav>
+                    <nav
+                        className={openStates["bottom"] ? "bottom_menu active" : "bottom_menu"}
+                        tabIndex="0"
+                    >
+                        <Footer setPage={setActivePage} />
+                    </nav>
+                    <main className="content-area">
+                        {pages[activePage] || pages.home}
+                    </main>
+                </div>
+            </ProfileProvider>
+
         </React.Fragment>
     );
 }
