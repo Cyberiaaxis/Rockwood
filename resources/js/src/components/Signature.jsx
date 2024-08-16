@@ -1,32 +1,70 @@
 import React from "react";
-import { Editor } from "@tinymce/tinymce-react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 export default function Signature() {
-  const editorRef = React.useRef(null);
+  const [editorContent, setEditorContent] = React.useState("");
+
+  // Function to handle saving the content
+  const handleSave = () => {
+    // Implement your save logic here
+    console.log("Saved Content:", editorContent);
+  };
 
   return (
-    <React.Fragment>
-      <Editor
-        apiKey="z0ofs10cgemuk3np8d585ugfc6gk6u6k6v32x2htj53u6pe4"
-        onInit={(evt, editor) => (editorRef.current = editor)}
-        initialValue="<p>This is the initial content of the editor.</p>"
-        init={{
-          height: 200,
-          menubar: false,
-          plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table paste code help wordcount"
-          ],
-          toolbar:
-            "undo redo | formatselect | " +
-            "bold italic backcolor | alignleft aligncenter " +
-            "alignright alignjustify | bullist numlist outdent indent | " +
-            "removeformat | help",
-          content_style:
-            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
+    <Box
+      component={Paper}
+      elevation={3}
+      p={2}
+      sx={{
+        height: "auto", // Ensure container can grow based on content
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between", // Space between editor and button
+        width: "100%", // Ensure full width
+      }}
+    >
+      <Typography variant="h6" gutterBottom>
+        Signature Editor
+      </Typography>
+      <Box
+        sx={{
+          flexGrow: 1,
+          overflow: "auto",
+          height: "200px", // Set a fixed height for the editor container
         }}
-      />
-    </React.Fragment>
+      >
+        <ReactQuill
+          value={editorContent}
+          onChange={setEditorContent}
+          theme="snow"
+          placeholder="Write your signature here..."
+          style={{ height: "100%" }} // Fill the container height
+          modules={{
+            toolbar: [
+              [{ header: "1" }, { header: "2" }, { font: [] }],
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["bold", "italic", "underline", "strike"],
+              [{ color: [] }, { background: [] }],
+              [{ align: [] }],
+              ["link", "image"],
+              ["clean"] // Adds the option to clear formatting
+            ]
+          }}
+        />
+      </Box>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSave}
+        sx={{ mt: 2 }} // Margin top for spacing from editor
+      >
+        Save
+      </Button>
+    </Box>
   );
 }

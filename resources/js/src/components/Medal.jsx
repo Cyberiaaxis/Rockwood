@@ -4,7 +4,20 @@ import Tabs, { tabsClasses } from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
+import "../styles/scrollStyles.css"; // Import custom CSS for scroll styling
 
+/**
+ * Data item structure for tab content
+ * @typedef {Object} Item
+ * @property {string} imgPath - The URL of the image to display in the Avatar
+ * @property {string} title - The title of the tab
+ * @property {string} body - The body content to display in the tooltip
+ */
+
+/**
+ * Sample data items to be used in the tabs
+ * @type {Item[]}
+ */
 const items = [
   {
     imgPath:
@@ -64,21 +77,53 @@ const items = [
   }
 ];
 
-function DetailsOfImage(props) {
-
+/**
+ * Component to display the details of the image in the tooltip.
+ * @param {Object} props - The props for the component
+ * @param {string} props.title - The title of the tab
+ * @param {string} props.body - The body content of the tab
+ * @returns {JSX.Element} The details of the image in a div
+ */
+function DetailsOfImage({ title, body }) {
   return (
     <div>
-      <p>{props.title}</p>
-      <div>{props.body}</div>
+      <p>{title}</p>
+      <div>{body}</div>
     </div>
   );
 }
 
+/**
+ * Medal Component displays tabs with images and tooltips.
+ * It includes a custom scrolling behavior when tabs are selected.
+ * @returns {JSX.Element} The Medal component
+ */
 function Medal() {
+  // State to keep track of the selected tab
   const [value, setValue] = React.useState(0);
 
+  // Ref to access the Tabs DOM element for custom scrolling
+  const tabsRef = React.useRef(null);
+
+  /**
+   * Handles tab selection and scrolls the selected tab into view with smooth behavior.
+   * @param {React.ChangeEvent<{}>} event - The change event object
+   * @param {number} newValue - The new value of the selected tab
+   */
   const handleChange = (event, newValue) => {
     setValue(newValue);
+
+    // Smooth scroll to the selected tab
+    if (tabsRef.current) {
+      const tabElement = tabsRef.current.querySelector(`button[data-index="${newValue}"]`);
+      if (tabElement) {
+        tabElement.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
+    }
   };
 
   return (
@@ -86,23 +131,22 @@ function Medal() {
       sx={{
         flexGrow: 1,
         maxWidth: { xs: 600 },
-        bgcolor: "transparent"
+        bgcolor: "transparent",
       }}
     >
       <Tabs
+        ref={tabsRef} // Reference for custom scrolling behavior
         value={value}
         onChange={handleChange}
         variant="scrollable"
         scrollButtons
-        aria-label="visible arrows tabs example"
-        sx={{
-          [`& .${tabsClasses.scrollButtons}`]: {
-            "&.Mui-disabled": { opacity: 0.3 }
-          }
-        }}
+        aria-label="scrollable tabs"
+        className="customScrollTabs" // Custom CSS class for scrolling
       >
-        {items.map((item, key) => (
+        {items.map((item, index) => (
           <Tab
+            key={index}
+            data-index={index} // Add data-index attribute for scroll targeting
             sx={{ paddingTop: 0.5 }}
             icon={
               <Tooltip
@@ -113,16 +157,23 @@ function Medal() {
                     sx: {
                       bgcolor: "#B5651D",
                       "& .MuiTooltip-arrow": {
-                        color: "#B5651D"
-                      }
-                    }
-                  }
+                        color: "#B5651D",
+                      },
+                    },
+                  },
                 }}
               >
-                <Avatar alt={item.title} src={item.imgPath} variant="square" />
+                <Avatar
+                  alt={item.title}
+                  src={item.imgPath}
+                  sx={{
+                    width: 45,
+                    height: 45,
+                    borderRadius: "50%", // Makes the Avatar circular
+                  }}
+                />
               </Tooltip>
             }
-            key={key}
           />
         ))}
       </Tabs>

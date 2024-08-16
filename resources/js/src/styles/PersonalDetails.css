@@ -1,11 +1,13 @@
 .PersonalDetailsContainer {
   display: flex;
 }
+
 .profileSignature {
   width: 100%;
 }
 
-.PersonalDetailsContainer ul, .PersonalDetailsContainer li {
+.PersonalDetailsContainer ul,
+.PersonalDetailsContainer li {
   list-style: none;
   text-align: left;
   border: 1px solid gray;
