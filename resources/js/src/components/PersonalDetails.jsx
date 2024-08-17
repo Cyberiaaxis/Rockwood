@@ -5,6 +5,9 @@ import ListItem from "@mui/material/ListItem";
 import { Editor, EditorState } from "draft-js";
 import "draft-js/dist/Draft.css";
 import "../styles/PersonalDetails.css";
+import { toast } from "react-toastify";
+import gameServerApi from "../libraries/gameServerApi";
+import { useProfile } from "../libraries/ProfileContext";
 
 /**
  * PersonalDetails Component
@@ -14,10 +17,13 @@ import "../styles/PersonalDetails.css";
  * @param {function} setPage - A function to set the current page when a player detail is clicked.
  */
 export default function PersonalDetails({ setPage }) {
+  // Accessing the playerId from ProfileContext
+  const { playerId } = useProfile();
   // State to manage the editor content for the signature
   const [editorState, setEditorState] = React.useState(() =>
     EditorState.createEmpty()
   );
+  const [playerDetail, setPlayerDetail] = React.useState("");
 
   /**
    * selectPage
@@ -27,7 +33,42 @@ export default function PersonalDetails({ setPage }) {
   function selectPage(event) {
     setPage(event.target.innerText);
   }
+  /**
+* Fetch the list of online players based on the selected time range.
+*
+* @param {number} timeData - The time range in minutes to filter online players.
+*/
+  const handleProfile = async (playerId) => {
+    try {
+      const response = await toast.promise(
+        gameServerApi('/playerDetails', 'POST', { playerId }),
+        {
+          pending: 'Fetching online players...',
+          success: {
+            render({ data }) {
+              setPlayerDetail(data);
+              return 'player fetched successfully!';
+            },
+          },
+          error: {
+            theme: 'colored',
+            render({ data }) {
+              return Array.isArray(data) ? <ValidationErrors data={data} /> : data?.message || 'An error occurred while fetching online players';
+            },
+          },
+        }
+      );
+    } catch (error) {
+      toast.error('Failed to fetch online players');
+    }
+  };
 
+  // Fetch initial data for players online within the last 15 minutes.
+  React.useEffect(() => {
+    handleProfile(playerId);
+  }, []);
+
+  console.log("playerDetail", playerDetail.userName);
   return (
     <React.Fragment>
       <Box
@@ -68,25 +109,25 @@ export default function PersonalDetails({ setPage }) {
         <Box flex={1} minWidth={{ xs: '100%', sm: '200px' }}>
           <List dense>
             <ListItem sx={{ bgcolor: "grey.100", marginBottom: "4px", borderRadius: "4px" }}>
-              Rockwood
+              {playerDetail.userName}
             </ListItem>
             <ListItem sx={{ bgcolor: "grey.100", marginBottom: "4px", borderRadius: "4px" }}>
-              100
+              {playerDetail.level}
             </ListItem>
             <ListItem sx={{ bgcolor: "grey.100", marginBottom: "4px", borderRadius: "4px" }}>
-              #19 Celebrity Felon
+              {playerDetail.rank}
             </ListItem>
             <ListItem sx={{ bgcolor: "grey.100", marginBottom: "4px", borderRadius: "4px" }}>
-              1234
+              {playerDetail.age}
             </ListItem>
             <ListItem sx={{ bgcolor: "grey.100", marginBottom: "4px", borderRadius: "4px" }}>
-              Gang of Wasypur
+              {playerDetail.gang_name}
             </ListItem>
             <ListItem sx={{ bgcolor: "grey.100", marginBottom: "4px", borderRadius: "4px" }}>
-              Want3d
+              this still pending to fetch
             </ListItem>
             <ListItem sx={{ bgcolor: "grey.100", marginBottom: "4px", borderRadius: "4px" }}>
-              200
+              still this is pending to fetch
             </ListItem>
           </List>
         </Box>
