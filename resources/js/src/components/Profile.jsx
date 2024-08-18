@@ -93,7 +93,7 @@ export default function Profile() {
                                             display: "flex",
                                             flexDirection: "column",
                                             overflow: "hidden", // Prevents overflow in tab panels
-                                            width: { xs: "100%", md: "550px" },
+                                            width: { xs: "100%", md: "540px" },
                                         }}
                                     >
                                         <TabPanel value="Details" sx={{ p: 0, overflow: "auto" }}>
@@ -112,7 +112,7 @@ export default function Profile() {
                                 </TabContext>
                             </Box>
                         </TabContext>
-                        <Box sx={{ border: 1, margin: 0, padding: 0, width: { xs: "100%", md: "530px" }, }}>
+                        <Box sx={{ border: 1, margin: 0.5, padding: 0, width: { xs: "100%", md: "530px" }, }}>
                             player signture box
                         </Box>
                     </Box>

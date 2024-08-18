@@ -41,7 +41,8 @@ export default function Action() {
         display: 'flex', // Flex container to align icons horizontally
         justifyContent: 'space-around', // Distribute space evenly around icons
         alignItems: 'center', // Align items vertically centered
-        p: 2, // Padding around the container
+        p: 0, // Padding around the container
+        margin: 0,
         // bgcolor: 'background.paper', // Background color of the container
         borderRadius: 2, // Rounded corners for the container
         boxShadow: 3, // Shadow for the container

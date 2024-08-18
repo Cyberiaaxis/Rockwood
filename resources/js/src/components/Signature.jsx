@@ -19,13 +19,13 @@ export default function Signature() {
     <Box
       component={Paper}
       elevation={3}
-      p={2}
       sx={{
         height: "auto", // Ensure container can grow based on content
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between", // Space between editor and button
         width: "100%", // Ensure full width
+        padding: 0
       }}
     >
       <Typography variant="h6" gutterBottom>
@@ -43,7 +43,7 @@ export default function Signature() {
           onChange={setEditorContent}
           theme="snow"
           placeholder="Write your signature here..."
-          style={{ height: "100%" }} // Fill the container height
+          style={{ height: "60%" }} // Fill the container height
           modules={{
             toolbar: [
               [{ header: "1" }, { header: "2" }, { font: [] }],
@@ -61,7 +61,7 @@ export default function Signature() {
         variant="contained"
         color="primary"
         onClick={handleSave}
-        sx={{ mt: 2 }} // Margin top for spacing from editor
+        sx={{ mt: 0 }} // Margin top for spacing from editor
       >
         Save
       </Button>

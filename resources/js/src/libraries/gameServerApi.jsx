@@ -1,77 +1,67 @@
-
 "use strict";
+
 import Axios from "axios";
-import { toast } from "react-toastify";
 
-let config = {
-    //    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
-    baseURL: '/api/',
-    timeout: 60 * 1000, // Timeout,
-    withCredentials: true,
-    //  authorization: accessToken,
-};
+/**
+ * Axios configuration for the game API.
+ */
+const gameApi = Axios.create({
+    baseURL: '/api/', // Base URL for API requests
+    timeout: 60000, // Request timeout in milliseconds (60 seconds)
+    withCredentials: true, // Include credentials in requests
+});
 
-export const gameApi = Axios.create(config);
-
-// Add a response interceptor
+/**
+ * Response interceptor for handling API responses and errors.
+ */
 gameApi.interceptors.response.use(
-    function (response) {
-        // Do something with response data
-        return response.data;
-    },
-    function (err) {
+    (response) => response.data, // Return response data directly on success
+    (error) => {
+        const { status, data } = error.response || {};
 
-        const { status, data } = err.response;
-
-        if (err.response && [419, 422].includes(status)) {
-
-            const statusCode = status;
-            const error = data;
-
-            const inputErrors = Array.isArray(data) ? data : Object.values(error.errors).flat() || [];
-
-            const errorMessage = statusCode === 419 ? error : inputErrors;
-
-            const errResponse = errorMessage || error || err
-
-            return Promise.reject(errResponse);
-
-        } else if (err.response && err.response.status >= 400 && err.response.status <= 504) {
-            // this will trigger the `handleError` function in the promise chain
-            return Promise.reject(new Error(`${err.response.status} - ${err.response.statusText}`))
-        } else if (err.code === 'ECONNREFUSED' || err?.message === 'Network Error') {
-            // this will trigger the `handlerResponse` function in the promise chain
-            // because we are not returning a rejection! Just an example
-            return Promise.reject(new Error('Unable to Connect maybe host down'))
-        } else {
-            // this will trigger the `handleError` function in the promise chain
-            return Promise.reject(err)
+        if ([419, 422].includes(status)) {
+            const errorMessage = status === 419 ? data : extractErrorMessages(data.errors);
+            return Promise.reject(errorMessage || data);
         }
-    }
-);
 
+        if (status >= 400 && status <= 504) {
+            return Promise.reject(new Error(`${status} - ${error.response.statusText}`));
+        }
 
-export default async function gameServerApi(endpoint, method = 'get', data = {}, options = {}) {
-
-    let response = '';
-
-    const defaultOptions = {
-        method: method,
-        data: data,
-        ...options,
-    }
-
-    try {
-
-        response = await gameApi(endpoint, defaultOptions);
-
-    } catch (error) {
-        // toast.error(error.message, {
-        //     theme: 'colored'
-        // });
+        if (error.code === 'ECONNREFUSED' || error.message === 'Network Error') {
+            return Promise.reject(new Error('Unable to connect. The host might be down.'));
+        }
 
         return Promise.reject(error);
     }
+);
 
-    return response;
+/**
+ * Extract error messages from a validation error response.
+ *
+ * @param {Object} errors - The error object from the server.
+ * @returns {Array} - An array of error messages.
+ */
+const extractErrorMessages = (errors) => {
+    if (!errors) return [];
+    return Object.values(errors).flat();
+};
+
+/**
+ * Makes an API request to the game server.
+ *
+ * @param {string} endpoint - The API endpoint to request.
+ * @param {string} [method='get'] - The HTTP method to use (default is 'get').
+ * @param {Object} [data={}] - The request payload (default is an empty object).
+ * @param {Object} [options={}] - Additional Axios options (default is an empty object).
+ * @returns {Promise<Object>} - The API response data.
+ */
+export default async function gameServerApi(endpoint, method = 'get', data = {}, options = {}) {
+    try {
+        const response = await gameApi(endpoint, { method, data, ...options });
+        await gameApi('/ping'); // Optional: Ping the server to check the connection
+        return response;
+    } catch (error) {
+        return Promise.reject(error);
+    }
 }

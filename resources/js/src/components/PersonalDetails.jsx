@@ -75,11 +75,12 @@ export default function PersonalDetails({ setPage }) {
         display="flex"
         flexDirection={{ xs: 'column', sm: 'row' }} // Stack vertically on small screens and horizontally on larger screens
         justifyContent="space-between"
-        padding={2}
+        padding={0}
         bgcolor="background.paper"
         boxShadow={3}
         borderRadius={2}
         gap={1} // Adds space between the two columns
+        margin={0}
       >
         <Box flex={1} minWidth={{ xs: '100%', sm: '200px' }} marginRight={{ sm: 0 }}>
           <List dense>

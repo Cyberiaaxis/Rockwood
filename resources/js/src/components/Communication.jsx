@@ -13,7 +13,8 @@ export default function Communication() {
             display="flex"
             justifyContent="space-around"
             alignItems="center"
-            p={2}
+            p={0}
+            margin={0}
         >
             <Button
                 variant="text"
