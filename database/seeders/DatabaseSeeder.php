@@ -29,12 +29,14 @@ use App\Models\Item;
 use App\Models\RouteRequirementsMapping;
 use App\Models\RouteTransportation;
 use App\Models\TransportationType;
+use App\Models\Award;
+// use App\Models\Reward;
+// use App\Models\Honor;
 use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+// use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -217,20 +219,62 @@ class DatabaseSeeder extends Seeder
 
         $realEstate = new RealEstate();
         $realEstate->create($realEstateData);
+
+        $awardData = [
+            [
+                'name' => 'Top Performer',
+                'description' => 'Awarded to the user with the highest performance in the month.',
+            ],
+            [
+                'name' => 'MVP',
+                'description' => 'Most Valuable Player of the year.',
+            ],
+            [
+                'name' => 'Consistency Award',
+                'description' => 'Awarded for consistent performance over six months.',
+            ],
+        ];
+
+        $award =  new Award();
+        $awardStored = $award->insert($awardData);
+        // $userStored->honors()->attach($awardStored->id);
+
         $honorData = [
-            'name' => 'demoHonor',
+            [
+                'name' => 'Employee of the Month',
+                'description' => 'Recognized for outstanding contribution in the month.',
+            ],
+            [
+                'name' => 'Service Excellence',
+                'description' => 'For providing exceptional service throughout the year.',
+            ],
+            [
+                'name' => 'Innovation Award',
+                'description' => 'For introducing innovative solutions that improve efficiency.',
+            ],
         ];
 
         $honor =  new Honor();
-        $honorStored = $honor->create($honorData);
-        $userStored->honors()->attach($honorStored->id);
+        $honorStored = $honor->insert($honorData);
+        // $userStored->honors()->attach($honorStored->id);
         $rewardData = [
-            'name' => 'demoReward',
+            [
+                'name' => 'Gift Card',
+                'description' => 'A $50 gift card to your favorite store.',
+            ],
+            [
+                'name' => 'Extra Vacation Day',
+                'description' => 'An additional day off to enjoy.',
+            ],
+            [
+                'name' => 'Tech Gadget',
+                'description' => 'Latest model of a tech gadget of your choice.',
+            ],
         ];
 
         $reward = new Reward();
-        $rewardStored = $reward->create($rewardData);
-        $userStored->rewards()->attach($rewardStored->id);
+        $rewardStored = $reward->insert($rewardData);
+        // $userStored->rewards()->attach($rewardStored->id);
 
         $levelData = [
             'name' => 'demoLevel',
@@ -306,85 +350,99 @@ class DatabaseSeeder extends Seeder
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 2',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 3',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 4',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 5',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 6',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 7',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 8',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 9',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 10',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ],            [
+            ],
+            [
                 'name' => 'Demo Gang 11',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 12',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 13',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 14',
                 'description' => 'description',
                 'image' => 'image',
                 'created_at' =>  now(),
                 'updated_at' => now(),
-            ], [
+            ],
+            [
                 'name' => 'Demo Gang 15',
                 'description' => 'description',
                 'image' => 'image',
