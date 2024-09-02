@@ -63,7 +63,7 @@ class City extends GameBaseModel
      */
     public function getCityNameById(int $cityId): ?string
     {
-        return $this->db->find($id)->value('name');
+        return $this->db->find($cityId)->value('name');
     }
 
     /**

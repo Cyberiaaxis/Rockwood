@@ -38,6 +38,8 @@ $router->group(['middleware' => 'auth:sanctum'], function ($router) {
     $router->post('/addItem', 'ItemController@createItem');
     $router->post('/modifyItem', 'ItemController@updateItem');
     $router->post('/onlinePlayers', 'UsersController@OnlinePlayers');
+    $router->post('/userAcievements', 'UserAchievementsController@checkEligibility');
+
     $router->post('/playerDetails', 'ProfileController@getPlayerDetails');
     $router->get('/configureRoute', 'TravelRoutesController@configureRoute');
     $router->get('/routes', 'TravelRoutesController@routes');
