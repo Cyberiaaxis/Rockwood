@@ -35,12 +35,11 @@ class Criteria extends GameBaseModel
     protected $fillable = [
         'name',
         'description',
-        'event_type',
+        'from_city_id',
+        'event_type_id',
         'award_id',
         'reward_id',
         'honor_id',
-        'threshold_type',
-        'threshold_value'
     ];
 
     /**
@@ -51,7 +50,6 @@ class Criteria extends GameBaseModel
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-        'threshold_value' => 'int',
     ];
 
     /**
