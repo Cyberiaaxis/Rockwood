@@ -40,6 +40,7 @@ class Criteria extends GameBaseModel
         'award_id',
         'reward_id',
         'honor_id',
+        'require_stage',
     ];
 
     /**
@@ -56,10 +57,16 @@ class Criteria extends GameBaseModel
      * Retrieve all criteria.
      *
      * @return \Illuminate\Support\Collection
+     * @example
+     * $criteria = new Criteria();
+     * $allCriteria = $criteria->getAllCriteria();
+     * foreach ($allCriteria as $criterion) {
+     *     echo $criterion->name;
+     * }
      */
     public function getAllCriteria()
     {
-        return $this->db->all();
+        return $this->db->get()->toArray();
     }
 
     /**
@@ -67,10 +74,19 @@ class Criteria extends GameBaseModel
      *
      * @param int $criteriaId The ID of the criteria.
      * @return string|null The name of the criteria, or null if not found.
+     * @example
+     * $criteria = new Criteria();
+     * $criteriaName = $criteria->getCriteriaDetailsById(1);
+     * echo $criteriaName; // Output: "Criteria 1"
      */
-    public function getCriteriaNameById(int $criteriaId): ?string
+    public function getCriteriaById(int $criteriaId)
     {
-        return $this->db->find($criteriaId)->value('name');
+        return $this->db->find($criteriaId);
+    }
+
+    public function getCriteriaExculdedByProvidedIds(array $criteriaId)
+    {
+        return  $this->db->whereNotIn('id', $criteriaId)->get()->toArray();
     }
 
     /**
@@ -78,6 +94,14 @@ class Criteria extends GameBaseModel
      *
      * @param array $attributes The attributes to be used for the new criteria.
      * @return int|null The ID of the newly created criteria, or null on failure.
+     * @example
+     * $criteria = new Criteria();
+     * $attributes = [
+     *     'name' => 'New Criteria',
+     *     'description' => 'This is a new criteria',
+     * ];
+     * $newCriteriaId = $criteria->addCriteria($attributes);
+     * echo $newCriteriaId; // Output: 10
      */
     public function addCriteria(array $attributes): ?int
     {
@@ -90,6 +114,14 @@ class Criteria extends GameBaseModel
      * @param int $id The ID of the criteria to modify.
      * @param array $data The updated data for the criteria.
      * @return int The number of rows affected by the update.
+     * @example
+     * $criteria = new Criteria();
+     * $id = 1;
+     * $data = [
+     *     'name' => 'Updated Criteria',
+     * ];
+     * $affectedRows = $criteria->modifyCriteria($id, $data);
+     * echo $affectedRows; // Output: 1
      */
     public function modifyCriteria(int $id, array $data): int
     {

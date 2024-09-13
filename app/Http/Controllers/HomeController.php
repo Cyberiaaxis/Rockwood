@@ -18,7 +18,9 @@ use App\Models\{
     Country,
     City,
     Gang,
-    UserTravel
+    UserTravel,
+    UserAchievement,
+    Criteria
 };
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -81,7 +83,9 @@ class HomeController extends Controller
         $authenticatedUserId,
         $course,
         $userCourseHistory,
-        $userTravel;
+        $userTravel,
+        $criteria, // Property to hold criteria object   
+        $userAchievement; // Property to hold userAchievement object  
 
     /**
      * Create a new controller instance.
@@ -125,7 +129,9 @@ class HomeController extends Controller
         Gang $gang,
         Course $course,
         UserCourseHistory $userCourseHistory,
-        UserTravel $userTravel
+        UserTravel $userTravel,
+        Criteria $criteria,
+        UserAchievement $userAchievement
     ) {
         $this->authenticatedUserId = auth()->user(); // Set the authenticated user ID
         $this->region = $region;
@@ -146,6 +152,8 @@ class HomeController extends Controller
         $this->userCourseHistory = $userCourseHistory;
         $this->authenticatedUserId = $this->getAuthenticatedUserId(); // Retrieve and set the authenticated user ID
         $this->userTravel = $userTravel;
+        $this->criteria = $criteria;
+        $this->userAchievement = $userAchievement;
     }
 
     /**
@@ -195,6 +203,23 @@ class HomeController extends Controller
     {
         $rankId = $this->userDetails->getRankId($this->authenticatedUserId);
         return $this->rank->getRankById($rankId);
+    }
+
+    /**
+     * Retrieve the rank of the authenticated user.
+     *
+     * This method obtains the rank ID of the authenticated user
+     * using the 'getRankId' method of the user details model.
+     * Then, it fetches and returns the rank information by calling
+     * the 'getRankById' method of the rank model.
+     *
+     * @return \App\Models\Rank|null The rank of the authenticated user, or null if user is not found.
+     */
+    public function achievements()
+    {
+        $criterion = $this->criteria->getAllCriteria();
+        $playerAchievements = $this->userAchievement->getUserAchievementsByUserId(Auth::user()->id);
+        dd($criterion, $playerAchievements);
     }
 
     /**
@@ -740,7 +765,8 @@ class HomeController extends Controller
             "money" => $this->money(), // Get player's money using the money() method
             "points" => $this->points(), // Get player's points using the points() method
             "gang" => $this->currentGang(), // 
-            "course" => $this->currentCourse() // 
+            "course" => $this->currentCourse(), // 
+            "achievements" => $this->achievements(), // 
         ];
     }
 }

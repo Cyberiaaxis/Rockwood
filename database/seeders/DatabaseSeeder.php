@@ -30,6 +30,7 @@ use App\Models\RouteRequirementsMapping;
 use App\Models\RouteTransportation;
 use App\Models\TransportationType;
 use App\Models\Award;
+use App\Models\EventType;
 // use App\Models\Reward;
 // use App\Models\Honor;
 use Carbon\Carbon;
@@ -452,5 +453,29 @@ class DatabaseSeeder extends Seeder
         ];
         $gang = new Gang();
         $gang->insert($gangData);
+
+        $eventType = new EventType();
+
+        $eventTypesData = [
+            [
+                'name' => 'Login',
+            ],
+            [
+                'name' => 'Battle',
+            ],
+            [
+                'name' => 'Crime',
+            ],
+            [
+                'name' => 'Travel',
+            ],
+            [
+                'name' => 'Mission',
+            ],
+        ];
+
+        foreach ($eventTypesData as $data) {
+            $eventType->addEventType($data);
+        }
     }
 }

@@ -25,7 +25,6 @@ return new class extends Migration
     {
         Schema::create('event_types', function (Blueprint $table) {
             $table->id(); // Primary key for the event types
-
             $table->string('name')->unique(); // Unique name for each event type
             $table->timestamps(); // Timestamps for created_at and updated_at
         });

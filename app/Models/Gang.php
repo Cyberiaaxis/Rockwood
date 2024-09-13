@@ -2,15 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Gang extends GameBaseModel
 {
+    use HasFactory;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'avatar', 'description', 'status'
+        'name',
+        'avatar',
+        'description',
+        'status'
     ];
 
     /**
@@ -26,6 +32,6 @@ class Gang extends GameBaseModel
      */
     public function getGangNameById(int $id)
     {
-        return $this->db->where(['id' => $id])->value('name');   
+        return $this->db->where(['id' => $id])->value('name');
     }
 }

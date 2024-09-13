@@ -99,7 +99,7 @@ class City extends GameBaseModel
      */
     public function addCity(array $attributes): ?int
     {
-        return  $this->insertGetId($attributes);
+        return  $this->db->insertGetId($attributes);
     }
 
     /**
@@ -111,6 +111,6 @@ class City extends GameBaseModel
      */
     public function modifyCity(int $id, array $data): int
     {
-        return $this->where('id', $id)->update($data);
+        return $this->db->where('id', $id)->update($data);
     }
 }

@@ -25,22 +25,18 @@ class CreateThresholdsTable extends Migration
     {
         Schema::create('thresholds', function (Blueprint $table) {
             $table->id(); // Primary key for the thresholds
-
             $table->unsignedBigInteger('criteria_id'); // Foreign key referencing the 'criteria' table
-            $table->string('threshold_type'); // Type of threshold (e.g., 'min_battles_won')
-            $table->integer('threshold_value'); // Value for the threshold
-            $table->timestamps(); // Timestamps for created_at and updated_at
 
-            // Define foreign key constraint
+            // Foreign key constraint
             $table->foreign('criteria_id')
                 ->references('id')
                 ->on('criteria')
                 ->onDelete('cascade'); // Automatically delete thresholds when the associated criterion is deleted
 
-            // Index for criteria_id to improve query performance
-            $table->index('criteria_id');
-
-            // Unique constraint to ensure that each criterion has a unique threshold type
+            $table->string('threshold_type'); // Type of threshold (e.g., 'min_battles_won')
+            $table->integer('threshold_value'); // Value for the threshold
+            $table->timestamps(); // Timestamps for created_at and updated_at
+            // Unique constraint to ensure each criterion has a unique threshold type
             $table->unique(['criteria_id', 'threshold_type']);
         });
     }
