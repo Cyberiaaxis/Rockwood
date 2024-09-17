@@ -48,6 +48,11 @@ class UserAchievement extends GameBaseModel
         return $this->db->select('achievement_id', 'last_achieved_stage')->where('user_id', $userId)->whereNotNull("next_criteria_id")->orderBy('last_achieved_stage', 'DESC')->get()->toArray();
     }
 
+    public function getUserLastAchievementByUserId(int $userId, $last = true)
+    {
+        return $this->db->select('achievement_id')->where('user_id', $userId)->where("last_achieved", $last)->get()->toArray();
+    }
+
     /**
      * Count achievements for a user for a specific achievement ID.
      *

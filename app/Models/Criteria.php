@@ -81,7 +81,10 @@ class Criteria extends GameBaseModel
      */
     public function getCriteriaById(int $criteriaId)
     {
-        return $this->db->find($criteriaId);
+        return $this->db->table('criteria')  // Specify the table name
+            ->where('id', $criteriaId)  // Use 'where' to filter by the criteria ID
+            ->get()  // Retrieve the records
+            ->toArray();  // Convert the result to an array
     }
 
     public function getCriteriaExculdedByProvidedIds(array $criteriaId)

@@ -217,9 +217,13 @@ class HomeController extends Controller
      */
     public function achievements()
     {
-        $criterion = $this->criteria->getAllCriteria();
-        $playerAchievements = $this->userAchievement->getUserAchievementsByUserId(Auth::user()->id);
-        dd($criterion, $playerAchievements);
+        $lastAchievement = $this->userAchievement->getUserLastAchievementByUserId(Auth::user()->id);
+        //  next workouts
+
+        // $nextCriteria;
+        // $nextCriteriaThresholds;
+
+        dd($lastAchievement);
     }
 
     /**
