@@ -64,6 +64,14 @@ class Threshold extends GameBaseModel
         return $this->db->find($id);
     }
 
+    public function getThresholdByCriteriaIds(array $criteriaIds)
+    {
+        // Fetch records where the id is in the array of criteria IDs
+        return $this->db->whereIn('criteria_id', $criteriaIds)  // Filter records where the id is in the array of IDs
+            ->get()  // Retrieve the records   
+            ->toArray();  // Convert the result to an array
+    }
+
     /**
      * Add a new country.
      *

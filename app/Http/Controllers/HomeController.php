@@ -20,7 +20,8 @@ use App\Models\{
     Gang,
     UserTravel,
     UserAchievement,
-    Criteria
+    Criteria,
+    Threshold
 };
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -64,6 +65,7 @@ class HomeController extends Controller
      * @var City          $country            The instance of the City model.
      * @var Gang          $gang               The instance of the gang model.
      * @var UserTravel    $userTravel         The instance of the UserTravel model.
+     * @var Threshold     $threshold         The instance of the UserTravel model.
      */
     protected $region,
         $attack,
@@ -85,7 +87,9 @@ class HomeController extends Controller
         $userCourseHistory,
         $userTravel,
         $criteria, // Property to hold criteria object   
-        $userAchievement; // Property to hold userAchievement object  
+        $userAchievement, // Property to hold userAchievement object  
+        $threshold;
+
 
     /**
      * Create a new controller instance.
@@ -110,6 +114,7 @@ class HomeController extends Controller
      * @param Course $course The gang model instance. 
      * @param UserCourseHistory $userCourseHHistory The gang model instance. 
      * @param UserTravel $userTravel The UserTravel model instance. 
+     * @param Threshold $threshold The UserTravel model instance.
      * @return void 
      */
     public function __construct(
@@ -131,7 +136,8 @@ class HomeController extends Controller
         UserCourseHistory $userCourseHistory,
         UserTravel $userTravel,
         Criteria $criteria,
-        UserAchievement $userAchievement
+        UserAchievement $userAchievement,
+        Threshold $threshold
     ) {
         $this->authenticatedUserId = auth()->user(); // Set the authenticated user ID
         $this->region = $region;
@@ -154,6 +160,7 @@ class HomeController extends Controller
         $this->userTravel = $userTravel;
         $this->criteria = $criteria;
         $this->userAchievement = $userAchievement;
+        $this->threshold = $threshold;
     }
 
     /**
@@ -218,12 +225,9 @@ class HomeController extends Controller
     public function achievements()
     {
         $lastAchievement = $this->userAchievement->getUserLastAchievementByUserId(Auth::user()->id);
-        //  next workouts
-
-        // $nextCriteria;
-        // $nextCriteriaThresholds;
-
-        dd($lastAchievement);
+        $ids = collect($lastAchievement)->pluck('achievement_id')->toArray();
+        $nextIds = collect($this->criteria->getCriterionByIds($ids))->pluck('next_criteria_id')->toArray();
+        return $this->threshold->getThresholdByCriteriaIds($nextIds);
     }
 
     /**

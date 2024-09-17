@@ -87,6 +87,15 @@ class Criteria extends GameBaseModel
             ->toArray();  // Convert the result to an array
     }
 
+    public function getCriterionByIds(array $criteriaIds)
+    {
+        return $this->db // Specify the table name
+            ->whereIn('id', $criteriaIds)  // Filter records where the id is in the array of IDs
+            ->get()  // Retrieve the records
+            ->toArray();  // Convert the result to an array
+    }
+
+
     public function getCriteriaExculdedByProvidedIds(array $criteriaId)
     {
         return  $this->db->whereNotIn('id', $criteriaId)->get()->toArray();
