@@ -91,6 +91,7 @@ class Criteria extends GameBaseModel
     {
         return $this->db // Specify the table name
             ->whereIn('id', $criteriaIds)  // Filter records where the id is in the array of IDs
+            ->orderBy('next_criteria_id', 'asc')  // Order the results by the specified column and direction
             ->get()  // Retrieve the records
             ->toArray();  // Convert the result to an array
     }

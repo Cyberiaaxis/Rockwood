@@ -50,7 +50,7 @@ class UserAchievement extends GameBaseModel
 
     public function getUserLastAchievementByUserId(int $userId, $last = true)
     {
-        return $this->db->select('achievement_id')->where('user_id', $userId)->where("last_achieved", $last)->get()->toArray();
+        return $this->db->select('achievement_id')->where('user_id', $userId)->where("last_achieved", $last)->orderBy('achievement_id', 'asc')->get()->toArray();
     }
 
     /**
