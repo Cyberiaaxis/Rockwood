@@ -75,13 +75,13 @@ class Threshold extends GameBaseModel
      * 
      * @return array An array of results containing threshold and criteria information.
      */
-    public function getThresholdByCriteriaIds(array $criteriaIds)
+    public function getThresholdsByCriteriaIds(array $criteriaIds)
     {
         // Fetch records where the id is in the array of criteria IDs
         return $this->db->join('criteria as c', 'c.id', '=', 'thresholds.criteria_id')
             ->whereIn('c.id', $criteriaIds)
             ->select(
-                'c.id as criteria_id',
+                'c.from_city_id as requiredCity',
                 $this->db->raw('CASE WHEN c.reward_id IS NOT NULL THEN true ELSE false END as isReward'),
                 $this->db->raw('CASE WHEN c.award_id IS NOT NULL THEN true ELSE false END as isAward'),
                 $this->db->raw('CASE WHEN c.honor_id IS NOT NULL THEN true ELSE false END as isHonor'),
