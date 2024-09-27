@@ -87,11 +87,12 @@ class Criteria extends GameBaseModel
             ->toArray();  // Convert the result to an array
     }
 
-    public function getCriterionByIds(array $criteriaIds)
+    public function getNextCriterionByIds(array $criteriaIds)
     {
         return $this->db // Specify the table name
             ->whereIn('id', $criteriaIds)  // Filter records where the id is in the array of IDs
             ->orderBy('next_criteria_id', 'asc')  // Order the results by the specified column and direction
+            ->select('next_criteria_id')
             ->get()  // Retrieve the records
             ->toArray();  // Convert the result to an array
     }

@@ -222,13 +222,31 @@ class HomeController extends Controller
      *
      * @return \App\Models\Rank|null The rank of the authenticated user, or null if user is not found.
      */
-    public function achievements()
+    public function achievements(): array
     {
-        $lastAchievement = $this->userAchievement->getUserLastAchievementByUserId(Auth::user()->id);
-        $ids = collect($lastAchievement)->pluck('achievement_id')->toArray();
-        $nextIds = collect($this->criteria->getCriterionByIds($ids))->pluck('next_criteria_id')->toArray();
-        return $this->threshold->getThresholdByCriteriaIds($nextIds);
+        // Get the ID of the currently authenticated user
+        $userId = Auth::user()->id;
+
+        // Fetch the last achievement for the user
+        $lastAchievement = $this->userAchievement->getUserLastAchievementByUserId($userId);
+
+        // Early return if no achievements found
+        if (empty($lastAchievement)) {
+            return [];
+        }
+
+        // Extract achievement IDs from the last achievement
+        $achievementIds = collect($lastAchievement)->pluck('achievement_id')->toArray();
+        // dd($achievementIds);
+        // Fetch the next criteria IDs based on the current achievement IDs
+        $nextCriteriaIds = collect($this->criteria->getNextCriterionByIds($achievementIds))->pluck('next_criteria_id')->toArray();
+
+        $thresholds = $this->threshold->getThresholdByCriteriaIds($nextCriteriaIds);
+        dd($thresholds);
     }
+
+
+
 
     /**
      * Retrieve the level information for the authenticated user.

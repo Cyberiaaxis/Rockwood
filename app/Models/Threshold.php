@@ -56,7 +56,7 @@ class Threshold extends GameBaseModel
     /**
      * Retrieve three name by ID.
      *
-     * @param  int  $id
+     * @param  int  $idp
      * @return string|null
      */
     public function getThresholdsByCriteriaId(int $id)
@@ -64,12 +64,33 @@ class Threshold extends GameBaseModel
         return $this->db->find($id);
     }
 
+    /**
+     * Retrieves thresholds based on an array of criteria IDs.
+     *
+     * This method fetches records from the thresholds table and joins with the criteria table.
+     * It checks if reward_id, award_id, and honor_id are not null, returning boolean values
+     * indicating their presence.
+     *
+     * @param array $criteriaIds An array of criteria IDs to filter the results.
+     * 
+     * @return array An array of results containing threshold and criteria information.
+     */
     public function getThresholdByCriteriaIds(array $criteriaIds)
     {
         // Fetch records where the id is in the array of criteria IDs
-        return $this->db->whereIn('criteria_id', $criteriaIds)  // Filter records where the id is in the array of IDs
-            ->get()  // Retrieve the records   
-            ->toArray();  // Convert the result to an array
+        return $this->db->join('criteria as c', 'c.id', '=', 'thresholds.criteria_id')
+            ->whereIn('c.id', $criteriaIds)
+            ->select(
+                'c.id as criteria_id',
+                $this->db->raw('CASE WHEN c.reward_id IS NOT NULL THEN true ELSE false END as isReward'),
+                $this->db->raw('CASE WHEN c.award_id IS NOT NULL THEN true ELSE false END as isAward'),
+                $this->db->raw('CASE WHEN c.honor_id IS NOT NULL THEN true ELSE false END as isHonor'),
+                'thresholds.id as threshold_id',
+                'thresholds.threshold_type as thresholdType',
+                'thresholds.threshold_value as thresholdValue'
+            )
+            ->get()
+            ->toArray(); // Convert collection to array
     }
 
     /**

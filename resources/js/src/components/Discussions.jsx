@@ -3,8 +3,19 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
 // Styled component for decorative line
-const Line = () => <hr style={{ width: "100px", border: "1px solid #ccc", margin: "20px 0" }} />;
+/**
+ * Line component renders a horizontal line.
+ * @returns {JSX.Element} A styled horizontal line.
+ */
+const Line = () => (
+    <hr style={{ width: "100px", border: "1px solid #ccc", margin: "20px 0" }} />
+);
 
+/**
+ * Discussions component displays a list of discussion topics.
+ * Each topic has a title and a brief description.
+ * @returns {JSX.Element} The Discussions component.
+ */
 const Discussions = () => {
     // Example discussion topics
     const discussionTopics = [
