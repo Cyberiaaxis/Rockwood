@@ -59,7 +59,12 @@ const extractErrorMessages = (errors) => {
 export default async function gameServerApi(endpoint, method = 'get', data = {}, options = {}) {
     try {
         const response = await gameApi(endpoint, { method, data, ...options });
-        await gameApi('/ping'); // Optional: Ping the server to check the connection
+        try {
+            await gameApi('/ping'); // Optional: Ping the server to check the connection
+        } catch (error) {
+
+        }
+
         return response;
     } catch (error) {
         return Promise.reject(error);

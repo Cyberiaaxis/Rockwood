@@ -2,15 +2,32 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import "../styles/Welcome.css";
-import { Paper, AppBar, Avatar, Button, Container, FormControl, Box, Grid, IconButton, Input, InputAdornment, InputBase, InputLabel, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, TextField, Toolbar, Tooltip, Typography } from '@mui/material';
+import {
+    AppBar,
+    Avatar,
+    Button,
+    Container,
+    Box,
+    Grid,
+    IconButton,
+    Input,
+    InputAdornment,
+    Toolbar,
+    Typography,
+    Paper,
+    Tooltip,
+} from '@mui/material';
 import AnimatedScrollDiv from "./AnimatedScrollDiv";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import EmailIcon from '@mui/icons-material/Email';
-import KeyIcon from '@mui/icons-material/Key';
-import InfoIcon from '@mui/icons-material/Info';
-import UpgradeIcon from '@mui/icons-material/Upgrade';
-import ChatIcon from '@mui/icons-material/Chat';
-import HelpIcon from '@mui/icons-material/Help';
+import {
+    ArrowForwardIos as ArrowForwardIosIcon,
+    Email as EmailIcon,
+    Key as KeyIcon,
+    Info as InfoIcon,
+    Upgrade as UpgradeIcon,
+    Chat as ChatIcon,
+    Help as HelpIcon,
+    Close as CloseIcon,
+} from '@mui/icons-material';
 import About from "./About";
 import Help from "./Help";
 import DisplayEvent from "./DisplayEvents";
@@ -20,23 +37,21 @@ import Registration from "./Registration";
 import gameServerApi from "../libraries/gameServerApi";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../libraries/AuthContext";
-import { renderMatches, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import CloseIcon from '@mui/icons-material/Close';
-import { Navigate } from "react-router-dom";
 
-// Define custom styled component
+// Define custom styled component for items
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
     padding: theme.spacing(1),
     textAlign: "center",
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
 }));
 
 // Define the Welcome component
 export default function Welcome() {
-    // Define state variables
+    // State variables
     const [showPassword, setShowPassword] = React.useState(false);
     const [currentBackgroundImage, setCurrentBackgroundImage] = React.useState(0);
     const { setUser } = React.useContext(AuthContext);
@@ -45,66 +60,37 @@ export default function Welcome() {
         players: [],
         images: [],
         events: [],
-        gangs: []
+        gangs: [],
     });
 
-    // Define hook for navigation
+    // Navigation hook
     const navigate = useNavigate();
 
-    // Define event handlers
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-
-    // Define form handling using useForm hook
+    // Form handling with react-hook-form
     const {
         register,
         reset,
-        setError,
-        formState: { errors },
         handleSubmit,
-        clearErrors,
     } = useForm();
 
     // Fetch welcome data from API
     const getWelcomeData = async () => {
-        const { gangs, events, players, images } = await gameServerApi("welcomelist");
-        setWelcomeData({ ...welcomeData, gangs, events, players, images });
+        try {
+            const { gangs, events, players, images } = await gameServerApi("welcomelist");
+            console.log("Fetched welcome data:", { gangs, events, players, images });
+            setWelcomeData({ gangs, events, players, images });
+        } catch (error) {
+            console.error("Error fetching welcome data:", error);
+        }
     };
 
     // Define menu items
     const menuItems = [
-        {
-            id: 'about',
-            text: 'About',
-            icon: <InfoIcon />,
-            color: 'blue',
-        },
-        {
-            id: 'upcoming',
-            text: 'Upcoming',
-            icon: <UpgradeIcon />,
-            color: 'green',
-        },
-        {
-            id: 'discussion',
-            text: 'Discussion',
-            icon: <ChatIcon />,
-            color: 'black',
-        },
-        {
-            id: 'help',
-            text: 'Help',
-            icon: <HelpIcon />,
-            color: 'green',
-        },
-        {
-            id: 'join-us',
-            text: 'Join Us',
-            icon: <InfoIcon />,
-            color: 'blue',
-        },
+        { id: 'about', text: 'About', icon: <InfoIcon />, color: 'blue' },
+        { id: 'upcoming', text: 'Upcoming', icon: <UpgradeIcon />, color: 'green' },
+        { id: 'discussion', text: 'Discussion', icon: <ChatIcon />, color: 'black' },
+        { id: 'help', text: 'Help', icon: <HelpIcon />, color: 'green' },
+        { id: 'join-us', text: 'Join Us', icon: <InfoIcon />, color: 'blue' },
     ];
 
     // Fetch welcome data on component mount
@@ -118,19 +104,8 @@ export default function Welcome() {
             setCurrentBackgroundImage((prevImage) => (prevImage + 1) % welcomeData.images.length);
         }, 45000);
         return () => clearInterval(interval);
-    }, [welcomeData.images.length, currentBackgroundImage]);
+    }, [welcomeData.images.length]);
 
-    // Render active page based on selected page
-    // function ActivePage() {
-    //     const pages = {
-    //         about: <About />,
-    //         help: <Help />,
-    //         discussion: <Discussions />,
-    //         upcoming: <Upcomings />,
-    //         "join-us": <Registration onClose={() => setPage(null)} />,
-    //     };
-    //     return pages[page]
-    // }
     // Render active page based on selected page
     const ActivePage = React.memo(() => {
         const pages = {
@@ -140,13 +115,13 @@ export default function Welcome() {
             upcoming: <Upcomings />,
             "join-us": <Registration onClose={() => setPage(null)} />,
         };
-        return pages[page]
+        return pages[page] || null;
     });
 
     // Handle click event to open component
     const handleClickOpenComponent = (e) => {
         setPage(e.target.value);
-    }
+    };
 
     // Form submission handler
     const onSubmit = async (data) => {
@@ -158,8 +133,8 @@ export default function Welcome() {
                     theme: 'colored',
                     position: 'top-center',
                     render({ data }) {
-                        setUser(data.userId)
-                        navigate('/dashboard')
+                        setUser(data.userId);
+                        navigate('/dashboard');
                     },
                 },
                 error: {
@@ -167,17 +142,10 @@ export default function Welcome() {
                     position: 'top-center',
                     render({ data }) {
                         reset();
-                        return Array.isArray(data) ? <>
-                            {data.length ? data.map((x, i) =>
-                                <div key={i}>
-                                    {i + 1}.  {x}
-                                </div>
-                            ) : <div>{data?.message}</div>}
-                        </> : data?.message;
+                        return Array.isArray(data) ? data.map((msg, i) => <div key={i}>{msg}</div>) : data?.message;
                     },
                 },
-            },
-
+            }
         );
     };
 
@@ -186,40 +154,31 @@ export default function Welcome() {
         <React.Fragment>
             <Box
                 className="background-carousel"
-                sx={{
-                    "--bg-img": `url(${welcomeData.images[currentBackgroundImage]})`
-                }}
+                sx={{ "--bg-img": `url(${welcomeData.images[currentBackgroundImage]})` }}
             >
                 <AppBar position="static" elevation={0} color='transparent'>
                     <Container maxWidth="xl">
                         <Toolbar disableGutters>
-                            <IconButton
-                                edge="start"
-                                color="inherit"
-                                aria-label="open drawer"
-                                href="/"
-                                sx={{ mr: 2 }}
-                            >
+                            <IconButton edge="start" color="inherit" aria-label="open drawer" href="/" sx={{ mr: 2 }}>
                                 <Avatar sx={{ width: 60, height: 60 }} alt="Cyberia" src="/images/logo.png" />
                             </IconButton>
 
                             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                                {menuItems.map((page) => (
+                                {menuItems.map((item) => (
                                     <Button
-                                        sx={{ color: page.color }}
-                                        startIcon={page.icon}
-                                        key={page.text}
-                                        value={page.id}
+                                        sx={{ color: item.color }}
+                                        startIcon={item.icon}
+                                        key={item.text}
+                                        value={item.id}
                                         onClick={handleClickOpenComponent}
                                     >
-                                        {page.text}
+                                        {item.text}
                                     </Button>
                                 ))}
                             </Box>
 
                             <Box sx={{ flexGrow: 0 }}>
                                 <Box component='form' sx={{ p: '2px 4px', gap: 1, display: 'flex', alignItems: 'center' }} method="POST" onSubmit={handleSubmit(onSubmit)}>
-
                                     <Input
                                         size='small'
                                         placeholder="Email"
@@ -231,7 +190,6 @@ export default function Welcome() {
                                             </InputAdornment>
                                         }
                                     />
-
                                     <Input
                                         size='small'
                                         placeholder='Password'
@@ -243,22 +201,21 @@ export default function Welcome() {
                                             </InputAdornment>
                                         }
                                     />
-
                                     <Tooltip title="Login">
                                         <IconButton type='submit' sx={{ paddingTop: 1 }} color="success">
                                             <ArrowForwardIosIcon sx={{ color: "red" }} />
                                         </IconButton>
                                     </Tooltip>
-
                                 </Box>
                             </Box>
                         </Toolbar>
                     </Container>
                 </AppBar>
+
                 <Grid container spacing={2}>
                     <Grid item xs={2} md={2}>
                         <Item sx={{ backgroundColor: "transparent" }}>
-                            <Box sx={{ paddingTop: 20 }} >
+                            <Box sx={{ paddingTop: 20 }}>
                                 <Typography sx={{ backgroundColor: "green" }} variant="h5" border={1} color="common.white" gutterBottom>
                                     Top Players
                                 </Typography>
@@ -273,11 +230,13 @@ export default function Welcome() {
                     </Grid>
                     <Grid item xs={8} md={8}>
                         <Item sx={{ backgroundColor: "transparent" }}>
-                            <Box sx={{ textAlign: "center", top: 0, bottom: 0, height: 550, width: "100%" }}>
+                            <Box sx={{ textAlign: "center", height: 550 }}>
                                 <Typography variant="h5" color="common.black" gutterBottom>
-                                    {page ? <IconButton sx={{ color: "red" }} onClick={() => setPage(false)}>
-                                        <CloseIcon />
-                                    </IconButton> : ''}
+                                    {page && (
+                                        <IconButton sx={{ color: "red" }} onClick={() => setPage(false)}>
+                                            <CloseIcon />
+                                        </IconButton>
+                                    )}
                                     {page ? <ActivePage /> : <DisplayEvent events={welcomeData.events} />}
                                 </Typography>
                             </Box>
@@ -287,7 +246,7 @@ export default function Welcome() {
                         <Item sx={{ backgroundColor: "transparent" }}>
                             <Box sx={{ paddingTop: 20 }}>
                                 <Typography sx={{ boxShadow: 3, backgroundColor: "green" }} variant="h5" border={1} color="common.white" gutterBottom>
-                                    Top Players
+                                    Top Gangs
                                 </Typography>
                                 <AnimatedScrollDiv
                                     className="topplayers"
@@ -300,12 +259,17 @@ export default function Welcome() {
                     </Grid>
                     <Grid item xs={12} md={12}>
                         <Item sx={{ backgroundColor: "transparent", position: "fixed", bottom: 0 }}>
-                            <Typography variant="h5" color="common.white" gutterBottom sx={{ fontFamily: 'cursive', fontSize: '1.5rem', textShadow: '1px 1px 2px #000000', letterSpacing: '1px', fontWeight: 'bold' }}>
+                            <Typography variant="h5" color="common.white" gutterBottom sx={{
+                                fontFamily: 'cursive',
+                                fontSize: '1.5rem',
+                                textShadow: '1px 1px 2px #000000',
+                                letterSpacing: '1px',
+                                fontWeight: 'bold'
+                            }}>
                                 Cyberia &copy; 2023
                             </Typography>
                         </Item>
                     </Grid>
-
                 </Grid>
             </Box>
         </React.Fragment>

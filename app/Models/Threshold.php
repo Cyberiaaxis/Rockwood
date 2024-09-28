@@ -85,7 +85,7 @@ class Threshold extends GameBaseModel
                 $this->db->raw('CASE WHEN c.reward_id IS NOT NULL THEN true ELSE false END as isReward'),
                 $this->db->raw('CASE WHEN c.award_id IS NOT NULL THEN true ELSE false END as isAward'),
                 $this->db->raw('CASE WHEN c.honor_id IS NOT NULL THEN true ELSE false END as isHonor'),
-                'thresholds.id as threshold_id',
+                'thresholds.id as thresholdId',
                 'thresholds.threshold_type as thresholdType',
                 'thresholds.threshold_value as thresholdValue'
             )
