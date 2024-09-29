@@ -1,65 +1,88 @@
 /* Base styles for the entire application */
 .App {
   font-family: sans-serif;
+  /* Sets the default font family */
   text-align: center;
+  /* Centers text within the application */
 }
 
 /* Styles for the background carousel */
 .background-carousel {
   display: block;
+  /* Ensures the carousel takes up space */
   position: relative;
+  /* Positions child elements relative to this container */
   height: 100vh;
+  /* Full viewport height */
   overflow: hidden;
+  /* Hides overflow content */
   background-color: transparent;
-  /* Set background color to transparent */
+  /* Background color is transparent */
 }
 
-/* Pseudo-element for creating gradient background with blend mode */
+/* Pseudo-element for creating a gradient background with a blend mode */
 .background-carousel::after {
   display: block;
+  /* Makes the pseudo-element a block-level element */
   content: "";
+  /* Required for pseudo-elements */
   position: absolute;
+  /* Absolutely positions the element within the parent */
   top: -50%;
+  /* Moves the element above the carousel */
   left: -50%;
+  /* Moves the element to the left of the carousel */
   right: -50%;
+  /* Expands to the right */
   bottom: -50%;
+  /* Expands to the bottom */
   z-index: -1;
+  /* Places it behind other content */
+
+  /* Custom properties for gradient blending */
   --blend-opacity: 0.3;
-  /* Custom opacity */
+  /* Opacity for the blend colors */
   --blend-color-1: rgba(0, 128, 0, var(--blend-opacity));
-  /* Custom blend color 1 */
+  /* Blend color 1 (green) */
   --blend-color-2: rgba(0, 0, 255, var(--blend-opacity));
-  /* Custom blend color 2 */
+  /* Blend color 2 (blue) */
   --blend-mode: custom-mode;
   /* Custom blend mode */
 
-  /* Background image with linear gradient and mix blend mode */
+  /* Background image with a linear gradient and mix blend mode */
   background-image: linear-gradient(to bottom, var(--blend-color-1), var(--blend-color-2)), var(--bg-img);
   mix-blend-mode: var(--blend-mode);
-  /* Set mix blend mode */
+  /* Sets the mix blend mode for layering */
   background-size: cover;
+  /* Ensures background covers the entire area */
   background-position: center;
+  /* Centers the background image */
+
+  /* Animation properties */
   animation-name: animName;
-  /* Apply animation */
+  /* Name of the animation */
   animation-duration: 35s;
+  /* Duration of the animation */
   animation-timing-function: ease-in-out;
-  /* Animation timing function */
+  /* Smooth timing function */
   animation-iteration-count: infinite;
-  /* Animation iteration count */
+  /* Repeats the animation indefinitely */
 }
 
 /* Keyframes for the animation */
 @keyframes animName {
   0% {
     transform: rotate(0deg) scale(1);
+    /* Initial state */
     opacity: 0.5;
     /* Initial opacity */
   }
 
   45% {
     transform: rotate(10deg) scale(1.05);
+    /* Slight rotation and scale */
     opacity: 0.6;
-    /* Increase opacity */
+    /* Increased opacity */
   }
 
   50% {
@@ -69,19 +92,21 @@
 
   75% {
     opacity: 0.3;
-    /* Reduce opacity */
+    /* Reduced opacity */
     transform: rotate(-10deg) scale(1.05);
     /* Reverse rotation starts */
   }
 
   100% {
     transform: rotate(-15deg) scale(1.1);
+    /* Final rotation and scale */
     opacity: 0.2;
     /* Final opacity */
   }
 }
 
+/* Styles for hovered text */
 .hovered-text {
-  /* Define hover styles here */
   text-decoration: underline;
+  /* Underlines text on hover */
 }
