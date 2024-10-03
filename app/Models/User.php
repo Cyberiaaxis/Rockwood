@@ -32,6 +32,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $primaryKey = 'id';
 
+    public $timestamps = true;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -116,7 +118,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function addUser(array $data): int
     {
-        return $this->insertGetId($data);
+        $user = $this->create($data);
+        return $user->id;
     }
 
     /**

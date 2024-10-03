@@ -25,7 +25,8 @@ class UserTravel extends GameBaseModel
         'user_id',
         'city_id',
         'isAtLocation',
-        'created_at',
+        'route_id',
+        'city_id'
     ];
 
     /**

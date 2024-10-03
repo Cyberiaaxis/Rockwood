@@ -15,26 +15,26 @@ class Attack extends Model
      */
     public $timestamps = false;
 
+    protected $fillable = [
+        'user_id',
+        'attacks',
+        'attacks_success',
+        'defenses',
+        'defenses_success',
+        'settlement_attacker',
+        'settlement_defender',
+        'escaped_attacker',
+        'escaped_defender',
+    ];
+
     /**
      * add or update player's crime count in storage.
      * @param  INT $userId
      * @return int
      */
-    public function addAttackRecords(int $userId)
+    public function addAttackRecords(array $attackRecord)
     {
-        return $this->create(
-            [
-                'user_id' => $userId,
-                'attacks' => 0,
-                'attacks_success' => 0,
-                'defenses' => 0,
-                'defenses_success' => 0,
-                'settlement_attacker' => 0,
-                'settlement_defender' => 0,
-                'escaped_attacker' => 0,
-                'escaped_defender' => 0,
-            ]
-        );
+        return $this->create($attackRecord);
     }
 
     /**

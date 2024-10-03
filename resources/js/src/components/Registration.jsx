@@ -29,16 +29,14 @@ export default function Registration({ onClose }) {
      */
     const onSubmit = async (data) => {
         try {
-            console.log("Submitting registration data:", data);
-
             // Send registration data to the API
             const response = await gameServerApi('/register', 'post', data);
-            console.log("Registration response:", response);
-
             // Check if registration was successful
             if (response && response.success) {
-                onClose(); // Close the registration modal
-                toast.success('Your account has been created!'); // Show success message
+                setApiError('Your account has been created!'); // Show success message
+                setTimeout(() => {
+                    onClose(); // Close the registration modal after a delay
+                }, 3000); // Change 3000 to your desired delay in milliseconds (e.g., 3000ms = 3 seconds)
             } else {
                 toast.error('Registration failed. Please try again.'); // Show error message
             }
@@ -47,8 +45,12 @@ export default function Registration({ onClose }) {
             Object.entries(error).forEach(([key, value]) => {
                 setApiError(value); // Set API error message
             });
+            setTimeout(() => {
+                onClose(); // Close the registration modal after a delay
+            }, 3000); // Delay for closing the modal
         }
     };
+
 
     return (
         <Container component="main" maxWidth="xs">
@@ -75,7 +77,7 @@ export default function Registration({ onClose }) {
                             helperText={errors.name?.message} // Display error message
                             InputProps={{
                                 startAdornment: (
-                                    <AccountCircle color="secondary" />
+                                    <AccountCircle color="secondary" sx={{ mr: 2 }} />
                                 ),
                             }}
                         />
@@ -92,7 +94,7 @@ export default function Registration({ onClose }) {
                             helperText={errors.email?.message} // Display error message
                             InputProps={{
                                 startAdornment: (
-                                    <Email color="secondary" />
+                                    <Email color="secondary" sx={{ mr: 2 }} />
                                 ),
                             }}
                         />
@@ -110,7 +112,7 @@ export default function Registration({ onClose }) {
                             helperText={errors.password?.message} // Display error message
                             InputProps={{
                                 startAdornment: (
-                                    <Lock color="secondary" />
+                                    <Lock color="secondary" sx={{ mr: 2 }} />
                                 ),
                             }}
                         />
@@ -128,7 +130,7 @@ export default function Registration({ onClose }) {
                             helperText={errors.password_confirmation?.message} // Display error message
                             InputProps={{
                                 startAdornment: (
-                                    <Lock color="secondary" />
+                                    <Lock color="secondary" sx={{ mr: 2 }} />
                                 ),
                             }}
                         />

@@ -49,6 +49,19 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary, // Text color
 }));
 
+// Component to render the currently active page
+const ActivePage = React.memo(({ page, setPage }) => {
+    const pages = {
+        about: <About />,
+        help: <Help />,
+        discussion: <Discussions />,
+        upcoming: <Upcomings />,
+        "join-us": <Registration onClose={() => setPage(null)} />,
+    };
+    return pages[page] || null; // Render the active page or null if none
+});
+
+
 // Define the Welcome component as a functional component
 export default function Welcome() {
     // State variables
@@ -140,17 +153,6 @@ export default function Welcome() {
         return () => clearInterval(interval); // Cleanup interval on unmount
     }, [welcomeData.images.length]);
 
-    // Component to render the currently active page
-    const ActivePage = React.memo(() => {
-        const pages = {
-            about: <About />,
-            help: <Help />,
-            discussion: <Discussions />,
-            upcoming: <Upcomings />,
-            "join-us": <Registration onClose={() => setPage(null)} />,
-        };
-        return pages[page] || null; // Render the active page or null if none
-    });
 
     // Handle menu item click to open corresponding component
     const handleClickOpenComponent = (e) => {
@@ -316,7 +318,7 @@ export default function Welcome() {
                                     )}
                                     {
                                         page ?
-                                            <ActivePage /> :
+                                            <ActivePage page={page} setPage={setPage} /> :
                                             <DisplayEvent
                                                 events={welcomeData.events} />
                                     } {/* Render active page or events */}

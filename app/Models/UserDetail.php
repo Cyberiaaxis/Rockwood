@@ -6,7 +6,7 @@ use App\City;
 use Illuminate\Database\Eloquent\Model;
 use Throwable;
 
-class UserDetail extends Model
+class UserDetail extends GameBaseModel
 {
     /**
      * The attributes that are mass assignable.
@@ -20,7 +20,21 @@ class UserDetail extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'realestate_id',  'jail', 'travel_route_id',  'money',  'hospital',  'points', 'rates', 'rank_id', 'level_id', 'location_id', 'gang_id',  'active_course', 'course_started', 'job'
+        'user_id',
+        'realestate_id',
+        'jail',
+        'travel_route_id',
+        'money',
+        'hospital',
+        'points',
+        'rates',
+        'rank_id',
+        'level_id',
+        'location_id',
+        'gang_id',
+        'active_course',
+        'course_started',
+        'job'
     ];
 
 
@@ -38,10 +52,10 @@ class UserDetail extends Model
     /**
      * get Location Name
      */
-    public function getCurrentLocationAttribute()
-    {
-        return $this->location()->value('name');
-    }
+    // public function getCurrentLocationAttribute()
+    // {
+    //     return $this->location()->value('name');
+    // }
 
     public function rank()
     {
@@ -71,18 +85,9 @@ class UserDetail extends Model
      * @param  INT $userId
      * @return boolean
      */
-    public function addUserDetails(int $userId)
+    public function addUserDetails(array $userDetails)
     {
-        return $this->insert([
-            'user_id' => $userId,
-            'money' => 100,
-            'points' => 10,
-            'rank_id' => 1,
-            'level_id' => 1,
-            'gang_id' => 1,
-            'realestate_id' => 1,
-            'location_id' => 1,
-        ]);
+        return $this->insert($userDetails);
     }
 
     /**
@@ -142,7 +147,7 @@ class UserDetail extends Model
      */
     public function getLocation(int $userId)
     {
-        return  $this->where(['user_id' => $userId])->get(["location_country", "location_region","location_city"]);
+        return  $this->where(['user_id' => $userId])->get(["location_country", "location_region", "location_city"]);
     }
 
     /**

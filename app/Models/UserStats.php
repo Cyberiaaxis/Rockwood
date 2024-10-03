@@ -17,7 +17,22 @@ class UserStats extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'strength', 'defense', 'agility', 'endurance',  'hp', 'max_hp', 'energy', 'max_energy', 'nerve', 'forum_rank_id', 'max_nerve', 'will', 'max_will', 'area_id', 'fight_club_id'
+        'user_id',
+        'strength',
+        'defense',
+        'agility',
+        'endurance',
+        'hp',
+        'max_hp',
+        'energy',
+        'max_energy',
+        'nerve',
+        'forum_rank_id',
+        'max_nerve',
+        'will',
+        'max_will',
+        'area_id',
+        'fight_club_id'
     ];
 
     /**
@@ -26,26 +41,9 @@ class UserStats extends Model
      * @param  $userId
      * @return \App\User
      */
-    public function addUserStats($userId)
+    public function addUserStats(array $userStats)
     {
-        return $this->create([
-            'user_id' => $userId,
-            'strength' => 100,
-            'defense' => 100,
-            'agility' => 100,
-            'endurance' => 100,
-            'hp' => 100,
-            'max_hp' => 100,
-            'energy' => 10,
-            'max_energy' => 10,
-            'nerve' => 10,
-            'max_nerve' => 10,
-            'will' => 100,
-            'max_will' => 100,
-            'forum_rank_id' => 1,
-            'area_id' => 1,
-            'fight_club_id' => 0,
-        ]);
+        return $this->insert($userStats);
     }
 
     /**
@@ -67,7 +65,7 @@ class UserStats extends Model
     {
         return $this->where('user_id', $userId)->first(['hp', 'energy', 'nerve', 'max_energy', 'max_hp', 'max_nerve']);
     }
-    
+
 
     /**
      * Decrement of bustExperince.
