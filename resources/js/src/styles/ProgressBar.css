@@ -3,7 +3,8 @@
     height: 7px;
     width: 200px;
     border-radius: 10px;
-
+    overflow: hidden;
+    /* Ensure the fill does not overflow the bar */
 }
 
 .fill {
@@ -11,24 +12,63 @@
     height: 100%;
     max-width: 100%;
     transform: scale(1);
-    animation: shilom 2s infinite;
+    animation: heartbeat 1.5s infinite;
+    /* Faster heartbeat animation */
 }
 
+/* Heartbeat Animation */
+@keyframes heartbeat {
 
-
-@keyframes shilom {
-    0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
-    }
-
-    70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
-    }
-
+    0%,
     100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+        /* Initial shadow */
+        background: hsla(0, 87%, 30%, 0.979);
+        /* Start color */
     }
+
+    25% {
+        background: hsla(0, 100%, 40%, 0.979);
+        /* Lighter red */
+    }
+
+    50% {
+        transform: scale(1.1);
+        /* Scale up for heartbeat effect */
+        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+        /* Shadow fades out */
+        background: hsla(0, 80%, 50%, 0.979);
+        /* Mid-tone red */
+    }
+
+    75% {
+        background: hsla(0, 60%, 40%, 0.979);
+        /* Darker red */
+    }
+}
+
+/* Randomized Animation Delay */
+.fill:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.fill:nth-child(2) {
+    animation-delay: 0.1s;
+    /* Slightly delay second bar */
+}
+
+.fill:nth-child(3) {
+    animation-delay: 0.2s;
+    /* Slightly delay third bar */
+}
+
+.fill:nth-child(4) {
+    animation-delay: 0.3s;
+    /* Slightly delay fourth bar */
+}
+
+/* Optional: Add a transition for smoother scaling */
+.fill {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }

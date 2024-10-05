@@ -55,15 +55,13 @@ const Home = () => {
       // Perform any cleanup if necessary
     };
   }, []);
-  console.log("playerHomeData", playerHomeData);
+  // console.log("playerHomeData", playerHomeData);
   return (
     <React.Fragment>
-
-
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ pt: 4 }}>
         {playerHomeData ?
           <React.Fragment>
-            <Grid item xs={9}>
+            <Grid item xs={12} sx={{ pt: 0 }}>
               <Grid item xs={12}>
                 <Tabs
                   value={value}
@@ -199,7 +197,74 @@ const Home = () => {
                       </Grid>
 
                     </Grid>
+                    <Grid item xs={12} sx={{ pt: 0 }} >
+                      <Card
+                        style={{
+                          marginTop: 55,
+                          boxShadow: "inset 0 0 10px rgba(0, 0, 0, 0.3)", // Inset shadow
+                          borderRadius: "8px", // Rounded corners for the card
+                          overflow: "hidden", // Hide overflow to prevent shadow clipping
+                          height: "47vh"
+                        }}
+                        variant="outlined"
+                      >
+                        <Box
+                          style={{
+                            backgroundColor: "#f0f0f0", // Background color for the title area
+                            padding: "1px", // Adjust padding as needed
+                            borderBottom: "2px solid transparent", // Transparent border to maintain space
+                            boxShadow: "inset 0px 0px 10px 0px rgba(0, 0, 0, 10)",
+                          }}
+                        >
+                          <Typography variant="h6" component="h2">
+                            Award & Honors
+                          </Typography>
+                        </Box>
+                        <Grid container spacing={2}>
+                          <Grid item xs={12} style={{ margin: 5 }}>
+                            <Box
+                              style={{
+                                display: 'flex', // Use flexbox for horizontal layout
+                                overflowX: 'auto', // Enable horizontal scrolling
+                                whiteSpace: 'nowrap', // Prevent line breaks
+                              }}
+                            >
+                              <ImageList cols={10} style={{ display: 'flex' }}>
+                                {[1, 2].map((item) => (
+                                  <ImageListItem key={item} style={{ display: 'inline-block' }}>
+                                    <Tooltip title={`Image ${item}`} arrow>
+                                      <CardMedia
+                                        component="img"
+                                        src={`https://picsum.photos/200/300?random=${item}`}
+                                        alt={`Image ${item}`}
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => handleOpenModal(`https://picsum.photos/200/300?random=${item}`)}
+                                      />
+                                    </Tooltip>
+                                  </ImageListItem>
+                                ))}
+                              </ImageList>
+                            </Box>
+                          </Grid>
+                        </Grid>
+                      </Card>
+                      <Modal
+                        open={openModal}
+                        onClose={handleCloseModal}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}
+                      >
+                        <img src={selectedImage} alt="Selected" style={{
+                          width: "80%",
+                          maxHeight: "80%"
+                        }} />
+                      </Modal>
+                    </Grid>
                   </React.Fragment>
+
                 )}
                 {value === 1 &&
                   <React.Fragment>
@@ -379,66 +444,7 @@ const Home = () => {
 
               </Grid>
             </Grid>
-            <Grid item xs={3}>
-              <Card
-                style={{
-                  marginTop: 55,
-                  boxShadow: "inset 0 0 10px rgba(0, 0, 0, 0.3)", // Inset shadow
-                  borderRadius: "8px", // Rounded corners for the card
-                  overflow: "hidden", // Hide overflow to prevent shadow clipping
-                  height: "47vh"
-                }}
-                variant="outlined"
-              >
 
-
-                <Box
-                  style={{
-                    backgroundColor: "#f0f0f0", // Background color for the title area
-                    padding: "20px", // Adjust padding as needed
-                    borderBottom: "2px solid transparent", // Transparent border to maintain space
-                    boxShadow: "inset 0px 0px 10px 0px rgba(0, 0, 0, 10)",
-                  }}
-                >
-                  <Typography variant="h5" component="h2">
-                    Award & Honors
-                  </Typography>
-                </Box>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} style={{ margin: 5 }}>
-                    <ImageList cols={2}>
-                      {[1, 2].map((item) => (
-                        <ImageListItem key={item} onClick={() => handleOpenModal(`https://picsum.photos/200/300?random=${item}`)}>
-                          {/* You can use CardMedia here if you want each item to be clickable */}
-                          <Tooltip title={`Image ${item}`} arrow>
-                            <CardMedia
-                              component="img"
-                              src={`https://picsum.photos/200/300?random=${item}`}
-                              alt={`Image ${item}`}
-                            />
-                          </Tooltip>
-                        </ImageListItem>
-                      ))}
-                    </ImageList>
-                  </Grid>
-                </Grid>
-
-              </Card>
-              <Modal
-                open={openModal}
-                onClose={handleCloseModal}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                <img src={selectedImage} alt="Selected" style={{
-                  width: "80%",
-                  maxHeight: "80%"
-                }} />
-              </Modal>
-            </Grid>
           </React.Fragment>
           : ''}
       </Grid>
