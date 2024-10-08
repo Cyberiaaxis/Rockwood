@@ -30,14 +30,21 @@ const StyledHeader = styled(Box)(({ theme }) => ({
 }));
 
 const GradientButton = styled(Button)(({ theme }) => ({
-  background: "linear-gradient(90deg, #f29216 30%, #e9ec0c 90%)",
+  background: "linear-gradient(90deg, #1e1e2f 30%, #ff4757 90%)", // Dark background with a vibrant red accent
   color: theme.palette.common.white,
   height: "4.6rem",
   width: "100%",
+  borderRadius: "8px", // Slightly rounded corners
+  transition: "background 0.3s, transform 0.3s, box-shadow 0.3s", // Smooth transitions
+
   '&:hover': {
-    background: "linear-gradient(90deg, #e9ec0c 30%, #f29216 90%)",
-  }
+    background: "linear-gradient(90deg, #ff4757 30%, #1e1e2f 90%)", // Reverse the gradient on hover
+    transform: "scale(1.05)", // Slightly enlarge on hover
+    boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.4)", // Deeper shadow for added depth
+  },
 }));
+
+
 
 const AccountMenu = styled(Menu)(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -191,25 +198,32 @@ function Header({ setPage }) {
 
       </Box>
       <Box gridColumn="span 2">
-        <Paper elevation={3} sx={{
-          border: '1px solid #ccc', // Light gray border
-          borderRadius: '8px', // Slightly rounded corners
-          // padding: 2, // Padding inside the Paper
-          boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', // Subtle shadow
-        }}>
+        <Paper
+          elevation={3}
+          sx={{
+            border: '1px solid #ccc', // Light gray border
+            borderRadius: '8px', // Slightly rounded corners
+            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', // Subtle shadow
+            transition: 'box-shadow 0.3s, transform 0.3s', // Smooth transition for shadow and transform
+            '&:hover': {
+              boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)', // Deeper shadow on hover
+              transform: 'translateY(-4px)', // Lift effect on hover
+            },
+          }}
+        >
           {[
             { icon: <MonetizationOn sx={{ color: '#4caf50' }} />, label: `Money: ${header?.money}` }, // Green for money
             { icon: <Star sx={{ color: '#ffd700' }} />, label: `Points: ${header?.points}` }, // Gold for points
             { icon: <ThumbUp sx={{ color: '#388e3c' }} />, label: `Merits: ${header?.awards}` }, // Darker green for merits
-
           ].map((info, index) => (
-            <InfoItem key={index}>
+            <InfoItem key={index} sx={{ marginBottom: 0 }}> {/* Set marginBottom to 0 */}
               <Box>{info.icon}</Box>
               <Box sx={{ marginLeft: 1 }}>{info.label}</Box>
             </InfoItem>
           ))}
         </Paper>
       </Box>
+
       <Box gridColumn="span 1" sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
         <Tooltip title="Account settings" arrow>
           <IconButton

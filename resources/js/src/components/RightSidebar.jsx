@@ -1,88 +1,115 @@
-import React from 'react'
-import { FaSteamSquare } from "react-icons/fa"
-import { SiYourtraveldottv } from "react-icons/si";
-import { CgGym } from "react-icons/cg";
+import React from 'react';
+import { FaTrophy, FaUsers } from "react-icons/fa"; // Icons for Hall of Fame and Recently Active Players
+import { GiWeightLiftingUp } from "react-icons/gi"; // Icon for Gym
+import { Box, ListItemButton, Tooltip } from '@mui/material'; // Material UI components
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"; // Toggle icons
 
-import { Box, ListItemButton, Tooltip, Typography } from '@mui/material'
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-
-
-export default function RightSideBar({ setPage, opener }) {
-
+/**
+ * RightSideBar component.
+ * 
+ * This component displays a sidebar with navigation options to different sections of the application.
+ *
+ * @param {Function} setPage - Function to update the current page based on user selection.
+ * @param {boolean} opener - Flag indicating whether the sidebar is open or closed.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
+const RightSideBar = ({ setPage, opener }) => {
+  // Menu items with their titles, icons, and corresponding URLs
   const menuItems = [
     {
       title: "Hall of Fame",
-      icon: <img src="/images/hof.png" alt="Description of the image" style={{ height: 50, width: 40 }} />,
+      icon: <FaTrophy style={{
+        height: 50,
+        width: 40,
+        color: '#ffbb33'
+      }} />,
       url: "halloffame",
     },
-    // c:\Users\cyber\Downloads\Hall-Of-Fame-PNG-Download-Image.png
     {
       title: "Recently Active Players",
-      icon: <FaSteamSquare style={{ height: 80, width: 40 }} />,
+      icon: <FaUsers style={{
+        height: 50,
+        width: 40,
+        color: '#007bff'
+      }} />,
       url: "useronline",
     },
-
     {
       title: "Gym",
-      icon: <CgGym style={{ height: 100, width: 60 }} />,
+      icon: <GiWeightLiftingUp style={{
+        height: 50,
+        width: 40,
+        color: '#28a745'
+      }} />,
       url: "gym",
-      // divider: true,
     },
-
   ];
 
   return (
     <React.Fragment>
+      {/* Sidebar Menu */}
       <Box
         component='ul'
         sx={{
           textAlign: 'center',
           height: '100%',
-          display: 'flex',   // Making the <ul> a flex container
+          display: 'flex',
           flexDirection: 'column',
         }}
-        className={`${opener ? 'active' : 'hidden'} menu`}
+        className={`${opener ? 'active' : 'hidden'} menu`} // Dynamic class based on 'opener' prop
       >
-        {
-          menuItems.map((item, i) =>
-            <li
-              key={i}
-              style={{
-                flex: '1 1 auto',
-                display: 'flex',
-                alignItems: 'center',
-                cursor: 'pointer',
-                listStyle: 'none',
-                border: 'none',
-              }}
-            >
-              <Tooltip title={item.title} placement="right">
-                <ListItemButton onClick={() => setPage(item.url)} sx={{
+        {/* Render menu items */}
+        {menuItems.map((item, index) => (
+          <li
+            key={index} // Unique key for each list item
+            style={{
+              flex: '1 1 auto',
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+              listStyle: 'none',
+              border: 'none',
+            }}
+          >
+            <Tooltip title={item.title} placement="right"> {/* Tooltip for item */}
+              <ListItemButton
+                onClick={() => setPage(item.url)} // Change page on click
+                sx={{
                   fontSize: '1.5rem',
-                }}>
-                  {item.icon}
-                </ListItemButton>
-              </Tooltip>
-            </li>
-          )}
-
+                  justifyContent: 'center',
+                }}
+              >
+                {item.icon} {/* Render icon */}
+              </ListItemButton>
+            </Tooltip>
+          </li>
+        ))}
       </Box>
 
+      {/* Sidebar Toggle Button */}
       <Box
         className='toggle'
         component='ul'
         sx={{
           textAlign: 'center',
-          marginTop: 'auto',
+          marginTop: 'auto', // Pushes the toggle to the bottom
           height: '100%',
           display: 'flex',
           alignItems: 'center',
           flexDirection: 'column',
         }}
       >
-        <li>{opener ? <IoIosArrowForward style={{ color: 'red' }} /> : <IoIosArrowBack style={{ color: 'green' }} />}</li>
+        <li>
+          {opener ? (
+            <IoIosArrowBack style={{ color: 'green' }} /> // Icon to close the sidebar
+          ) : (
+            <IoIosArrowForward style={{ color: 'red' }} /> // Icon to open the sidebar
+          )}
+        </li>
       </Box>
     </React.Fragment>
+  );
+};
 
-  )
-}
+export default RightSideBar;
